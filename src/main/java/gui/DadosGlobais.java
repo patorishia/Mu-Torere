@@ -12,4 +12,11 @@ public class DadosGlobais {
     public static String nomeJogador1;
     public static String nomeJogador2;
 
+    // Quem escolhe a cor (definido na roleta)
+    public static String jogadorQueEscolheCor;
+
+    // Cores escolhidas
+    public static String corJogador1;
+    public static String corJogador2;
+
 }
