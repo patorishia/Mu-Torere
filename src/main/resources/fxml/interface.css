@@ -1,19 +1,27 @@
 /*
- * Empty Stylesheet file.
+ * Estilos globais da aplicação
  */
 
-/* Fundo geral */
+/* ----------------------------- */
+/*   FUNDO E TIPOGRAFIA GLOBAL   */
+/* ----------------------------- */
+
+/* Fundo geral da janela */
 .root {
     -fx-font-family: "Segoe UI";
     -fx-background-color: linear-gradient(to bottom, #272B57, #1b1e3f);
 }
 
-/* Labels */
+/* ----------------------------- */
+/*   CONTROLOS GENÉRICOS         */
+/* ----------------------------- */
+
+/* Labels genéricos */
 .label {
     -fx-text-fill: white;
 }
 
-/* Botões */
+/* Botões genéricos */
 .button {
     -fx-background-radius: 8;
     -fx-background-color: #3f448c;
@@ -26,7 +34,7 @@
     -fx-background-color: #565cb3;
 }
 
-/* TextFields */
+/* Campos de texto */
 .text-field {
     -fx-background-radius: 6;
     -fx-background-color: #ffffff;
@@ -44,12 +52,17 @@
     -fx-text-fill: white;
 }
 
-/* Títulos */
+/* Títulos genéricos (ex: topo dos ecrãs) */
 .title-label {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
 }
+
+/* ----------------------------- */
+/*   TABULEIRO / JOGO            */
+/* ----------------------------- */
+
 /* Peças do tabuleiro */
 .piece-light {
     -fx-fill: #F2F2F2;
@@ -63,12 +76,12 @@
     -fx-stroke-width: 2;
 }
 
-
 /* Linhas do tabuleiro */
 .board-line {
     -fx-stroke: #AFA7D9;
     -fx-stroke-width: 3;
 }
+
 /* Casas do tabuleiro */
 .board-cell {
     -fx-fill: #3f448c; /* lilás muito suave */
@@ -76,6 +89,9 @@
     -fx-stroke-width: 2;
 }
 
+/* ----------------------------- */
+/*   DROPDOWNS / MENUS           */
+/* ----------------------------- */
 
 /* Tamanho do dropdown */
 .choice-box .context-menu {
@@ -91,4 +107,52 @@
     -fx-text-fill: white;
 }
 
+/* ----------------------------- */
+/*   ESTILO PERSONALIZADO DA ROLETA   */
+/* ----------------------------- */
 
+/* Título da roleta */
+.roleta-titulo {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 20 0 10 0;
+}
+
+/* Seta da roleta */
+.roleta-seta {
+    -fx-font-size: 70px;
+    -fx-text-fill: white;
+}
+
+/* Labels dos jogadores */
+.roleta-jogador {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Resultado */
+.roleta-resultado {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Área inferior da roleta */
+.roleta-bottom {
+    -fx-padding: 20 0 20 0;
+}
+
+/* Botão continuar da roleta */
+.roleta-botao {
+    -fx-background-radius: 8;
+    -fx-background-color: #3f448c;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.roleta-botao:hover {
+    -fx-background-color: #565cb3;
+}
