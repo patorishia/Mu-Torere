@@ -23,6 +23,7 @@ public class Mu_Torere extends Application{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/interface.fxml"));
 
         Scene scene = new Scene(root);
+        
 
         primaryStage.setTitle("Mu Torere");
         primaryStage.setScene(scene);

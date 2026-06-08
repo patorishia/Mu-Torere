@@ -11,13 +11,8 @@ import java.util.List;
  * @author patri
  */
 /**
- * Classe que representa o jogo de Mu Torere.
- * Gere:
- *  - o tabuleiro
- *  - os dois jogadores
- *  - as peças
- *  - o jogador atual
- *  - a validação e execução de movimentos
+ * Classe que representa o jogo de Mu Torere. Gere: - o tabuleiro - os dois
+ * jogadores - as peças - o jogador atual - a validação e execução de movimentos
  */
 public class Jogo {
 
@@ -27,8 +22,9 @@ public class Jogo {
     private Tabuleiro tabuleiro;
 
     /**
-     * Construtor do jogo.
-     * Cria o tabuleiro, os jogadores e coloca as peças nas posições iniciais.
+     * Construtor do jogo. Cria o tabuleiro, os jogadores e coloca as peças nas
+     * posições iniciais.
+     *
      * @param nome1 nome do primeiro jogador
      * @param nome2 nome do segundo jogador
      */
@@ -47,9 +43,8 @@ public class Jogo {
     }
 
     /**
-     * Coloca as peças dos jogadores nas posições iniciais do tabuleiro.
-     * Jogador 1: posições 0, 1, 2, 3
-     * Jogador 2: posições 4, 5, 6, 7
+     * Coloca as peças dos jogadores nas posições iniciais do tabuleiro. Jogador
+     * 1: posições 0, 1, 2, 3 Jogador 2: posições 4, 5, 6, 7
      */
     private void inicializarPecas() {
         // Peças do jogador 1
@@ -66,12 +61,12 @@ public class Jogo {
     }
 
     /**
-     * Devolve a lista de posições para onde uma peça pode mover,
-     * de acordo com as regras:
-     *  - só pode mover para posições adjacentes
-     *  - a posição de destino tem de estar vazia
+     * Devolve a lista de posições para onde uma peça pode mover, de acordo com
+     * as regras: - só pode mover para posições adjacentes - a posição de
+     * destino tem de estar vazia
+     *
      * @param peca
-     * @return 
+     * @return
      */
     public List<Posicao> obterMovimentosValidos(Peca peca) {
         return peca.getPosicaoAtual().getAdjacentes()
@@ -81,10 +76,12 @@ public class Jogo {
     }
 
     /**
-     * Verifica se um movimento é válido para uma dada peça e posição de destino.
+     * Verifica se um movimento é válido para uma dada peça e posição de
+     * destino.
+     *
      * @param peca
      * @param destino
-     * @return 
+     * @return
      */
     public boolean validarMovimento(Peca peca, Posicao destino) {
         return obterMovimentosValidos(peca).contains(destino);
@@ -92,6 +89,7 @@ public class Jogo {
 
     /**
      * Executa um movimento, se for válido, e troca o turno do jogador.
+     *
      * @param peca
      * @param destino
      */
@@ -111,9 +109,31 @@ public class Jogo {
 
     /**
      * Devolve o jogador que tem o turno atual.
-     * @return 
+     *
+     * @return
      */
     public Jogador getJogadorAtual() {
         return jogadorAtual;
     }
+
+    public Jogador getJogador1() {
+        return jogador1;
+    }
+
+    public Jogador getJogador2() {
+        return jogador2;
+    }
+
+    public Tabuleiro getTabuleiro() {
+        return tabuleiro;
+    }
+
+    public boolean movimentoValido(Peca pecaModelo, Posicao destinoModelo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void fazerMovimento(Peca pecaModelo, Posicao destinoModelo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

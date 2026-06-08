@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package gui;
+import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -51,7 +52,7 @@ public class ScreenManager {
             // Aplica o ficheiro CSS global à Scene
             // Isto garante que TODOS os ecrãs partilham o mesmo estilo
             scene.getStylesheets().add(
-                ScreenManager.class.getResource("/gui/interface.css").toExternalForm()
+                ScreenManager.class.getResource("/fxml/interface.css").toExternalForm()
             );
 
             // Define a Scene no Stage principal
@@ -59,6 +60,9 @@ public class ScreenManager {
 
             // Mostra a janela (caso ainda não esteja visível)
             stage.show();
+            URL cssUrl = ScreenManager.class.getResource("/fxml/interface.css");
+System.out.println("CSS URL = " + cssUrl);
+
 
         } catch (Exception e) {
             // Em caso de erro, imprime a stack trace para facilitar debugging
