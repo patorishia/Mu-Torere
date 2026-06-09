@@ -1,24 +1,19 @@
 /*
- * Estilos globais da aplicação
+ * Empty Stylesheet file.
  */
 
-/* ----------------------------- */
-/*   FUNDO E TIPOGRAFIA GLOBAL   */
-/* ----------------------------- */
-
+/* Fundo geral */
 .root {
     -fx-font-family: "Segoe UI";
     -fx-background-color: linear-gradient(to bottom, #272B57, #1b1e3f);
 }
 
-/* ----------------------------- */
-/*   CONTROLOS GENÉRICOS         */
-/* ----------------------------- */
-
+/* Labels */
 .label {
     -fx-text-fill: white;
 }
 
+/* Botões */
 .button {
     -fx-background-radius: 8;
     -fx-background-color: #3f448c;
@@ -31,31 +26,31 @@
     -fx-background-color: #565cb3;
 }
 
+/* TextFields */
 .text-field {
     -fx-background-radius: 6;
     -fx-background-color: #ffffff;
     -fx-padding: 8;
 }
 
+/* ChoiceBox */
 .choice-box {
     -fx-background-radius: 6;
     -fx-background-color: white;
 }
 
+/* CheckBox */
 .check-box {
     -fx-text-fill: white;
 }
 
+/* Títulos */
 .title-label {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
 }
-
-/* ----------------------------- */
-/*   TABULEIRO / JOGO            */
-/* ----------------------------- */
-
+/* Peças do tabuleiro */
 .piece-light {
     -fx-fill: #F2F2F2;
     -fx-stroke: #CCCCCC;
@@ -68,25 +63,26 @@
     -fx-stroke-width: 2;
 }
 
+
+/* Linhas do tabuleiro */
 .board-line {
     -fx-stroke: #AFA7D9;
     -fx-stroke-width: 3;
 }
-
+/* Casas do tabuleiro */
 .board-cell {
-    -fx-fill: #3f448c;
+    -fx-fill: #3f448c; /* lilás muito suave */
     -fx-stroke: #C5B5FF;
     -fx-stroke-width: 2;
 }
 
-/* ----------------------------- */
-/*   DROPDOWNS / MENUS           */
-/* ----------------------------- */
 
+/* Tamanho do dropdown */
 .choice-box .context-menu {
     -fx-pref-width: 200px;
 }
 
+/* Cor do texto no dropdown */
 .choice-box .menu-item > .label {
     -fx-text-fill: black;
 }
@@ -95,62 +91,4 @@
     -fx-text-fill: white;
 }
 
-/* ----------------------------- */
-/*   ROLETA   */
-/* ----------------------------- */
 
-.roleta-titulo {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-padding: 20 0 10 0;
-}
-
-.roleta-seta {
-    -fx-font-size: 70px;
-}
-
-.roleta-jogador {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-}
-
-.roleta-resultado {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-}
-
-.roleta-bottom {
-    -fx-padding: 20 0 20 0;
-}
-
-/* Botão da roleta — só adiciona o que é diferente do .button */
-.roleta-botao {
-    -fx-font-weight: bold;
-}
-
-/* ----------------------------- */
-/*   ESCOLHER COR   */
-/* ----------------------------- */
-
-.escolhercor-label-jogador {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-}
-
-.escolhercor-circulo-claro,
-.escolhercor-circulo-escuro {
-    -fx-stroke: black;
-    -fx-stroke-width: 2;
-    -fx-cursor: hand;
-}
-
-.escolhercor-highlight {
-    -fx-stroke: dodgerblue;
-    -fx-stroke-width: 5;
-}
-
-/* Botão confirmar — só o que é diferente do .button */
-.escolhercor-botao {
-    -fx-font-weight: bold;
-}

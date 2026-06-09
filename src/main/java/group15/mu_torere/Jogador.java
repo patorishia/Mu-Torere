@@ -68,6 +68,5 @@ public class Jogador {
     public String getCor() {
         return cor;
     }
-    
 }
 
