@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<!--
+    Ecrã: Definições
+    Função: Ajustar som e tema da aplicação.
+    Controlador: gui.parametros.ParametrosController
+-->
+<BorderPane fx:id="parametros" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ParametrosController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+
+    <!-- Título -->
+    <top>
+        <Label text="Definições"
+               BorderPane.alignment="CENTER"
+               styleClass="title-label"/>
+    </top>
+
+    <!-- Conteúdo -->
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+
+            <!-- Som -->
+            <Label text="Som:" styleClass="label"/>
+            <CheckBox fx:id="checkSom" text="Ativar Som"/>
+
+            <!-- Tema -->
+            <Label text="Tema:" styleClass="label"/>
+            <ComboBox fx:id="temaCombo" prefWidth="200">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Claro"/>
+                        <String fx:value="Escuro"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <!-- Botões -->
+            <Button fx:id="btnGuardarParametros"
+                    text="Guardar"
+                    prefWidth="200"
+                    onAction="#guardarParametros"/>
+
+            <Button fx:id="btnVoltarParametros"
+                    text="Voltar"
+                    prefWidth="200"
+                    onAction="#voltarAtras"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>
+

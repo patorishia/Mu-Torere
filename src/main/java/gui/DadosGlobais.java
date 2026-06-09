@@ -19,4 +19,8 @@ public class DadosGlobais {
     public static String corJogador1;
     public static String corJogador2;
 
+    //parametros
+    public static boolean somAtivo = true;
+    public static String temaAtual = "Claro";
+
 }
