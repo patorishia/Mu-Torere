@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Ecrã: Jogo Local
+    Função: Jogar Mu Torere localmente entre dois jogadores.
+    Controlador: gui.jogo.JogoLocalController
+-->
+
+<BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.JogoController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+
+    <!-- Título -->
+    <top>
+        <Label text="Mu Torere"
+               BorderPane.alignment="CENTER"
+               styleClass="title-label"/>
+    </top>
+
+    <!-- Tabuleiro -->
+    <center>
+        <Pane fx:id="tabuleiro" prefHeight="500" prefWidth="500">
+
+            <!-- Linhas principais -->
+            <Line startX="250" startY="50"  endX="250" endY="450" styleClass="board-line"/>
+            <Line startX="50"  startY="250" endX="450" endY="250" styleClass="board-line"/>
+            <Line startX="100" startY="100" endX="400" endY="400" styleClass="board-line"/>
+            <Line startX="400" startY="100" endX="100" endY="400" styleClass="board-line"/>
+
+            <!-- Linhas laterais -->
+            <Line startX="250" startY="50"  endX="400" endY="100" styleClass="board-line"/>
+            <Line startX="400" startY="100" endX="450" endY="250" styleClass="board-line"/>
+            <Line startX="450" startY="250" endX="400" endY="400" styleClass="board-line"/>
+            <Line startX="400" startY="400" endX="250" endY="450" styleClass="board-line"/>
+            <Line startX="250" startY="450" endX="100" endY="400" styleClass="board-line"/>
+            <Line startX="100" startY="400" endX="50"  endY="250" styleClass="board-line"/>
+            <Line startX="50"  startY="250" endX="100" endY="100" styleClass="board-line"/>
+            <Line startX="100" startY="100" endX="250" endY="50"  styleClass="board-line"/>
+
+            <!-- Casas -->
+            <Circle fx:id="casaCentro" centerX="250" centerY="250" radius="18" styleClass="board-cell"/>
+
+            <Circle fx:id="casa0" centerX="250" centerY="50"  radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa1" centerX="400" centerY="100" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa2" centerX="450" centerY="250" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa3" centerX="400" centerY="400" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa4" centerX="250" centerY="450" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa5" centerX="100" centerY="400" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa6" centerX="50"  centerY="250" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa7" centerX="100" centerY="100" radius="18" styleClass="board-cell"/>
+
+            <!-- Peças claras -->
+            <Circle fx:id="pecaClara1" centerX="250" centerY="50"  radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara2" centerX="400" centerY="100" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara3" centerX="400" centerY="400" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara4" centerX="100" centerY="400" radius="14" styleClass="piece-light"/>
+
+            <!-- Peças escuras -->
+            <Circle fx:id="pecaEscura1" centerX="450" centerY="250" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura2" centerX="250" centerY="450" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura3" centerX="50"  centerY="250" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura4" centerX="100" centerY="100" radius="14" styleClass="piece-dark"/>
+
+        </Pane>
+    </center>
+
+    <!-- Painel lateral -->
+    <right>
+        <VBox alignment="CENTER" spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Jogador Atual:" styleClass="label"/>
+            <Label fx:id="labelJogadorAtual" styleClass="label-bold"/>
+
+            <Button fx:id="btnDefinicoesJogoLocal"
+                    text="Definições"
+                    prefWidth="160"
+                    onAction="#abrirDefinicoes"/>
+
+            <Button fx:id="btnVoltarMenuJogoLocal"
+                    text="Voltar ao Menu"
+                    prefWidth="160"
+                    onAction="#mostrarMenuInicial"/>
+        </VBox>
+    </right>
+
+</BorderPane>
+
