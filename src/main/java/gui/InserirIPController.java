@@ -9,13 +9,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 /**
- * Controlador do ecrã Jogo em Rede.
+ * Controlador do ecrã Inserir IP em Jogo de Rede.
  * Responsável por:
  *  - ler o IP introduzido pelo jogador
  *  - iniciar ligação ao servidor (futuro)
  *  - avançar para o ecrã de espera
  */
-public class JogoRedeController {
+public class InserirIPController {
 
     @FXML private TextField campoIP;
 

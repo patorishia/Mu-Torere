@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 
 /**
- * Controlador do ecrã Jogo Local.
+ * Controlador do ecrã Jogo
  * Responsável por:
  *  - ligar GUI ao modelo
  *  - permitir selecionar peças
@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
  *  - atualizar o jogador atual
  *  - detetar fim de jogo
  */
-public class JogoLocalController implements Initializable {
+public class JogoController implements Initializable {
 
     @FXML private Label labelJogadorAtual;
 

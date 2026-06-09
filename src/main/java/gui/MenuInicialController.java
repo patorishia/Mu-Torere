@@ -33,7 +33,7 @@ public class MenuInicialController {
      */
     @FXML
     private void abrirJogoRede(ActionEvent e) {
-        ScreenManager.show("/fxml/JogoRede.fxml");
+        ScreenManager.show("/fxml/InserirIP.fxml");
     }
 
     /**

@@ -119,6 +119,6 @@ public class EscolherCorController implements Initializable {
         DadosGlobais.corJogador1 = corJogador1;
         DadosGlobais.corJogador2 = corJogador2;
 
-        ScreenManager.show("/fxml/JogoLocal.fxml");
+        ScreenManager.show("/fxml/Jogo.fxml");
     }
 }

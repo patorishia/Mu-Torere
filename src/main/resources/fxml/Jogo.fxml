@@ -15,7 +15,7 @@
     Controlador: gui.jogo.JogoLocalController
 -->
 
-<BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.JogoLocalController">
+<BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.JogoController">
     <stylesheets>
         <URL value="@interface.css"/>
     </stylesheets>

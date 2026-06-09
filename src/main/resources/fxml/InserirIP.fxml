@@ -13,7 +13,7 @@
     Função: Permitir ao jogador introduzir o IP do servidor e conectar.
     Controlador: gui.rede.JogoRedeController
 -->
-<BorderPane fx:id="jogoRede" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.JogoRedeController">
+<BorderPane fx:id="jogoRede" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.InserirIPController">
     <stylesheets>
         <URL value="@interface.css"/>
     </stylesheets>
