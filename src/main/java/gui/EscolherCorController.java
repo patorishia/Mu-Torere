@@ -4,11 +4,11 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
 
@@ -19,85 +19,96 @@ import java.util.ResourceBundle;
  * Controlador do ecrã Escolher Cor. O jogador escolhido pela roleta seleciona a
  * cor clara ou escura.
  */
-public class EscolherCorController implements Initializable {
+  
 
-    @FXML
-    private Label labelTitulo;
-    @FXML
-    private Label labelJogadorAtual;
+    public class EscolherCorController implements Initializable {
 
-    @FXML
-    private Circle circuloClara;
-    @FXML
-    private Circle circuloEscura;
+        @FXML
+        private Label labelTitulo;
+        @FXML
+        private Label labelJogadorAtual;
 
-    @FXML
-    private Button btnConfirmarCor;
+        @FXML
+        private Circle circuloClara;
+        @FXML
+        private Circle circuloEscura;
 
-    // Variáveis internas
-    private String jogadorQueEscolhe;
-    private String corJogador1;
-    private String corJogador2;
+        @FXML
+        private Button btnConfirmarCor;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+        // Variáveis internas
+        private String jogadorQueEscolhe;
+        private String corJogador1;
+        private String corJogador2;
 
-        // Quem escolhe a cor vem da roleta
-        jogadorQueEscolhe = DadosGlobais.jogadorQueEscolheCor;
+        @Override
+        public void initialize(URL url, ResourceBundle rb) {
 
-        // Atualizar texto
-        labelJogadorAtual.setText(jogadorQueEscolhe + ", escolhe a cor:");
-    }
+            // Quem escolhe a cor vem da roleta
+            jogadorQueEscolhe = DadosGlobais.jogadorQueEscolheCor;
 
-    /**
-     * Seleciona a cor clara.
-     */
-    @FXML
-    private void selecionarClara(MouseEvent event) {
+            if (jogadorQueEscolhe == null) {
+                labelJogadorAtual.setText("Erro: jogador não definido");
+                return;
+            }
 
-        if (jogadorQueEscolhe.equals(DadosGlobais.nomeJogador1)) {
-            corJogador1 = "claro";
-            corJogador2 = "escuro";
-        } else {
-            corJogador1 = "escuro";
-            corJogador2 = "claro";
+            // Atualizar texto
+            labelJogadorAtual.setText(jogadorQueEscolhe + ", escolhe a cor:");
         }
 
-        highlightEscolha("clara");
-    }
+        /**
+         * Seleciona a cor clara.
+         */
+        @FXML
+        private void selecionarClara(MouseEvent event) {
 
-    /**
-     * Seleciona a cor escura.
-     */
-    @FXML
-    private void selecionarEscura(MouseEvent event) {
+            if (jogadorQueEscolhe.equals(DadosGlobais.nomeJogador1)) {
+                corJogador1 = "claro";
+                corJogador2 = "escuro";
+            } else {
+                corJogador1 = "escuro";
+                corJogador2 = "claro";
+            }
 
-        if (jogadorQueEscolhe.equals(DadosGlobais.nomeJogador1)) {
-            corJogador1 = "escuro";
-            corJogador2 = "claro";
-        } else {
-            corJogador1 = "claro";
-            corJogador2 = "escuro";
+            highlightEscolha("clara");
         }
 
-        highlightEscolha("escura");
-    }
+        /**
+         * Seleciona a cor escura.
+         */
+        @FXML
+        private void selecionarEscura(MouseEvent event) {
 
-    /**
-     * Aplica o highlight visual ao círculo selecionado. Remove o highlight
-     * anterior e aplica ao círculo escolhido.
-     */
-    private void highlightEscolha(String cor) {
+            if (jogadorQueEscolhe.equals(DadosGlobais.nomeJogador1)) {
+                corJogador1 = "escuro";
+                corJogador2 = "claro";
+            } else {
+                corJogador1 = "claro";
+                corJogador2 = "escuro";
+            }
 
-        // Remover highlight dos dois círculos
-        circuloClara.getStyleClass().remove("escolhercor-highlight");
-        circuloEscura.getStyleClass().remove("escolhercor-highlight");
+            highlightEscolha("escura");
+        }
 
-        // Aplicar highlight ao círculo selecionado
-        if (cor.equals("clara")) {
-            circuloClara.getStyleClass().add("escolhercor-highlight");
-        } else {
-            circuloEscura.getStyleClass().add("escolhercor-highlight");
+        /**
+         * Aplica o highlight visual ao círculo selecionado. Remove o highlight
+         * anterior e aplica ao círculo escolhido.
+         */
+        private void highlightEscolha(String cor) {
+
+            // Remover highlight dos dois círculos
+            circuloClara.getStyleClass().remove("escolhercor-highlight");
+            circuloEscura.getStyleClass().remove("escolhercor-highlight");
+
+            // Aplicar highlight ao círculo selecionado
+            if (cor.equals("clara")) {
+                circuloClara.getStyleClass().add("escolhercor-highlight");
+            } else {
+                circuloEscura.getStyleClass().add("escolhercor-highlight");
+            }
+
+            // ativar botao continuar
+            btnConfirmarCor.setDisable(false);
         }
     }
 
@@ -110,6 +121,6 @@ public class EscolherCorController implements Initializable {
         DadosGlobais.corJogador1 = corJogador1;
         DadosGlobais.corJogador2 = corJogador2;
 
-        ScreenManager.show("/gui/tabuleiro/Tabuleiro.fxml");
+        ScreenManager.show("/fxml/Tabuleiro.fxml");
     }
 }

@@ -4,6 +4,7 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
 import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,17 +16,21 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controlador do ecrã da Roleta.
- * Mostra os nomes dos jogadores, executa a animação da seta
- * e determina quem escolhe a cor.
+ * Controlador do ecrã da Roleta. Mostra os nomes dos jogadores, executa a
+ * animação da seta e determina quem escolhe a cor.
  */
 public class RoletaController implements Initializable {
 
-    @FXML private Label labelJogador1Roleta;   // Nome do Jogador 1
-    @FXML private Label labelJogador2Roleta;   // Nome do Jogador 2
-    @FXML private Label labelResultado;        // Texto do resultado
-    @FXML private Label seta;                  // Seta que roda
-    @FXML private Button btnContinuarRoleta;   // Botão para avançar
+    @FXML
+    private Label labelJogador1Roleta;   // Nome do Jogador 1
+    @FXML
+    private Label labelJogador2Roleta;   // Nome do Jogador 2
+    @FXML
+    private Label labelResultado;        // Texto do resultado
+    @FXML
+    private Label seta;                  // Seta que roda
+    @FXML
+    private Button btnContinuarRoleta;   // Botão para avançar
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -43,21 +48,32 @@ public class RoletaController implements Initializable {
      */
     private void iniciarAnimacaoRoleta() {
 
+        btnContinuarRoleta.setDisable(true);
+        labelResultado.setText("A roleta vai decidir...");
+
+        // 1) ROTAÇÃO PRINCIPAL — 3 voltas completas
         RotateTransition rt = new RotateTransition(Duration.seconds(1.5), seta);
-        rt.setByAngle(720); // 2 voltas completas
+        rt.setByAngle(360 * 3);
         rt.setCycleCount(1);
 
         rt.setOnFinished(e -> {
 
             boolean jogador1Escolhe = Math.random() < 0.5;
 
-            if (jogador1Escolhe) {
-                labelResultado.setText(DadosGlobais.nomeJogador1 + " escolhe a cor!");
-            } else {
-                labelResultado.setText(DadosGlobais.nomeJogador2 + " escolhe a cor!");
-            }
+            // 2) ROTAÇÃO FINAL — inclinar para o lado correto
+            double anguloFinal = jogador1Escolhe ? 30 : -30;
 
-            // Ativar botão continuar
+            RotateTransition rt2 = new RotateTransition(Duration.seconds(0.4), seta);
+            rt2.setToAngle(anguloFinal);
+            rt2.setCycleCount(1);
+            rt2.play();
+
+            // Guardar vencedor globalmente
+            DadosGlobais.jogadorQueEscolheCor = jogador1Escolhe
+                    ? DadosGlobais.nomeJogador1
+                    : DadosGlobais.nomeJogador2;
+
+            labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
             btnContinuarRoleta.setDisable(false);
         });
 
@@ -69,6 +85,6 @@ public class RoletaController implements Initializable {
      */
     @FXML
     private void abrirEscolherCor() {
-        ScreenManager.show("/gui/escolhercor/EscolherCor.fxml");
+        ScreenManager.show("/fxml/EscolherCor.fxml");
     }
 }
