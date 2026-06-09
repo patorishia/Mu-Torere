@@ -4,6 +4,7 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
 import group15.mu_torere.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -182,7 +183,7 @@ public class JogoLocalController implements Initializable {
                             ? jogo.getJogador2().getNome()
                             : jogo.getJogador1().getNome();
 
-            ScreenManager.show("/gui/fim/FimJogo.fxml");
+            ScreenManager.show("/fxml/FimJogo.fxml");
         }
     }
 
@@ -210,11 +211,11 @@ public class JogoLocalController implements Initializable {
 
     @FXML
     private void abrirDefinicoes() {
-        ScreenManager.show("/gui/parametros/Parametros.fxml");
+        ScreenManager.show("/fxml/Parametros.fxml");
     }
 
     @FXML
     private void mostrarMenuInicial() {
-        ScreenManager.show("/gui/menu/MenuInicial.fxml");
+        ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }

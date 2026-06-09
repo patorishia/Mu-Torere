@@ -22,7 +22,7 @@ public class Mu_Torere extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Carregar o menu inicial (primeiro ecrã da aplicação)
-        Parent root = FXMLLoader.load(getClass().getResource("/gui/menu/MenuInicial.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuInicial.fxml"));
 
         Scene scene = new Scene(root);
 

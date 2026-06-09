@@ -4,6 +4,7 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -39,7 +40,7 @@ public class ParametrosController implements Initializable {
         DadosGlobais.temaAtual = temaCombo.getValue();
 
         // Voltar ao menu
-        ScreenManager.show("/gui/menu/MenuInicial.fxml");
+        ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 
     /**
@@ -47,6 +48,6 @@ public class ParametrosController implements Initializable {
      */
     @FXML
     private void voltarAtras() {
-        ScreenManager.show("/gui/menu/MenuInicial.fxml");
+        ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }

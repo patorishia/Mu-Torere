@@ -4,6 +4,7 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -36,11 +37,11 @@ public class JogoRedeController {
         DadosGlobais.ipServidor = ip;
 
         // Avançar para o ecrã de espera
-        ScreenManager.show("/gui/rede/Espera.fxml");
+        ScreenManager.show("/fxml/Espera.fxml");
     }
 
     @FXML
     private void mostrarMenuInicial() {
-        ScreenManager.show("/gui/menu/MenuInicial.fxml");
+        ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }

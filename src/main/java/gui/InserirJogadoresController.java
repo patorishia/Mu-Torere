@@ -4,6 +4,7 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
@@ -44,7 +45,7 @@ public class InserirJogadoresController {
         DadosGlobais.nomeJogador2 = nome2;
 
         // Avançar para a roleta
-        ScreenManager.show("/gui/roleta/Roleta.fxml");
+        ScreenManager.show("/fxml/Roleta.fxml");
     }
     
     /**
@@ -53,7 +54,7 @@ public class InserirJogadoresController {
      */
     @FXML
     private void voltar(ActionEvent event) {
-        ScreenManager.show("/gui/menu/MenuInicial.fxml");
+        ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }
 
