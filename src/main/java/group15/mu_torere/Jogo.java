@@ -6,13 +6,15 @@ package group15.mu_torere;
 
 import java.util.List;
 
+
 /**
- *
- * @author patri
- */
-/**
- * Classe que representa o jogo de Mu Torere. Gere: - o tabuleiro - os dois
- * jogadores - as peças - o jogador atual - a validação e execução de movimentos
+ * Classe que representa o jogo de Mu Torere.
+ * Gere:
+ *  - o tabuleiro
+ *  - os dois jogadores
+ *  - as peças
+ *  - o jogador atual
+ *  - a validação e execução de movimentos
  */
 public class Jogo {
 
@@ -22,20 +24,23 @@ public class Jogo {
     private Tabuleiro tabuleiro;
 
     /**
-     * Construtor do jogo. Cria o tabuleiro, os jogadores e coloca as peças nas
-     * posições iniciais.
+     * Construtor do jogo.
+     * Agora recebe também as cores escolhidas no ecrã anterior.
      *
      * @param nome1 nome do primeiro jogador
      * @param nome2 nome do segundo jogador
+     * @param corJog1 cor do jogador 1 ("claro" ou "escuro")
+     * @param corJog2 cor do jogador 2 ("claro" ou "escuro")
      */
-    public Jogo(String nome1, String nome2) {
+    public Jogo(String nome1, String nome2, String corJog1, String corJog2) {
+
         tabuleiro = new Tabuleiro();
 
-        // Criação dos jogadores
-        jogador1 = new Jogador(nome1, "escuro");
-        jogador2 = new Jogador(nome2, "claro");
+        // Criação dos jogadores com as cores escolhidas
+        jogador1 = new Jogador(nome1, corJog1);
+        jogador2 = new Jogador(nome2, corJog2);
 
-        // O jogador 1 começa
+        // Jogador 1 começa sempre
         jogadorAtual = jogador1;
 
         // Colocar as peças nas posições iniciais
@@ -43,10 +48,12 @@ public class Jogo {
     }
 
     /**
-     * Coloca as peças dos jogadores nas posições iniciais do tabuleiro. Jogador
-     * 1: posições 0, 1, 2, 3 Jogador 2: posições 4, 5, 6, 7
+     * Coloca as peças dos jogadores nas posições iniciais do tabuleiro.
+     * Jogador 1 → posições 0,1,2,3
+     * Jogador 2 → posições 4,5,6,7
      */
     private void inicializarPecas() {
+
         // Peças do jogador 1
         for (int i = 0; i < 4; i++) {
             Peca p = new Peca(jogador1, tabuleiro.getPosicao(i));
@@ -61,43 +68,47 @@ public class Jogo {
     }
 
     /**
-     * Devolve a lista de posições para onde uma peça pode mover, de acordo com
-     * as regras: - só pode mover para posições adjacentes - a posição de
-     * destino tem de estar vazia
+     * Verifica se uma peça pertence ao jogador que tem o turno atual.
      *
-     * @param peca
-     * @return
+     * @param p peça a verificar
+     * @return true se a peça pertence ao jogador atual
      */
-    public List<Posicao> obterMovimentosValidos(Peca peca) {
-        return peca.getPosicaoAtual().getAdjacentes()
-                .stream()
-                .filter(pos -> !pos.estaOcupada())
-                .toList();
+    public boolean ePecaDoJogadorAtual(Peca p) {
+        return p.getDono() == jogadorAtual;
     }
 
     /**
-     * Verifica se um movimento é válido para uma dada peça e posição de
-     * destino.
+     * Verifica se um movimento é válido segundo as regras:
+     *  - a posição de destino tem de estar vazia
+     *  - a posição de destino tem de ser adjacente à posição atual da peça
      *
-     * @param peca
-     * @param destino
-     * @return
+     * @param peca peça a mover
+     * @param destino posição de destino
+     * @return true se o movimento for permitido
      */
-    public boolean validarMovimento(Peca peca, Posicao destino) {
-        return obterMovimentosValidos(peca).contains(destino);
-    }
+    public boolean movimentoValido(Peca peca, Posicao destino) {
 
-    /**
-     * Executa um movimento, se for válido, e troca o turno do jogador.
-     *
-     * @param peca
-     * @param destino
-     */
-    public void executarMovimento(Peca peca, Posicao destino) {
-        if (validarMovimento(peca, destino)) {
-            peca.moverPara(destino);
-            alternarTurno();
+        // destino tem de estar livre
+        if (destino.estaOcupada()) {
+            return false;
         }
+
+        // destino tem de ser adjacente
+        List<Posicao> adj = peca.getPosicaoAtual().getAdjacentes();
+        return adj.contains(destino);
+    }
+
+    /**
+     * Executa um movimento válido:
+     *  - move a peça no modelo
+     *  - troca o turno
+     *
+     * @param peca peça a mover
+     * @param destino posição de destino
+     */
+    public void fazerMovimento(Peca peca, Posicao destino) {
+        peca.moverPara(destino);
+        alternarTurno();
     }
 
     /**
@@ -108,9 +119,7 @@ public class Jogo {
     }
 
     /**
-     * Devolve o jogador que tem o turno atual.
-     *
-     * @return
+     * @return jogador que tem o turno atual
      */
     public Jogador getJogadorAtual() {
         return jogadorAtual;
@@ -127,13 +136,4 @@ public class Jogo {
     public Tabuleiro getTabuleiro() {
         return tabuleiro;
     }
-
-    public boolean movimentoValido(Peca pecaModelo, Posicao destinoModelo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public void fazerMovimento(Peca pecaModelo, Posicao destinoModelo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }
