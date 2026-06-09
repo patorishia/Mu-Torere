@@ -63,5 +63,13 @@ public class Peca {
         // Atualiza a referência interna
         posicaoAtual = destino;
     }
+
+    public void setCenterX(double centerX) {
+       
+    }
+
+    public void setCenterY(double centerY) {
+       
+    }
 }
 
