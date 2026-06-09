@@ -4,18 +4,17 @@
  */
 package gui;
 
-
 import group15.mu_torere.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 
 /**
  * Controlador do ecrã Jogo Local.
@@ -25,40 +24,32 @@ import java.util.ResourceBundle;
  *  - permitir mover peças
  *  - validar movimentos através do modelo
  *  - atualizar o jogador atual
+ *  - detetar fim de jogo
  */
 public class JogoLocalController implements Initializable {
 
-    // Label lateral que mostra o jogador atual
     @FXML private Label labelJogadorAtual;
 
-    // Casas do tabuleiro (GUI)
     @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
-    // Peças claras (GUI)
     @FXML private Circle pecaClara1, pecaClara2, pecaClara3, pecaClara4;
-
-    // Peças escuras (GUI)
     @FXML private Circle pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4;
 
-    // Peça selecionada pelo jogador
     private Circle pecaSelecionada;
 
-    // Modelo do jogo
     private Jogo jogo;
 
-    // Mapas GUI ↔ Modelo
     private final Map<Circle, Peca> mapaGuiParaModelo = new HashMap<>();
     private final Map<Peca, Circle> mapaModeloParaGui = new HashMap<>();
     private final Map<Circle, Posicao> mapaCasaGuiParaModelo = new HashMap<>();
 
-    // Arrays úteis
     private Circle[] casas;
     private Circle[] pecas;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // Criar jogo com nomes e cores escolhidas no ecrã anterior
+        // Criar jogo com nomes e cores escolhidas
         jogo = new Jogo(
                 DadosGlobais.nomeJogador1,
                 DadosGlobais.nomeJogador2,
@@ -66,20 +57,15 @@ public class JogoLocalController implements Initializable {
                 DadosGlobais.corJogador2
         );
 
-        // Arrays para facilitar loops
         casas = new Circle[]{casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7, casaCentro};
         pecas = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4,
                              pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
 
-        // Ligar GUI ao Modelo
         ligarPecasDoModelo();
         ligarCasasDoModelo();
-
-        // Ligar eventos de clique
         ligarClicksNasPecas();
         ligarClicksNasCasas();
 
-        // Mostrar jogador inicial
         atualizarJogadorAtual();
     }
 
@@ -87,16 +73,10 @@ public class JogoLocalController implements Initializable {
     // LIGAÇÃO GUI ↔ MODELO
     // -------------------------------------------------------------------------
 
-    /**
-     * Liga cada peça da GUI à peça correspondente no modelo.
-     * As posições iniciais são:
-     * Jogador 1 → 0,1,2,3
-     * Jogador 2 → 4,5,6,7
-     */
     private void ligarPecasDoModelo() {
         Tabuleiro tab = jogo.getTabuleiro();
 
-        // Jogador 1 (claro)
+        // Jogador 1
         Peca p1 = tab.getPosicao(0).getOcupante();
         Peca p2 = tab.getPosicao(1).getOcupante();
         Peca p3 = tab.getPosicao(2).getOcupante();
@@ -112,7 +92,7 @@ public class JogoLocalController implements Initializable {
         mapaModeloParaGui.put(p3, pecaClara3);
         mapaModeloParaGui.put(p4, pecaClara4);
 
-        // Jogador 2 (escuro)
+        // Jogador 2
         Peca e1 = tab.getPosicao(4).getOcupante();
         Peca e2 = tab.getPosicao(5).getOcupante();
         Peca e3 = tab.getPosicao(6).getOcupante();
@@ -129,9 +109,6 @@ public class JogoLocalController implements Initializable {
         mapaModeloParaGui.put(e4, pecaEscura4);
     }
 
-    /**
-     * Liga cada casa da GUI à posição correspondente no modelo.
-     */
     private void ligarCasasDoModelo() {
         Tabuleiro tab = jogo.getTabuleiro();
 
@@ -150,46 +127,32 @@ public class JogoLocalController implements Initializable {
     // INTERAÇÃO DO JOGADOR
     // -------------------------------------------------------------------------
 
-    /**
-     * Liga o clique às peças.
-     */
     private void ligarClicksNasPecas() {
         for (Circle peca : pecas) {
             peca.setOnMouseClicked(e -> selecionarPeca(peca));
         }
     }
 
-    /**
-     * Seleciona uma peça se ela pertencer ao jogador atual.
-     */
     private void selecionarPeca(Circle pecaGui) {
 
         limparStrokes();
 
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
-        // Só pode selecionar peças do jogador atual
         if (!jogo.ePecaDoJogadorAtual(pecaModelo)) return;
 
         pecaSelecionada = pecaGui;
 
-        // Highlight azul
         pecaGui.setStroke(Color.BLUE);
         pecaGui.setStrokeWidth(3);
     }
 
-    /**
-     * Liga o clique às casas.
-     */
     private void ligarClicksNasCasas() {
         for (Circle casa : casas) {
             casa.setOnMouseClicked(e -> moverPecaParaCasa(casa));
         }
     }
 
-    /**
-     * Tenta mover a peça selecionada para a casa clicada.
-     */
     private void moverPecaParaCasa(Circle casaGui) {
 
         if (pecaSelecionada == null) return;
@@ -197,13 +160,10 @@ public class JogoLocalController implements Initializable {
         Peca pecaModelo = mapaGuiParaModelo.get(pecaSelecionada);
         Posicao destino = mapaCasaGuiParaModelo.get(casaGui);
 
-        // Validar movimento no modelo
         if (!jogo.movimentoValido(pecaModelo, destino)) return;
 
-        // Atualizar modelo
         jogo.fazerMovimento(pecaModelo, destino);
 
-        // Atualizar GUI
         pecaSelecionada.setCenterX(casaGui.getCenterX());
         pecaSelecionada.setCenterY(casaGui.getCenterY());
 
@@ -211,11 +171,21 @@ public class JogoLocalController implements Initializable {
         pecaSelecionada = null;
 
         atualizarJogadorAtual();
+
+        // Verificar se o jogador seguinte tem movimentos
+        if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
+
+            // O jogador atual NÃO tem movimentos → perdeu
+            // Logo, o vencedor é o outro jogador
+            DadosGlobais.vencedor =
+                    (jogo.getJogadorAtual() == jogo.getJogador1())
+                            ? jogo.getJogador2().getNome()
+                            : jogo.getJogador1().getNome();
+
+            ScreenManager.show("/gui/fim/FimJogo.fxml");
+        }
     }
 
-    /**
-     * Remove highlight de todas as peças.
-     */
     private void limparStrokes() {
         for (Circle p : pecas) {
             p.setStroke(null);
@@ -223,11 +193,15 @@ public class JogoLocalController implements Initializable {
         }
     }
 
-    /**
-     * Atualiza o texto do jogador atual.
-     */
     private void atualizarJogadorAtual() {
         labelJogadorAtual.setText(jogo.getJogadorAtual().getNome());
+    }
+
+    private boolean jogadorTemMovimentos(Jogador jog) {
+        for (Peca p : jog.getPecas()) {
+            if (!jogo.obterMovimentosValidos(p).isEmpty()) return true;
+        }
+        return false;
     }
 
     // -------------------------------------------------------------------------

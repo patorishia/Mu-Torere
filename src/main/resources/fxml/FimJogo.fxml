@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Ecrã: Fim de Jogo
+    Função: Mostrar o vencedor e permitir voltar ao menu.
+    Controlador: gui.fim.FimJogoController
+-->
+<BorderPane fx:id="fimJogo" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FimJogoController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+    
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+
+            <!-- Título -->
+            <Label text="Fim de Jogo"
+                   styleClass="title-label"/>
+
+            <!-- Nome do vencedor (atualizado pelo controlador) -->
+            <Label fx:id="labelVencedor"
+                   styleClass="fim-label-vencedor"
+                   text="Vencedor: "/>
+
+            <!-- Botão para voltar ao menu -->
+            <Button fx:id="btnVoltarMenuFim"
+                    text="Voltar ao Menu"
+                    prefWidth="200"
+                    onAction="#mostrarMenuInicial"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

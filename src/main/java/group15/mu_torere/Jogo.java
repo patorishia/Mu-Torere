@@ -77,6 +77,22 @@ public class Jogo {
         return p.getDono() == jogadorAtual;
     }
 
+     /**
+     * Devolve todas as posições para onde uma peça pode mover.
+     * Regras:
+     *  - só pode mover para posições adjacentes
+     *  - a posição de destino tem de estar vazia
+     *
+     * @param peca peça a analisar
+     * @return lista de posições válidas
+     */
+    public List<Posicao> obterMovimentosValidos(Peca peca) {
+        return peca.getPosicaoAtual().getAdjacentes()
+                .stream()
+                .filter(pos -> !pos.estaOcupada())
+                .toList();
+    }
+    
     /**
      * Verifica se um movimento é válido segundo as regras:
      *  - a posição de destino tem de estar vazia

@@ -5,22 +5,47 @@
 package gui;
 
 /**
- * Classe para guardar dados que precisam de ser partilhados entre ecrãs.
+ * Classe usada para guardar dados globais que precisam de ser
+ * partilhados entre diferentes ecrãs da aplicação.
+ *
+ * Não tem lógica — é apenas um "contentor" de variáveis públicas.
  */
 public class DadosGlobais {
 
+    // ---------------------------------------------------------
+    // JOGADORES
+    // ---------------------------------------------------------
+
+    /** Nome do jogador 1 (inserido no ecrã Inserir Jogadores) */
     public static String nomeJogador1;
+
+    /** Nome do jogador 2 */
     public static String nomeJogador2;
 
-    // Quem escolhe a cor (definido na roleta)
-    public static String jogadorQueEscolheCor;
-
-    // Cores escolhidas
+    /** Cor escolhida pelo jogador 1 ("claro" ou "escuro") */
     public static String corJogador1;
+
+    /** Cor escolhida pelo jogador 2 ("claro" ou "escuro") */
     public static String corJogador2;
 
-    //parametros
+    /** Jogador que ganhou a roleta e escolhe a cor */
+    public static String jogadorQueEscolheCor;
+
+    // ---------------------------------------------------------
+    // FIM DE JOGO
+    // ---------------------------------------------------------
+
+    /** Nome do vencedor do jogo (usado no ecrã Fim de Jogo) */
+    public static String vencedor;
+
+    // ---------------------------------------------------------
+    // DEFINIÇÕES
+    // ---------------------------------------------------------
+
+    /** Som ativado/desativado */
     public static boolean somAtivo = true;
+
+    /** Tema atual ("Claro" ou "Escuro") */
     public static String temaAtual = "Claro";
 
 }
