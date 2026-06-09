@@ -47,5 +47,8 @@ public class DadosGlobais {
 
     /** Tema atual ("Claro" ou "Escuro") */
     public static String temaAtual = "Claro";
+    
+    
+    static String ipServidor;
 
 }
