@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gui;
+package group15.mu_torere;
 
 /**
  * Classe usada para guardar dados globais que precisam de ser
@@ -49,6 +49,6 @@ public class DadosGlobais {
     public static String temaAtual = "Claro";
     
     
-    static String ipServidor;
+    public static String ipServidor;
 
 }
