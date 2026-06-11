@@ -31,45 +31,49 @@
     <center>
         <Pane fx:id="tabuleiro" prefHeight="500" prefWidth="500">
 
-            <!-- Linhas principais -->
-            <Line startX="250" startY="50"  endX="250" endY="450" styleClass="board-line"/>
-            <Line startX="50"  startY="250" endX="450" endY="250" styleClass="board-line"/>
-            <Line startX="100" startY="100" endX="400" endY="400" styleClass="board-line"/>
-            <Line startX="400" startY="100" endX="100" endY="400" styleClass="board-line"/>
+            <!-- Linhas do centro para os kewai -->
+            <Line startX="250" startY="250" endX="190" endY="70"  styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="310" endY="70"  styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="430" endY="170" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="430" endY="330" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="310" endY="430" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="190" endY="430" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="70"  endY="330" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="70"  endY="170" styleClass="board-line"/>
 
-            <!-- Linhas laterais -->
-            <Line startX="250" startY="50"  endX="400" endY="100" styleClass="board-line"/>
-            <Line startX="400" startY="100" endX="450" endY="250" styleClass="board-line"/>
-            <Line startX="450" startY="250" endX="400" endY="400" styleClass="board-line"/>
-            <Line startX="400" startY="400" endX="250" endY="450" styleClass="board-line"/>
-            <Line startX="250" startY="450" endX="100" endY="400" styleClass="board-line"/>
-            <Line startX="100" startY="400" endX="50"  endY="250" styleClass="board-line"/>
-            <Line startX="50"  startY="250" endX="100" endY="100" styleClass="board-line"/>
-            <Line startX="100" startY="100" endX="250" endY="50"  styleClass="board-line"/>
+            <!-- Linhas exteriores -->
+            <Line startX="190" startY="70"  endX="310" endY="70"  styleClass="board-line"/>
+            <Line startX="310" startY="70"  endX="430" endY="170" styleClass="board-line"/>
+            <Line startX="430" startY="170" endX="430" endY="330" styleClass="board-line"/>
+            <Line startX="430" startY="330" endX="310" endY="430" styleClass="board-line"/>
+            <Line startX="310" startY="430" endX="190" endY="430" styleClass="board-line"/>
+            <Line startX="190" startY="430" endX="70"  endY="330" styleClass="board-line"/>
+            <Line startX="70"  startY="330" endX="70"  endY="170" styleClass="board-line"/>
+            <Line startX="70"  startY="170" endX="190" endY="70"  styleClass="board-line"/>
 
             <!-- Casas -->
             <Circle fx:id="casaCentro" centerX="250" centerY="250" radius="18" styleClass="board-cell"/>
 
-            <Circle fx:id="casa0" centerX="250" centerY="50"  radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa1" centerX="400" centerY="100" radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa2" centerX="450" centerY="250" radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa3" centerX="400" centerY="400" radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa4" centerX="250" centerY="450" radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa5" centerX="100" centerY="400" radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa6" centerX="50"  centerY="250" radius="18" styleClass="board-cell"/>
-            <Circle fx:id="casa7" centerX="100" centerY="100" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa0" centerX="190" centerY="70"  radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa1" centerX="310" centerY="70"  radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa2" centerX="430" centerY="170" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa3" centerX="430" centerY="330" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa4" centerX="310" centerY="430" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa5" centerX="190" centerY="430" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa6" centerX="70"  centerY="330" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa7" centerX="70"  centerY="170" radius="18" styleClass="board-cell"/>
 
             <!-- Peças claras -->
-            <Circle fx:id="pecaClara1" centerX="250" centerY="450" radius="14" styleClass="piece-light"/>
-            <Circle fx:id="pecaClara2" centerX="100" centerY="400" radius="14" styleClass="piece-light"/>
-            <Circle fx:id="pecaClara3" centerX="50"  centerY="250" radius="14" styleClass="piece-light"/>
-            <Circle fx:id="pecaClara4" centerX="100" centerY="100" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara1" centerX="190" centerY="430" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara2" centerX="70"  centerY="330" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara3" centerX="70"  centerY="170" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara4" centerX="190" centerY="70"  radius="14" styleClass="piece-light"/>
 
             <!-- Peças escuras -->
-            <Circle fx:id="pecaEscura1" centerX="250" centerY="50"  radius="14" styleClass="piece-dark"/>
-            <Circle fx:id="pecaEscura2" centerX="400" centerY="100" radius="14" styleClass="piece-dark"/>
-            <Circle fx:id="pecaEscura3" centerX="450" centerY="250" radius="14" styleClass="piece-dark"/>
-            <Circle fx:id="pecaEscura4" centerX="400" centerY="400" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura1" centerX="310" centerY="70"  radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura2" centerX="430" centerY="170" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura3" centerX="430" centerY="330" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura4" centerX="310" centerY="430" radius="14" styleClass="piece-dark"/>
 
         </Pane>
     </center>
