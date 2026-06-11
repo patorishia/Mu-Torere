@@ -5,6 +5,7 @@
 package group15.mu_torere;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -77,32 +78,46 @@ public class Jogo {
         return p.getDono() == jogadorAtual;
     }
 
-     /**
+    /**
      * Devolve todas as posições para onde uma peça pode mover.
-     * Regras:
-     *  - só pode mover para posições adjacentes
-     *  - a posição de destino tem de estar vazia
      *
      * @param peca peça a analisar
      * @return lista de posições válidas
      */
     public List<Posicao> obterMovimentosValidos(Peca peca) {
-        return peca.getPosicaoAtual().getAdjacentes()
-                .stream()
-                .filter(pos -> !pos.estaOcupada())
-                .toList();
+        List<Posicao> movimentos = new ArrayList<>();
+        List<Posicao> adjacentes = peca.getPosicaoAtual().getAdjacentes();
+
+        for (Posicao destino : adjacentes) {
+            if (movimentoValido(peca, destino)) {
+                movimentos.add(destino);
+            }
+        }
+
+        return movimentos;
     }
     
     /**
      * Verifica se um movimento é válido segundo as regras:
+     *  - a peça tem de pertencer ao jogador atual
      *  - a posição de destino tem de estar vazia
      *  - a posição de destino tem de ser adjacente à posição atual da peça
+     *  - uma peça exterior só pode entrar no centro se tiver uma peça
+     *    adversária numa das posições exteriores vizinhas
      *
      * @param peca peça a mover
      * @param destino posição de destino
      * @return true se o movimento for permitido
      */
     public boolean movimentoValido(Peca peca, Posicao destino) {
+
+        if (peca == null || destino == null) {
+            return false;
+        }
+
+        if (!ePecaDoJogadorAtual(peca)) {
+            return false;
+        }
 
         // destino tem de estar livre
         if (destino.estaOcupada()) {
@@ -111,7 +126,45 @@ public class Jogo {
 
         // destino tem de ser adjacente
         List<Posicao> adj = peca.getPosicaoAtual().getAdjacentes();
-        return adj.contains(destino);
+        if (!adj.contains(destino)) {
+            return false;
+        }
+
+        // Movimento normal entre posições exteriores vizinhas
+        if (peca.getPosicaoAtual().getId() != 8 && destino.getId() != 8) {
+            return true;
+        }
+
+        // Movimento do centro para uma posição exterior livre
+        if (peca.getPosicaoAtual().getId() == 8 && destino.getId() != 8) {
+            return true;
+        }
+
+        // Movimento de uma posição exterior para o centro
+        return temAdversarioNasCasasExterioresVizinhas(peca);
+    }
+
+    /**
+     * Verifica se uma peça exterior tem pelo menos uma peça adversária
+     * numa das duas casas exteriores vizinhas.
+     *
+     * @param peca peça a verificar
+     * @return true se existir uma peça adversária vizinha
+     */
+    private boolean temAdversarioNasCasasExterioresVizinhas(Peca peca) {
+        List<Posicao> adjacentes = peca.getPosicaoAtual().getAdjacentes();
+
+        for (Posicao posicao : adjacentes) {
+            if (posicao.getId() != 8 && posicao.estaOcupada()) {
+                Peca ocupante = posicao.getOcupante();
+
+                if (ocupante.getDono() != peca.getDono()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
