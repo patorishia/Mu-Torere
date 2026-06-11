@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -125,14 +126,19 @@ public class JogoController implements Initializable {
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
         if (!jogo.ePecaDoJogadorAtual(pecaModelo)) return;
-        if (jogo.obterMovimentosValidos(pecaModelo).isEmpty()) return;
 
-        atualizarDestaquesPecasMoveis();
+        List<Posicao> movimentosValidos = jogo.obterMovimentosValidos(pecaModelo);
+
+        if (movimentosValidos.isEmpty()) return;
+
+        Posicao destino = movimentosValidos.get(0);
+        Circle casaDestino = obterCasaGui(destino);
+
+        if (casaDestino == null) return;
 
         pecaSelecionada = pecaGui;
 
-        pecaGui.setStroke(Color.BLUE);
-        pecaGui.setStrokeWidth(3);
+        moverPecaParaCasa(casaDestino);
     }
 
     private void ligarClicksNasCasas() {
@@ -173,6 +179,16 @@ public class JogoController implements Initializable {
 
             ScreenManager.show("/fxml/FimJogo.fxml");
         }
+    }
+
+    private Circle obterCasaGui(Posicao posicao) {
+        for (Circle casa : casas) {
+            if (mapaCasaGuiParaModelo.get(casa) == posicao) {
+                return casa;
+            }
+        }
+
+        return null;
     }
 
     private void limparStrokes() {
