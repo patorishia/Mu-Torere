@@ -5,6 +5,7 @@
 package group15.mu_torere;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -31,8 +32,9 @@ public class Jogo {
      * @param nome2 nome do segundo jogador
      * @param corJog1 cor do jogador 1 ("claro" ou "escuro")
      * @param corJog2 cor do jogador 2 ("claro" ou "escuro")
+     * @param nomeJogadorInicial nome do jogador que começa a partida
      */
-    public Jogo(String nome1, String nome2, String corJog1, String corJog2) {
+    public Jogo(String nome1, String nome2, String corJog1, String corJog2, String nomeJogadorInicial) {
 
         tabuleiro = new Tabuleiro();
 
@@ -40,8 +42,12 @@ public class Jogo {
         jogador1 = new Jogador(nome1, corJog1);
         jogador2 = new Jogador(nome2, corJog2);
 
-        // Jogador 1 começa sempre
-        jogadorAtual = jogador1;
+        // O jogador sorteado começa a partida
+        if (nomeJogadorInicial != null && nomeJogadorInicial.equals(nome2)) {
+            jogadorAtual = jogador2;
+        } else {
+            jogadorAtual = jogador1;
+        }
 
         // Colocar as peças nas posições iniciais
         inicializarPecas();
@@ -49,21 +55,32 @@ public class Jogo {
 
     /**
      * Coloca as peças dos jogadores nas posições iniciais do tabuleiro.
-     * Jogador 1 → posições 0,1,2,3
-     * Jogador 2 → posições 4,5,6,7
+     * As peças são colocadas nas casas onde a GUI mostra essa cor.
      */
     private void inicializarPecas() {
+        adicionarPecasIniciais(jogador1);
+        adicionarPecasIniciais(jogador2);
+    }
 
-        // Peças do jogador 1
-        for (int i = 0; i < 4; i++) {
-            Peca p = new Peca(jogador1, tabuleiro.getPosicao(i));
-            jogador1.adicionarPeca(p);
+    /**
+     * Coloca as peças iniciais de um jogador de acordo com a sua cor.
+     *
+     * @param jogador jogador a quem pertencem as peças
+     */
+    private void adicionarPecasIniciais(Jogador jogador) {
+        int[] posicoesClaras = {5, 6, 7, 0};
+        int[] posicoesEscuras = {1, 2, 3, 4};
+        int[] posicoesIniciais;
+
+        if (jogador.getCor().equals("claro")) {
+            posicoesIniciais = posicoesClaras;
+        } else {
+            posicoesIniciais = posicoesEscuras;
         }
 
-        // Peças do jogador 2
-        for (int i = 4; i < 8; i++) {
-            Peca p = new Peca(jogador2, tabuleiro.getPosicao(i));
-            jogador2.adicionarPeca(p);
+        for (int i = 0; i < posicoesIniciais.length; i++) {
+            Peca p = new Peca(jogador, tabuleiro.getPosicao(posicoesIniciais[i]));
+            jogador.adicionarPeca(p);
         }
     }
 
@@ -77,32 +94,45 @@ public class Jogo {
         return p.getDono() == jogadorAtual;
     }
 
-     /**
+    /**
      * Devolve todas as posições para onde uma peça pode mover.
-     * Regras:
-     *  - só pode mover para posições adjacentes
-     *  - a posição de destino tem de estar vazia
      *
      * @param peca peça a analisar
      * @return lista de posições válidas
      */
     public List<Posicao> obterMovimentosValidos(Peca peca) {
-        return peca.getPosicaoAtual().getAdjacentes()
-                .stream()
-                .filter(pos -> !pos.estaOcupada())
-                .toList();
+        List<Posicao> movimentos = new ArrayList<>();
+        List<Posicao> adjacentes = peca.getPosicaoAtual().getAdjacentes();
+
+        for (Posicao destino : adjacentes) {
+            if (movimentoValido(peca, destino)) {
+                movimentos.add(destino);
+            }
+        }
+
+        return movimentos;
     }
     
     /**
      * Verifica se um movimento é válido segundo as regras:
+     *  - a peça tem de pertencer ao jogador atual
      *  - a posição de destino tem de estar vazia
      *  - a posição de destino tem de ser adjacente à posição atual da peça
+     *  - uma peça exterior só pode entrar no centro se for kawhena
      *
      * @param peca peça a mover
      * @param destino posição de destino
      * @return true se o movimento for permitido
      */
     public boolean movimentoValido(Peca peca, Posicao destino) {
+
+        if (peca == null || destino == null) {
+            return false;
+        }
+
+        if (!ePecaDoJogadorAtual(peca)) {
+            return false;
+        }
 
         // destino tem de estar livre
         if (destino.estaOcupada()) {
@@ -111,7 +141,50 @@ public class Jogo {
 
         // destino tem de ser adjacente
         List<Posicao> adj = peca.getPosicaoAtual().getAdjacentes();
-        return adj.contains(destino);
+        if (!adj.contains(destino)) {
+            return false;
+        }
+
+        // Movimento normal entre posições exteriores vizinhas
+        if (peca.getPosicaoAtual().getId() != 8 && destino.getId() != 8) {
+            return true;
+        }
+
+        // Movimento do centro para uma posição exterior livre
+        if (peca.getPosicaoAtual().getId() == 8 && destino.getId() != 8) {
+            return true;
+        }
+
+        // Regra do kawhena: só entra no centro se tocar numa peça adversária
+        return eKawhena(peca);
+    }
+
+    /**
+     * Verifica a regra do kawhena.
+     * Uma peça é kawhena quando está numa posição exterior e tem pelo menos
+     * uma peça adversária numa das duas posições exteriores vizinhas.
+     *
+     * @param peca peça a verificar
+     * @return true se a peça for kawhena
+     */
+    private boolean eKawhena(Peca peca) {
+        if (peca.getPosicaoAtual().getId() == 8) {
+            return false;
+        }
+
+        List<Posicao> adjacentes = peca.getPosicaoAtual().getAdjacentes();
+
+        for (Posicao posicao : adjacentes) {
+            if (posicao.getId() != 8 && posicao.estaOcupada()) {
+                Peca ocupante = posicao.getOcupante();
+
+                if (ocupante.getDono() != peca.getDono()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

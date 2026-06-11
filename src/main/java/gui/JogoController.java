@@ -6,6 +6,7 @@ package gui;
 
 import group15.mu_torere.DadosGlobais;
 import group15.mu_torere.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -55,7 +57,8 @@ public class JogoController implements Initializable {
                 DadosGlobais.nomeJogador1,
                 DadosGlobais.nomeJogador2,
                 DadosGlobais.corJogador1,
-                DadosGlobais.corJogador2
+                DadosGlobais.corJogador2,
+                DadosGlobais.jogadorQueEscolheCor
         );
 
         casas = new Circle[]{casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7, casaCentro};
@@ -68,6 +71,7 @@ public class JogoController implements Initializable {
         ligarClicksNasCasas();
 
         atualizarJogadorAtual();
+        Platform.runLater(() -> atualizarDestaquesPecasMoveis());
     }
 
     // -------------------------------------------------------------------------
@@ -77,37 +81,20 @@ public class JogoController implements Initializable {
     private void ligarPecasDoModelo() {
         Tabuleiro tab = jogo.getTabuleiro();
 
-        // Jogador 1
-        Peca p1 = tab.getPosicao(0).getOcupante();
-        Peca p2 = tab.getPosicao(1).getOcupante();
-        Peca p3 = tab.getPosicao(2).getOcupante();
-        Peca p4 = tab.getPosicao(3).getOcupante();
+        ligarPeca(pecaClara1, tab.getPosicao(5).getOcupante());
+        ligarPeca(pecaClara2, tab.getPosicao(6).getOcupante());
+        ligarPeca(pecaClara3, tab.getPosicao(7).getOcupante());
+        ligarPeca(pecaClara4, tab.getPosicao(0).getOcupante());
 
-        mapaGuiParaModelo.put(pecaClara1, p1);
-        mapaGuiParaModelo.put(pecaClara2, p2);
-        mapaGuiParaModelo.put(pecaClara3, p3);
-        mapaGuiParaModelo.put(pecaClara4, p4);
+        ligarPeca(pecaEscura1, tab.getPosicao(1).getOcupante());
+        ligarPeca(pecaEscura2, tab.getPosicao(2).getOcupante());
+        ligarPeca(pecaEscura3, tab.getPosicao(3).getOcupante());
+        ligarPeca(pecaEscura4, tab.getPosicao(4).getOcupante());
+    }
 
-        mapaModeloParaGui.put(p1, pecaClara1);
-        mapaModeloParaGui.put(p2, pecaClara2);
-        mapaModeloParaGui.put(p3, pecaClara3);
-        mapaModeloParaGui.put(p4, pecaClara4);
-
-        // Jogador 2
-        Peca e1 = tab.getPosicao(4).getOcupante();
-        Peca e2 = tab.getPosicao(5).getOcupante();
-        Peca e3 = tab.getPosicao(6).getOcupante();
-        Peca e4 = tab.getPosicao(7).getOcupante();
-
-        mapaGuiParaModelo.put(pecaEscura1, e1);
-        mapaGuiParaModelo.put(pecaEscura2, e2);
-        mapaGuiParaModelo.put(pecaEscura3, e3);
-        mapaGuiParaModelo.put(pecaEscura4, e4);
-
-        mapaModeloParaGui.put(e1, pecaEscura1);
-        mapaModeloParaGui.put(e2, pecaEscura2);
-        mapaModeloParaGui.put(e3, pecaEscura3);
-        mapaModeloParaGui.put(e4, pecaEscura4);
+    private void ligarPeca(Circle pecaGui, Peca pecaModelo) {
+        mapaGuiParaModelo.put(pecaGui, pecaModelo);
+        mapaModeloParaGui.put(pecaModelo, pecaGui);
     }
 
     private void ligarCasasDoModelo() {
@@ -136,16 +123,22 @@ public class JogoController implements Initializable {
 
     private void selecionarPeca(Circle pecaGui) {
 
-        limparStrokes();
-
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
         if (!jogo.ePecaDoJogadorAtual(pecaModelo)) return;
 
+        List<Posicao> movimentosValidos = jogo.obterMovimentosValidos(pecaModelo);
+
+        if (movimentosValidos.isEmpty()) return;
+
+        Posicao destino = movimentosValidos.get(0);
+        Circle casaDestino = obterCasaGui(destino);
+
+        if (casaDestino == null) return;
+
         pecaSelecionada = pecaGui;
 
-        pecaGui.setStroke(Color.BLUE);
-        pecaGui.setStrokeWidth(3);
+        moverPecaParaCasa(casaDestino);
     }
 
     private void ligarClicksNasCasas() {
@@ -172,6 +165,7 @@ public class JogoController implements Initializable {
         pecaSelecionada = null;
 
         atualizarJogadorAtual();
+        atualizarDestaquesPecasMoveis();
 
         // Verificar se o jogador seguinte tem movimentos
         if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
@@ -187,10 +181,34 @@ public class JogoController implements Initializable {
         }
     }
 
+    private Circle obterCasaGui(Posicao posicao) {
+        for (Circle casa : casas) {
+            if (mapaCasaGuiParaModelo.get(casa) == posicao) {
+                return casa;
+            }
+        }
+
+        return null;
+    }
+
     private void limparStrokes() {
         for (Circle p : pecas) {
             p.setStroke(null);
             p.setStrokeWidth(0);
+        }
+    }
+
+    private void atualizarDestaquesPecasMoveis() {
+        limparStrokes();
+
+        for (Circle pecaGui : pecas) {
+            Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
+
+            if (jogo.ePecaDoJogadorAtual(pecaModelo)
+                    && !jogo.obterMovimentosValidos(pecaModelo).isEmpty()) {
+                pecaGui.setStroke(Color.GREEN);
+                pecaGui.setStrokeWidth(3);
+            }
         }
     }
 
