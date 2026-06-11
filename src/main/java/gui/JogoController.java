@@ -69,6 +69,7 @@ public class JogoController implements Initializable {
         ligarClicksNasCasas();
 
         atualizarJogadorAtual();
+        atualizarDestaquesPecasMoveis();
     }
 
     // -------------------------------------------------------------------------
@@ -120,11 +121,12 @@ public class JogoController implements Initializable {
 
     private void selecionarPeca(Circle pecaGui) {
 
-        limparStrokes();
-
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
         if (!jogo.ePecaDoJogadorAtual(pecaModelo)) return;
+        if (jogo.obterMovimentosValidos(pecaModelo).isEmpty()) return;
+
+        atualizarDestaquesPecasMoveis();
 
         pecaSelecionada = pecaGui;
 
@@ -156,6 +158,7 @@ public class JogoController implements Initializable {
         pecaSelecionada = null;
 
         atualizarJogadorAtual();
+        atualizarDestaquesPecasMoveis();
 
         // Verificar se o jogador seguinte tem movimentos
         if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
@@ -175,6 +178,20 @@ public class JogoController implements Initializable {
         for (Circle p : pecas) {
             p.setStroke(null);
             p.setStrokeWidth(0);
+        }
+    }
+
+    private void atualizarDestaquesPecasMoveis() {
+        limparStrokes();
+
+        for (Circle pecaGui : pecas) {
+            Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
+
+            if (jogo.ePecaDoJogadorAtual(pecaModelo)
+                    && !jogo.obterMovimentosValidos(pecaModelo).isEmpty()) {
+                pecaGui.setStroke(Color.GREEN);
+                pecaGui.setStrokeWidth(3);
+            }
         }
     }
 
