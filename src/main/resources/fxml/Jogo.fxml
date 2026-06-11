@@ -60,16 +60,16 @@
             <Circle fx:id="casa7" centerX="100" centerY="100" radius="18" styleClass="board-cell"/>
 
             <!-- Peças claras -->
-            <Circle fx:id="pecaClara1" centerX="250" centerY="50"  radius="14" styleClass="piece-light"/>
-            <Circle fx:id="pecaClara2" centerX="400" centerY="100" radius="14" styleClass="piece-light"/>
-            <Circle fx:id="pecaClara3" centerX="400" centerY="400" radius="14" styleClass="piece-light"/>
-            <Circle fx:id="pecaClara4" centerX="100" centerY="400" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara1" centerX="250" centerY="450" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara2" centerX="100" centerY="400" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara3" centerX="50"  centerY="250" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara4" centerX="100" centerY="100" radius="14" styleClass="piece-light"/>
 
             <!-- Peças escuras -->
-            <Circle fx:id="pecaEscura1" centerX="450" centerY="250" radius="14" styleClass="piece-dark"/>
-            <Circle fx:id="pecaEscura2" centerX="250" centerY="450" radius="14" styleClass="piece-dark"/>
-            <Circle fx:id="pecaEscura3" centerX="50"  centerY="250" radius="14" styleClass="piece-dark"/>
-            <Circle fx:id="pecaEscura4" centerX="100" centerY="100" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura1" centerX="250" centerY="50"  radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura2" centerX="400" centerY="100" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura3" centerX="450" centerY="250" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura4" centerX="400" centerY="400" radius="14" styleClass="piece-dark"/>
 
         </Pane>
     </center>

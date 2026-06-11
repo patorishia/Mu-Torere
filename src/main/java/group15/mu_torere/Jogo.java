@@ -68,8 +68,8 @@ public class Jogo {
      * @param jogador jogador a quem pertencem as peças
      */
     private void adicionarPecasIniciais(Jogador jogador) {
-        int[] posicoesClaras = {0, 1, 3, 5};
-        int[] posicoesEscuras = {2, 4, 6, 7};
+        int[] posicoesClaras = {4, 5, 6, 7};
+        int[] posicoesEscuras = {0, 1, 2, 3};
         int[] posicoesIniciais;
 
         if (jogador.getCor().equals("claro")) {

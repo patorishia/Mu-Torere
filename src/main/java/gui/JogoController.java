@@ -80,15 +80,15 @@ public class JogoController implements Initializable {
     private void ligarPecasDoModelo() {
         Tabuleiro tab = jogo.getTabuleiro();
 
-        ligarPeca(pecaClara1, tab.getPosicao(0).getOcupante());
-        ligarPeca(pecaClara2, tab.getPosicao(1).getOcupante());
-        ligarPeca(pecaClara3, tab.getPosicao(3).getOcupante());
-        ligarPeca(pecaClara4, tab.getPosicao(5).getOcupante());
+        ligarPeca(pecaClara1, tab.getPosicao(4).getOcupante());
+        ligarPeca(pecaClara2, tab.getPosicao(5).getOcupante());
+        ligarPeca(pecaClara3, tab.getPosicao(6).getOcupante());
+        ligarPeca(pecaClara4, tab.getPosicao(7).getOcupante());
 
-        ligarPeca(pecaEscura1, tab.getPosicao(2).getOcupante());
-        ligarPeca(pecaEscura2, tab.getPosicao(4).getOcupante());
-        ligarPeca(pecaEscura3, tab.getPosicao(6).getOcupante());
-        ligarPeca(pecaEscura4, tab.getPosicao(7).getOcupante());
+        ligarPeca(pecaEscura1, tab.getPosicao(0).getOcupante());
+        ligarPeca(pecaEscura2, tab.getPosicao(1).getOcupante());
+        ligarPeca(pecaEscura3, tab.getPosicao(2).getOcupante());
+        ligarPeca(pecaEscura4, tab.getPosicao(3).getOcupante());
     }
 
     private void ligarPeca(Circle pecaGui, Peca pecaModelo) {
