@@ -32,8 +32,9 @@ public class Jogo {
      * @param nome2 nome do segundo jogador
      * @param corJog1 cor do jogador 1 ("claro" ou "escuro")
      * @param corJog2 cor do jogador 2 ("claro" ou "escuro")
+     * @param nomeJogadorInicial nome do jogador que começa a partida
      */
-    public Jogo(String nome1, String nome2, String corJog1, String corJog2) {
+    public Jogo(String nome1, String nome2, String corJog1, String corJog2, String nomeJogadorInicial) {
 
         tabuleiro = new Tabuleiro();
 
@@ -41,8 +42,12 @@ public class Jogo {
         jogador1 = new Jogador(nome1, corJog1);
         jogador2 = new Jogador(nome2, corJog2);
 
-        // Jogador 1 começa sempre
-        jogadorAtual = jogador1;
+        // O jogador sorteado começa a partida
+        if (nomeJogadorInicial != null && nomeJogadorInicial.equals(nome2)) {
+            jogadorAtual = jogador2;
+        } else {
+            jogadorAtual = jogador1;
+        }
 
         // Colocar as peças nas posições iniciais
         inicializarPecas();
@@ -50,21 +55,32 @@ public class Jogo {
 
     /**
      * Coloca as peças dos jogadores nas posições iniciais do tabuleiro.
-     * Jogador 1 → posições 0,1,2,3
-     * Jogador 2 → posições 4,5,6,7
+     * As peças são colocadas nas casas onde a GUI mostra essa cor.
      */
     private void inicializarPecas() {
+        adicionarPecasIniciais(jogador1);
+        adicionarPecasIniciais(jogador2);
+    }
 
-        // Peças do jogador 1
-        for (int i = 0; i < 4; i++) {
-            Peca p = new Peca(jogador1, tabuleiro.getPosicao(i));
-            jogador1.adicionarPeca(p);
+    /**
+     * Coloca as peças iniciais de um jogador de acordo com a sua cor.
+     *
+     * @param jogador jogador a quem pertencem as peças
+     */
+    private void adicionarPecasIniciais(Jogador jogador) {
+        int[] posicoesClaras = {0, 1, 3, 5};
+        int[] posicoesEscuras = {2, 4, 6, 7};
+        int[] posicoesIniciais;
+
+        if (jogador.getCor().equals("claro")) {
+            posicoesIniciais = posicoesClaras;
+        } else {
+            posicoesIniciais = posicoesEscuras;
         }
 
-        // Peças do jogador 2
-        for (int i = 4; i < 8; i++) {
-            Peca p = new Peca(jogador2, tabuleiro.getPosicao(i));
-            jogador2.adicionarPeca(p);
+        for (int i = 0; i < posicoesIniciais.length; i++) {
+            Peca p = new Peca(jogador, tabuleiro.getPosicao(posicoesIniciais[i]));
+            jogador.adicionarPeca(p);
         }
     }
 
