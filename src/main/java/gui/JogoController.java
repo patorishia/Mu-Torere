@@ -6,6 +6,7 @@ package gui;
 
 import group15.mu_torere.DadosGlobais;
 import group15.mu_torere.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -69,7 +70,7 @@ public class JogoController implements Initializable {
         ligarClicksNasCasas();
 
         atualizarJogadorAtual();
-        atualizarDestaquesPecasMoveis();
+        Platform.runLater(() -> atualizarDestaquesPecasMoveis());
     }
 
     // -------------------------------------------------------------------------
