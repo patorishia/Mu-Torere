@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Ecrã: Jogo em Rede
+    Função: Permitir ao jogador introduzir o IP do servidor e conectar.
+    Controlador: gui.rede.JogoRedeController
+-->
+<BorderPane fx:id="jogoRede" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.InserirIPController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+    <top>
+        <Label text="Jogo em Rede"
+               BorderPane.alignment="CENTER"
+               styleClass="title-label"/>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+
+            <Label text="IP do Servidor:" styleClass="label"/>
+
+            <TextField fx:id="campoIP"
+                       promptText="ex: 192.168.1.10"
+                       prefWidth="300"/>
+
+            <Button fx:id="btnConectarRede"
+                    text="Conectar"
+                    prefWidth="200"
+                    onAction="#conectar"/>
+
+            <Button fx:id="btnVoltarRede"
+                    text="Voltar"
+                    prefWidth="200"
+                    onAction="#mostrarMenuInicial"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>
