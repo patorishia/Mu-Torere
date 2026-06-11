@@ -118,8 +118,7 @@ public class Jogo {
      *  - a peça tem de pertencer ao jogador atual
      *  - a posição de destino tem de estar vazia
      *  - a posição de destino tem de ser adjacente à posição atual da peça
-     *  - uma peça exterior só pode entrar no centro se tiver uma peça
-     *    adversária numa das posições exteriores vizinhas
+     *  - uma peça exterior só pode entrar no centro se for kawhena
      *
      * @param peca peça a mover
      * @param destino posição de destino
@@ -156,18 +155,23 @@ public class Jogo {
             return true;
         }
 
-        // Movimento de uma posição exterior para o centro
-        return temAdversarioNasCasasExterioresVizinhas(peca);
+        // Regra do kawhena: só entra no centro se tocar numa peça adversária
+        return eKawhena(peca);
     }
 
     /**
-     * Verifica se uma peça exterior tem pelo menos uma peça adversária
-     * numa das duas casas exteriores vizinhas.
+     * Verifica a regra do kawhena.
+     * Uma peça é kawhena quando está numa posição exterior e tem pelo menos
+     * uma peça adversária numa das duas posições exteriores vizinhas.
      *
      * @param peca peça a verificar
-     * @return true se existir uma peça adversária vizinha
+     * @return true se a peça for kawhena
      */
-    private boolean temAdversarioNasCasasExterioresVizinhas(Peca peca) {
+    private boolean eKawhena(Peca peca) {
+        if (peca.getPosicaoAtual().getId() == 8) {
+            return false;
+        }
+
         List<Posicao> adjacentes = peca.getPosicaoAtual().getAdjacentes();
 
         for (Posicao posicao : adjacentes) {
