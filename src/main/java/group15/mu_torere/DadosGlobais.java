@@ -50,5 +50,8 @@ public class DadosGlobais {
     
     
     public static String ipServidor;
+    
+    public static Jogo jogoCarregado = null; // null = jogo novo; != null = jogo carregado
+    
 
 }
