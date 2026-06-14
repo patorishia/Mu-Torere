@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<StackPane prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.InterfaceController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+    
+
+    
+<!-- ===========================
+         MENU INICIAL
+    ============================ -->
+    <BorderPane fx:id="menuInicial" prefHeight="600" prefWidth="900" visible="true">
+
+        <top>
+            <Label styleClass="title-label" text="Mu Torere" BorderPane.alignment="CENTER" />
+        </top>
+
+        <center>
+            <VBox alignment="CENTER" spacing="20">
+                <Button fx:id="btnJogoLocal" onAction="#abrirInserirJogadores" prefWidth="200" text="Jogo Local" />
+                <Button fx:id="btnJogoRede" onAction="#abrirJogoRede" prefWidth="200" text="Jogo em Rede" />
+                <Button fx:id="btnDefinicoes" onAction="#abrirDefinicoes" prefWidth="200" text="Definições" />
+                <Button fx:id="btnSair" onAction="#sairJogo" prefWidth="200" text="Sair" />
+
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- ===========================
+         INSERIR JOGADORES
+    ============================ -->
+    <BorderPane fx:id="inserirJogadores" prefHeight="600" prefWidth="900" visible="false">
+        <top>
+            <Label styleClass="title-label" text="Inserir Jogadores" BorderPane.alignment="CENTER" />
+        </top>
+
+        <center>
+            <VBox alignment="CENTER" fillWidth="false" spacing="15">
+                <Label text="Jogador 1:" />
+                <TextField prefHeight="31.0" prefWidth="489.0" />
+
+                <Label text="Jogador 2:" />
+                <TextField prefHeight="31.0" prefWidth="490.0" />
+
+                <Button fx:id="btnContinuarInserir" onAction="#abrirRoleta" prefWidth="200" text="Continuar" />
+
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- ===========================
+         JOGO LOCAL
+    ============================ -->
+    <BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900" visible="false">
+        <top>
+            <Label styleClass="title-label" text="Mu Torere" BorderPane.alignment="CENTER" />
+        </top>
+
+        <center>
+            <Pane fx:id="tabuleiro" prefHeight="500" prefWidth="500">
+
+                <!-- Linhas do tabuleiro -->
+                <Line endX="250" endY="450" startX="250" startY="50" styleClass="board-line" />
+                <Line endX="450" endY="250" startX="50" startY="250" styleClass="board-line" />
+                <Line endX="400" endY="400" startX="100" startY="100" styleClass="board-line" />
+                <Line endX="100" endY="400" startX="400" startY="100" styleClass="board-line" />
+
+                <!-- Linhas laterais -->
+                <Line endX="400" endY="100" startX="250" startY="50" styleClass="board-line" />
+                <Line endX="450" endY="250" startX="400" startY="100" styleClass="board-line" />
+                <Line endX="400" endY="400" startX="450" startY="250" styleClass="board-line" />
+                <Line endX="250" endY="450" startX="400" startY="400" styleClass="board-line" />
+                <Line endX="100" endY="400" startX="250" startY="450" styleClass="board-line" />
+                <Line endX="50" endY="250" startX="100" startY="400" styleClass="board-line" />
+                <Line endX="100" endY="100" startX="50" startY="250" styleClass="board-line" />
+                <Line endX="250" endY="50" startX="100" startY="100" styleClass="board-line" />
+
+                <!-- Círculo central (CASA, não peça) -->
+                <Circle fx:id="casaCentro" centerX="250" centerY="250" radius="18" styleClass="board-cell" />
+
+                <!-- 8 casas exteriores -->
+                <Circle fx:id="casa0" centerX="250" centerY="50" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa1" centerX="400" centerY="100" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa2" centerX="450" centerY="250" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa3" centerX="400" centerY="400" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa4" centerX="250" centerY="450" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa5" centerX="100" centerY="400" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa6" centerX="50" centerY="250" radius="18" styleClass="board-cell" />
+                <Circle fx:id="casa7" centerX="100" centerY="100" radius="18" styleClass="board-cell" />
+                
+                <!-- Peças claras -->
+                <Circle fx:id="pecaClara1" centerX="250" centerY="50" radius="14" styleClass="piece-light" />
+                <Circle fx:id="pecaClara2" centerX="400" centerY="100" radius="14" styleClass="piece-light" />
+                <Circle fx:id="pecaClara3" centerX="400" centerY="400" radius="14" styleClass="piece-light" />
+                <Circle fx:id="pecaClara4" centerX="100" centerY="400" radius="14" styleClass="piece-light" />
+
+                <!-- Peças escuras -->
+                <Circle fx:id="pecaEscura1" centerX="450" centerY="250" radius="14" styleClass="piece-dark" />
+                <Circle fx:id="pecaEscura2" centerX="250" centerY="450" radius="14" styleClass="piece-dark" />
+                <Circle fx:id="pecaEscura3" centerX="50" centerY="250" radius="14" styleClass="piece-dark" />
+                <Circle fx:id="pecaEscura4" centerX="100" centerY="100" radius="14" styleClass="piece-dark" />
+
+
+            </Pane>
+
+
+        </center>
+
+        <right>
+            <VBox alignment="CENTER" spacing="15">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
+
+                <Label text="Jogador Atual:" />
+                <Label style="-fx-font-weight: bold;" text="(nome)" />
+
+                <Button fx:id="btnDefinicoesJogoLocal" onAction="#abrirDefinicoes" prefHeight="40" prefWidth="168" text="Definições" />
+                <Button fx:id="btnVoltarMenuJogoLocal" onAction="#mostrarMenuInicial" prefHeight="40" prefWidth="166" text="Voltar ao Menu" />
+
+
+            </VBox>
+        </right>
+    </BorderPane>
+
+    <!-- ===========================
+         JOGO EM REDE
+    ============================ -->
+    <BorderPane fx:id="jogoRede" prefHeight="600" prefWidth="900" visible="false">
+        <top>
+            <Label styleClass="title-label" text="Jogo em Rede" BorderPane.alignment="CENTER" />
+        </top>
+
+        <center>
+            <VBox alignment="CENTER" fillWidth="false" spacing="20">
+                <Label text="IP do Servidor:" />
+                <TextField prefHeight="31.0" prefWidth="858.0" />
+
+                <Button fx:id="btnConectarRede" onAction="#abrirRoleta" prefWidth="200" text="Conectar" /> <!-- ou outro fluxo -->
+                <Button fx:id="btnVoltarRede" onAction="#mostrarMenuInicial" prefWidth="200" text="Voltar" />
+
+
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- ===========================
+         ECRÃ DE ESPERA
+    ============================ -->
+    <BorderPane fx:id="espera" prefHeight="600" prefWidth="900" visible="false">
+        <center>
+            <VBox alignment="CENTER" spacing="20">
+                <Label styleClass="title-label" text="A aguardar o adversário..." />
+                <Label fx:id="labelIPServidor"
+                    text="IP: ---"
+                    style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-padding: 0 0 10 0;" />
+
+                <ProgressIndicator />
+                <Button fx:id="btnCancelarEspera" onAction="#mostrarMenuInicial" prefWidth="200" text="Cancelar" />
+            </VBox>
+
+        </center>
+    </BorderPane>
+
+    <!-- ===========================
+         FIM DE JOGO
+    ============================ -->
+    <BorderPane fx:id="fimJogo" prefHeight="600" prefWidth="900" visible="false">
+        <center>
+            <VBox alignment="CENTER" spacing="20">
+                <Label styleClass="title-label" text="Fim de Jogo" />
+                <Label style="-fx-font-size: 20;" text="Vencedor: (nome)" />
+                <Button fx:id="btnVoltarMenuFim" onAction="#mostrarMenuInicial" prefWidth="200" text="Voltar ao Menu" />
+
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- ===========================
+         DEFINIÇÕES
+    ============================ -->
+    <BorderPane fx:id="parametros" prefHeight="600" prefWidth="900" visible="false">
+        <top>
+            <Label styleClass="title-label" text="Definições" BorderPane.alignment="CENTER" />
+        </top>
+
+        <center>
+            <VBox alignment="CENTER" spacing="15">
+                <Label text="Som:" />
+                <CheckBox text="Ativar Som" />
+
+                <Label text="Tema:" />
+                <ComboBox fx:id="temaCombo" prefWidth="200">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Claro" />
+                            <String fx:value="Escuro" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+
+
+               <Button fx:id="btnGuardarParametros" onAction="#mostrarMenuInicial" prefWidth="200" text="Guardar" />
+               <Button fx:id="btnVoltarParametros" onAction="#mostrarMenuInicial" prefWidth="200" text="Voltar" />
+
+
+            </VBox>
+        </center>
+    </BorderPane>
+    <!-- ===========================
+         ROLETA
+    ============================ -->
+    
+<BorderPane fx:id="roleta"
+            prefHeight="600" prefWidth="900"
+            visible="false">
+
+    <!-- Título -->
+    <top>
+        <Label text="A decidir quem escolhe a cor..."
+               BorderPane.alignment="CENTER"
+               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-padding: 20 0 10 0;"/>
+    </top>
+
+    <!-- Conteúdo -->
+    <center>
+        <VBox alignment="CENTER" spacing="40">
+
+            <!-- Seta que roda -->
+            <Label fx:id="seta"
+                   text="▼"
+                   style="-fx-font-size: 70px; -fx-text-fill: black;" />
+
+            <!-- Jogadores -->
+            <HBox alignment="CENTER" spacing="120">
+                <Label text="Jogador 1"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+                <Label text="Jogador 2"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+    <!-- Resultado + Botão -->
+    <bottom>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20 0 20 0;">
+
+            <Label fx:id="labelResultado"
+                   text="A roleta vai decidir..."
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <Button fx:id="btnContinuarRoleta"
+                    onAction="#abrirEscolherCor"
+                    text="Continuar"
+                    prefWidth="200"
+                    disable="true"/>
+        </VBox>
+    </bottom>
+
+</BorderPane>
+
+<!-- ===========================
+         ESCOLHER COR
+    ============================ -->
+<BorderPane fx:id="escolherCor"
+            prefWidth="900" prefHeight="600"
+            visible="false">
+
+    <top>
+        <Label text="Escolhe a tua cor"
+               BorderPane.alignment="CENTER"
+               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-padding: 20 0 20 0;" />
+    </top>
+
+    <center>
+        <HBox alignment="CENTER" spacing="120">
+
+            <!-- Peça Clara -->
+            <VBox alignment="CENTER" spacing="10">
+                <Circle fx:id="circuloClara"
+                        radius="60"
+                        fill="white"
+                        stroke="black"
+                        strokeWidth="2"
+                        onMouseClicked="#selecionarClara"
+                        style="-fx-cursor: hand;" />
+                <Label text="Peça Clara" style="-fx-font-size: 18px;" />
+            </VBox>
+
+            <!-- Peça Escura -->
+            <VBox alignment="CENTER" spacing="10">
+                <Circle fx:id="circuloEscura"
+                        radius="60"
+                        fill="black"
+                        stroke="black"
+                        strokeWidth="2"
+                        onMouseClicked="#selecionarEscura"
+                        style="-fx-cursor: hand;" />
+                <Label text="Peça Escura" style="-fx-font-size: 18px;" />
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20 0 20 0;">
+            <Button fx:id="btnConfirmarCor"
+                    text="Confirmar"
+                    prefWidth="200"
+                    disable="true"
+                    onAction="#abrirJogoLocal"
+                    style="-fx-font-size: 16px;" />
+        </VBox>
+    </bottom>
+
+</BorderPane>
+
+</StackPane>
+
+

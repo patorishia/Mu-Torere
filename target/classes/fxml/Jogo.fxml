@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Ecrã: Jogo Local
+    Função: Jogar Mu Torere localmente entre dois jogadores.
+    Controlador: gui.jogo.JogoLocalController
+-->
+
+<BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.JogoController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+
+    <!-- Título -->
+    <top>
+        <Label text="Mu Torere"
+               BorderPane.alignment="CENTER"
+               styleClass="title-label"/>
+    </top>
+
+    <!-- Tabuleiro -->
+    <center>
+        <Pane fx:id="tabuleiro" prefHeight="500" prefWidth="500">
+
+            <!-- Linhas do centro para os kewai -->
+            <Line startX="250" startY="250" endX="190" endY="70"  styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="310" endY="70"  styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="430" endY="170" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="430" endY="330" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="310" endY="430" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="190" endY="430" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="70"  endY="330" styleClass="board-line"/>
+            <Line startX="250" startY="250" endX="70"  endY="170" styleClass="board-line"/>
+
+            <!-- Linhas exteriores -->
+            <Line startX="190" startY="70"  endX="310" endY="70"  styleClass="board-line"/>
+            <Line startX="310" startY="70"  endX="430" endY="170" styleClass="board-line"/>
+            <Line startX="430" startY="170" endX="430" endY="330" styleClass="board-line"/>
+            <Line startX="430" startY="330" endX="310" endY="430" styleClass="board-line"/>
+            <Line startX="310" startY="430" endX="190" endY="430" styleClass="board-line"/>
+            <Line startX="190" startY="430" endX="70"  endY="330" styleClass="board-line"/>
+            <Line startX="70"  startY="330" endX="70"  endY="170" styleClass="board-line"/>
+            <Line startX="70"  startY="170" endX="190" endY="70"  styleClass="board-line"/>
+
+            <!-- Casas -->
+            <Circle fx:id="casaCentro" centerX="250" centerY="250" radius="18" styleClass="board-cell"/>
+
+            <Circle fx:id="casa0" centerX="190" centerY="70"  radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa1" centerX="310" centerY="70"  radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa2" centerX="430" centerY="170" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa3" centerX="430" centerY="330" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa4" centerX="310" centerY="430" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa5" centerX="190" centerY="430" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa6" centerX="70"  centerY="330" radius="18" styleClass="board-cell"/>
+            <Circle fx:id="casa7" centerX="70"  centerY="170" radius="18" styleClass="board-cell"/>
+
+            <!-- Peças claras -->
+            <Circle fx:id="pecaClara1" centerX="190" centerY="430" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara2" centerX="70"  centerY="330" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara3" centerX="70"  centerY="170" radius="14" styleClass="piece-light"/>
+            <Circle fx:id="pecaClara4" centerX="190" centerY="70"  radius="14" styleClass="piece-light"/>
+
+            <!-- Peças escuras -->
+            <Circle fx:id="pecaEscura1" centerX="310" centerY="70"  radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura2" centerX="430" centerY="170" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura3" centerX="430" centerY="330" radius="14" styleClass="piece-dark"/>
+            <Circle fx:id="pecaEscura4" centerX="310" centerY="430" radius="14" styleClass="piece-dark"/>
+
+        </Pane>
+    </center>
+
+    <!-- Painel lateral -->
+    <right>
+        <VBox alignment="CENTER" spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Jogador Atual:" styleClass="label"/>
+            <Label fx:id="labelJogadorAtual" styleClass="label-bold"/>
+
+            <Label fx:id="labelEstadoRede"
+                   text=""
+                   styleClass="label"/>
+
+            <Button fx:id="btnDefinicoesJogoLocal"
+                    text="Definições"
+                    prefWidth="160"
+                    onAction="#abrirDefinicoes"/>
+
+            <Button fx:id="btnGuardarJogo"
+                    text="Guardar Jogo"
+                    prefWidth="160"
+                    onAction="#guardarJogo"/>
+
+            <Button fx:id="btnVoltarMenuJogoLocal"
+                    text="Voltar ao Menu"
+                    prefWidth="160"
+                    onAction="#mostrarMenuInicial"/>
+        </VBox>
+    </right>
+
+</BorderPane>
+
