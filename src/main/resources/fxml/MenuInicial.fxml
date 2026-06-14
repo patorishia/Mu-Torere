@@ -26,6 +26,8 @@
             <Button fx:id="btnJogoLocal" onAction="#abrirInserirJogadores" prefWidth="200" text="Jogo Local" />
             <!-- Botão para iniciar jogo em rede -->
             <Button fx:id="btnJogoRede" onAction="#abrirJogoRede" prefWidth="200" text="Jogo em Rede" />
+            <!-- Botão para carregar jogo guardado -->
+            <Button fx:id="btnCarregarJogo" onAction="#carregarJogo" prefWidth="200" text="Carregar Jogo" />
             <!-- Botão para abrir definições -->
             <Button fx:id="btnDefinicoes" onAction="#abrirDefinicoes" prefWidth="200" text="Definições" />
             <!-- Botão para sair da aplicação -->

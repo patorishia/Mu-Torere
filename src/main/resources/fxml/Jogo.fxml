@@ -88,10 +88,19 @@
             <Label text="Jogador Atual:" styleClass="label"/>
             <Label fx:id="labelJogadorAtual" styleClass="label-bold"/>
 
+            <Label fx:id="labelEstadoRede"
+                   text=""
+                   styleClass="label"/>
+
             <Button fx:id="btnDefinicoesJogoLocal"
                     text="Definições"
                     prefWidth="160"
                     onAction="#abrirDefinicoes"/>
+
+            <Button fx:id="btnGuardarJogo"
+                    text="Guardar Jogo"
+                    prefWidth="160"
+                    onAction="#guardarJogo"/>
 
             <Button fx:id="btnVoltarMenuJogoLocal"
                     text="Voltar ao Menu"

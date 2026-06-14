@@ -12,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.ResourceBundle;
 public class JogoController implements Initializable {
 
     @FXML private Label labelJogadorAtual;
+    @FXML private Label labelEstadoRede;
 
     @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
@@ -48,30 +51,42 @@ public class JogoController implements Initializable {
 
     private Circle[] casas;
     private Circle[] pecas;
+    private Circle[] pecasClaras;
+    private Circle[] pecasEscuras;
+    private boolean receberJogadasRede;
+    private int numeroMensagensRede;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // Criar jogo com nomes e cores escolhidas
-        jogo = new Jogo(
-                DadosGlobais.nomeJogador1,
-                DadosGlobais.nomeJogador2,
-                DadosGlobais.corJogador1,
-                DadosGlobais.corJogador2,
-                DadosGlobais.jogadorQueEscolheCor
-        );
+        if (DadosGlobais.jogoCarregado != null) {
+            jogo = DadosGlobais.jogoCarregado;
+            DadosGlobais.jogoCarregado = null;
+        } else {
+            jogo = new Jogo(
+                    DadosGlobais.nomeJogador1,
+                    DadosGlobais.nomeJogador2,
+                    DadosGlobais.corJogador1,
+                    DadosGlobais.corJogador2,
+                    DadosGlobais.jogadorQueEscolheCor
+            );
+        }
 
         casas = new Circle[]{casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7, casaCentro};
+        pecasClaras = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4};
+        pecasEscuras = new Circle[]{pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
         pecas = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4,
-                             pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
+                pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
 
-        ligarPecasDoModelo();
         ligarCasasDoModelo();
+        ligarPecasDoModelo();
         ligarClicksNasPecas();
         ligarClicksNasCasas();
 
         atualizarJogadorAtual();
+        atualizarEstadoRedeInicial();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
+        iniciarRececaoJogadasRede();
     }
 
     // -------------------------------------------------------------------------
@@ -79,17 +94,23 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
 
     private void ligarPecasDoModelo() {
-        Tabuleiro tab = jogo.getTabuleiro();
+        ligarPecasDoJogador(jogo.getJogador1());
+        ligarPecasDoJogador(jogo.getJogador2());
+    }
 
-        ligarPeca(pecaClara1, tab.getPosicao(5).getOcupante());
-        ligarPeca(pecaClara2, tab.getPosicao(6).getOcupante());
-        ligarPeca(pecaClara3, tab.getPosicao(7).getOcupante());
-        ligarPeca(pecaClara4, tab.getPosicao(0).getOcupante());
+    private void ligarPecasDoJogador(Jogador jogador) {
+        Circle[] pecasGui;
 
-        ligarPeca(pecaEscura1, tab.getPosicao(1).getOcupante());
-        ligarPeca(pecaEscura2, tab.getPosicao(2).getOcupante());
-        ligarPeca(pecaEscura3, tab.getPosicao(3).getOcupante());
-        ligarPeca(pecaEscura4, tab.getPosicao(4).getOcupante());
+        if (jogador.getCor().equals("claro")) {
+            pecasGui = pecasClaras;
+        } else {
+            pecasGui = pecasEscuras;
+        }
+
+        for (int i = 0; i < jogador.getPecas().size(); i++) {
+            ligarPeca(pecasGui[i], jogador.getPecas().get(i));
+            moverPecaGuiParaPosicao(pecasGui[i], jogador.getPecas().get(i).getPosicaoAtual());
+        }
     }
 
     private void ligarPeca(Circle pecaGui, Peca pecaModelo) {
@@ -156,6 +177,9 @@ public class JogoController implements Initializable {
 
         if (!jogo.movimentoValido(pecaModelo, destino)) return;
 
+        int origemRede = pecaModelo.getPosicaoAtual().getId();
+        int destinoRede = destino.getId();
+
         jogo.fazerMovimento(pecaModelo, destino);
 
         pecaSelecionada.setCenterX(casaGui.getCenterX());
@@ -166,7 +190,132 @@ public class JogoController implements Initializable {
 
         atualizarJogadorAtual();
         atualizarDestaquesPecasMoveis();
+        enviarJogadaRede(origemRede, destinoRede);
+        enviarEstadoJogoRede();
+        indicarEsperaAdversario();
 
+        verificarFimJogo();
+    }
+
+    private void enviarJogadaRede(int origem, int destino) {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarJogada(origem, destino);
+        }
+
+        if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
+            DadosGlobais.clienteRede.enviarJogada(origem, destino);
+        }
+    }
+
+    private void iniciarRececaoJogadasRede() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        receberJogadasRede = true;
+        numeroMensagensRede = 0;
+
+        Thread thread = new Thread(() -> {
+            while (receberJogadasRede) {
+                String mensagem = obterMensagemRede();
+                int numeroMensagens = obterNumeroMensagensRede();
+
+                if (mensagem != null && numeroMensagens > numeroMensagensRede) {
+                    numeroMensagensRede = numeroMensagens;
+
+                    if (mensagem.startsWith("JOGADA|")) {
+                        Platform.runLater(() -> aplicarJogadaRecebida(mensagem));
+                    } else if (mensagem.startsWith("ESTADO_JOGO|")) {
+                        Platform.runLater(() -> aplicarEstadoRecebido(mensagem));
+                    }
+                }
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    receberJogadasRede = false;
+                }
+            }
+        });
+
+        thread.start();
+    }
+
+    private String obterMensagemRede() {
+        if (DadosGlobais.servidorRede != null) {
+            return DadosGlobais.servidorRede.getUltimaMensagem();
+        }
+
+        if (DadosGlobais.clienteRede != null) {
+            return DadosGlobais.clienteRede.getUltimaMensagem();
+        }
+
+        return null;
+    }
+
+    private int obterNumeroMensagensRede() {
+        if (DadosGlobais.servidorRede != null) {
+            return DadosGlobais.servidorRede.getNumeroMensagensRecebidas();
+        }
+
+        if (DadosGlobais.clienteRede != null) {
+            return DadosGlobais.clienteRede.getNumeroMensagensRecebidas();
+        }
+
+        return 0;
+    }
+
+    private void aplicarJogadaRecebida(String mensagem) {
+        String[] partes = mensagem.split("\\|");
+
+        if (partes.length != 3) {
+            return;
+        }
+
+        int origem;
+        int destino;
+
+        try {
+            origem = Integer.parseInt(partes[1]);
+            destino = Integer.parseInt(partes[2]);
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if (jogo.aplicarJogadaRede(origem, destino)) {
+            atualizarPecasGui();
+            atualizarJogadorAtual();
+            atualizarDestaquesPecasMoveis();
+            indicarJogadaRecebida();
+            verificarFimJogo();
+        }
+    }
+
+    private void aplicarEstadoRecebido(String mensagem) {
+        try {
+            if (jogo.aplicarMensagemEstadoRede(mensagem)) {
+                mapaGuiParaModelo.clear();
+                mapaModeloParaGui.clear();
+                mapaCasaGuiParaModelo.clear();
+
+                ligarCasasDoModelo();
+                ligarPecasDoModelo();
+                atualizarPecasGui();
+                atualizarJogadorAtual();
+                atualizarDestaquesPecasMoveis();
+                indicarJogadaRecebida();
+                verificarFimJogo();
+            }
+        } catch (NumberFormatException e) {
+            return;
+        }
+    }
+
+    private void verificarFimJogo() {
         // Verificar se o jogador seguinte tem movimentos
         if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
 
@@ -181,6 +330,30 @@ public class JogoController implements Initializable {
         }
     }
 
+    private void atualizarPecasGui() {
+        for (Circle pecaGui : pecas) {
+            Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
+
+            if (pecaModelo != null) {
+                moverPecaGuiParaPosicao(pecaGui, pecaModelo.getPosicaoAtual());
+            }
+        }
+    }
+
+    private void enviarEstadoJogoRede() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarEstadoJogo(jogo);
+        }
+
+        if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
+            DadosGlobais.clienteRede.enviarEstadoJogo(jogo);
+        }
+    }
+
     private Circle obterCasaGui(Posicao posicao) {
         for (Circle casa : casas) {
             if (mapaCasaGuiParaModelo.get(casa) == posicao) {
@@ -189,6 +362,15 @@ public class JogoController implements Initializable {
         }
 
         return null;
+    }
+
+    private void moverPecaGuiParaPosicao(Circle pecaGui, Posicao posicao) {
+        Circle casaGui = obterCasaGui(posicao);
+
+        if (casaGui != null) {
+            pecaGui.setCenterX(casaGui.getCenterX());
+            pecaGui.setCenterY(casaGui.getCenterY());
+        }
     }
 
     private void limparStrokes() {
@@ -216,6 +398,26 @@ public class JogoController implements Initializable {
         labelJogadorAtual.setText(jogo.getJogadorAtual().getNome());
     }
 
+    private void atualizarEstadoRedeInicial() {
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            labelEstadoRede.setText("A jogar em rede");
+        } else {
+            labelEstadoRede.setText("");
+        }
+    }
+
+    private void indicarEsperaAdversario() {
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            labelEstadoRede.setText("À espera do adversário...");
+        }
+    }
+
+    private void indicarJogadaRecebida() {
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            labelEstadoRede.setText("Jogada recebida. A tua vez.");
+        }
+    }
+
     private boolean jogadorTemMovimentos(Jogador jog) {
         for (Peca p : jog.getPecas()) {
             if (!jogo.obterMovimentosValidos(p).isEmpty()) return true;
@@ -230,6 +432,23 @@ public class JogoController implements Initializable {
     @FXML
     private void abrirDefinicoes() {
         ScreenManager.show("/fxml/Parametros.fxml");
+    }
+
+    @FXML
+    private void guardarJogo() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Guardar Jogo");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiros Mu Torere", "*.mt"));
+
+        File ficheiro = fc.showSaveDialog(null);
+
+        if (ficheiro != null) {
+            if (!ficheiro.getName().endsWith(".mt")) {
+                ficheiro = new File(ficheiro.getAbsolutePath() + ".mt");
+            }
+
+            GestorFicheiros.guardarJogo(jogo, ficheiro);
+        }
     }
 
     @FXML
