@@ -51,6 +51,15 @@ public class DadosGlobais {
     
     public static String ipServidor;
 
+    /** Porto usado para a ligação em rede */
+    public static int portoServidor = 5000;
+
+    /** Servidor criado pelo jogador anfitrião */
+    public static ServidorRede servidorRede;
+
+    /** Cliente usado pelo jogador que entra no servidor */
+    public static ClienteRede clienteRede;
+
     /** Modo atual da partida: "local" ou "rede" */
     public static String modoJogo = "local";
 

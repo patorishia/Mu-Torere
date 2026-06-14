@@ -4,24 +4,55 @@
  */
 package gui;
 
+import group15.mu_torere.ClienteRede;
 import group15.mu_torere.DadosGlobais;
+import group15.mu_torere.ServidorRede;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
  * Controlador do ecrã Inserir IP em Jogo de Rede.
  * Responsável por:
+ *  - criar um servidor para o adversário entrar
  *  - ler o IP introduzido pelo jogador
- *  - iniciar ligação ao servidor (futuro)
  *  - avançar para o ecrã de espera
  */
 public class InserirIPController {
 
     @FXML private TextField campoIP;
+    @FXML private Label labelIPLocal;
+
+    /**
+     * Cria um servidor TCP e mostra o IP que o outro jogador deve usar.
+     */
+    @FXML
+    private void criarServidor() {
+        DadosGlobais.modoJogo = "rede";
+        DadosGlobais.clienteRede = null;
+
+        if (DadosGlobais.servidorRede != null) {
+            DadosGlobais.servidorRede.fechar();
+        }
+
+        DadosGlobais.servidorRede = new ServidorRede(DadosGlobais.portoServidor);
+        DadosGlobais.servidorRede.start();
+
+        try {
+            DadosGlobais.ipServidor = InetAddress.getLocalHost().getHostAddress();
+            labelIPLocal.setText("IP do servidor: " + DadosGlobais.ipServidor);
+        } catch (UnknownHostException e) {
+            DadosGlobais.ipServidor = "nao encontrado";
+            labelIPLocal.setText("IP do servidor: nao encontrado");
+        }
+
+        ScreenManager.show("/fxml/Espera.fxml");
+    }
 
     /**
      * Tenta conectar ao servidor usando o IP introduzido.
-     * (Lógica de rede será implementada mais tarde)
      */
     @FXML
     private void conectar() {
@@ -35,6 +66,15 @@ public class InserirIPController {
 
         // Guardar IP globalmente para o ecrã de espera
         DadosGlobais.ipServidor = ip;
+        DadosGlobais.modoJogo = "rede";
+        DadosGlobais.servidorRede = null;
+
+        if (DadosGlobais.clienteRede != null) {
+            DadosGlobais.clienteRede.fechar();
+        }
+
+        DadosGlobais.clienteRede = new ClienteRede(ip, DadosGlobais.portoServidor);
+        DadosGlobais.clienteRede.start();
 
         // Avançar para o ecrã de espera
         ScreenManager.show("/fxml/Espera.fxml");
