@@ -34,6 +34,7 @@ import java.util.ResourceBundle;
 public class JogoController implements Initializable {
 
     @FXML private Label labelJogadorAtual;
+    @FXML private Label labelEstadoRede;
 
     @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
@@ -83,6 +84,7 @@ public class JogoController implements Initializable {
         ligarClicksNasCasas();
 
         atualizarJogadorAtual();
+        atualizarEstadoRedeInicial();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
     }
@@ -190,6 +192,7 @@ public class JogoController implements Initializable {
         atualizarDestaquesPecasMoveis();
         enviarJogadaRede(origemRede, destinoRede);
         enviarEstadoJogoRede();
+        indicarEsperaAdversario();
 
         verificarFimJogo();
     }
@@ -287,6 +290,7 @@ public class JogoController implements Initializable {
             atualizarPecasGui();
             atualizarJogadorAtual();
             atualizarDestaquesPecasMoveis();
+            indicarJogadaRecebida();
             verificarFimJogo();
         }
     }
@@ -303,6 +307,7 @@ public class JogoController implements Initializable {
                 atualizarPecasGui();
                 atualizarJogadorAtual();
                 atualizarDestaquesPecasMoveis();
+                indicarJogadaRecebida();
                 verificarFimJogo();
             }
         } catch (NumberFormatException e) {
@@ -391,6 +396,26 @@ public class JogoController implements Initializable {
 
     private void atualizarJogadorAtual() {
         labelJogadorAtual.setText(jogo.getJogadorAtual().getNome());
+    }
+
+    private void atualizarEstadoRedeInicial() {
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            labelEstadoRede.setText("A jogar em rede");
+        } else {
+            labelEstadoRede.setText("");
+        }
+    }
+
+    private void indicarEsperaAdversario() {
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            labelEstadoRede.setText("À espera do adversário...");
+        }
+    }
+
+    private void indicarJogadaRecebida() {
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            labelEstadoRede.setText("Jogada recebida. A tua vez.");
+        }
     }
 
     private boolean jogadorTemMovimentos(Jogador jog) {
