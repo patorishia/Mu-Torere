@@ -335,6 +335,38 @@ public class Jogo {
         return mensagem;
     }
 
+    /**
+     * Atualiza o jogo com uma mensagem de estado recebida pela rede.
+     *
+     * @param mensagem mensagem recebida pela rede
+     * @return true se o estado foi aplicado, false caso contrário
+     */
+    public boolean aplicarMensagemEstadoRede(String mensagem) {
+        String[] partes = mensagem.split("\\|");
+
+        if (partes.length != 8 || !"ESTADO_JOGO".equals(partes[0])) {
+            return false;
+        }
+
+        int[] posicoesJogador1 = separarPosicoes(partes[6]);
+        int[] posicoesJogador2 = separarPosicoes(partes[7]);
+
+        tabuleiro = new Tabuleiro();
+        jogador1 = new Jogador(partes[1], partes[2]);
+        jogador2 = new Jogador(partes[3], partes[4]);
+
+        adicionarPecasGuardadas(jogador1, posicoesJogador1);
+        adicionarPecasGuardadas(jogador2, posicoesJogador2);
+
+        if (partes[5].equals(jogador2.getNome())) {
+            jogadorAtual = jogador2;
+        } else {
+            jogadorAtual = jogador1;
+        }
+
+        return true;
+    }
+
     private String juntarPosicoes(int[] posicoes) {
         String texto = "";
 
@@ -347,5 +379,16 @@ public class Jogo {
         }
 
         return texto;
+    }
+
+    private int[] separarPosicoes(String texto) {
+        String[] partes = texto.split(",");
+        int[] posicoes = new int[partes.length];
+
+        for (int i = 0; i < partes.length; i++) {
+            posicoes[i] = Integer.parseInt(partes[i]);
+        }
+
+        return posicoes;
     }
 }

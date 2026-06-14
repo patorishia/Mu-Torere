@@ -221,9 +221,14 @@ public class JogoController implements Initializable {
                 String mensagem = obterMensagemRede();
                 int numeroMensagens = obterNumeroMensagensRede();
 
-                if (mensagem != null && numeroMensagens > numeroMensagensRede && mensagem.startsWith("JOGADA|")) {
+                if (mensagem != null && numeroMensagens > numeroMensagensRede) {
                     numeroMensagensRede = numeroMensagens;
-                    Platform.runLater(() -> aplicarJogadaRecebida(mensagem));
+
+                    if (mensagem.startsWith("JOGADA|")) {
+                        Platform.runLater(() -> aplicarJogadaRecebida(mensagem));
+                    } else if (mensagem.startsWith("ESTADO_JOGO|")) {
+                        Platform.runLater(() -> aplicarEstadoRecebido(mensagem));
+                    }
                 }
 
                 try {
@@ -283,6 +288,25 @@ public class JogoController implements Initializable {
             atualizarJogadorAtual();
             atualizarDestaquesPecasMoveis();
             verificarFimJogo();
+        }
+    }
+
+    private void aplicarEstadoRecebido(String mensagem) {
+        try {
+            if (jogo.aplicarMensagemEstadoRede(mensagem)) {
+                mapaGuiParaModelo.clear();
+                mapaModeloParaGui.clear();
+                mapaCasaGuiParaModelo.clear();
+
+                ligarCasasDoModelo();
+                ligarPecasDoModelo();
+                atualizarPecasGui();
+                atualizarJogadorAtual();
+                atualizarDestaquesPecasMoveis();
+                verificarFimJogo();
+            }
+        } catch (NumberFormatException e) {
+            return;
         }
     }
 
