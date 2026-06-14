@@ -160,6 +160,11 @@ public class JogoController implements Initializable {
 
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
+        if (!pecaPertenceAoJogadorLocal(pecaModelo)) {
+            GestorSons.tocarErro();
+            return;
+        }
+
         if (!jogo.ePecaDoJogadorAtual(pecaModelo)) {
             GestorSons.tocarErro();
             return;
@@ -200,6 +205,11 @@ public class JogoController implements Initializable {
 
         Peca pecaModelo = mapaGuiParaModelo.get(pecaSelecionada);
         Posicao destino = mapaCasaGuiParaModelo.get(casaGui);
+
+        if (!pecaPertenceAoJogadorLocal(pecaModelo)) {
+            GestorSons.tocarErro();
+            return;
+        }
 
         if (!jogo.movimentoValido(pecaModelo, destino)) {
             GestorSons.tocarErro();
@@ -420,6 +430,7 @@ public class JogoController implements Initializable {
             Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
             if (jogo.ePecaDoJogadorAtual(pecaModelo)
+                    && pecaPertenceAoJogadorLocal(pecaModelo)
                     && !jogo.obterMovimentosValidos(pecaModelo).isEmpty()) {
                 pecaGui.setStroke(Color.GREEN);
                 pecaGui.setStrokeWidth(3);
@@ -433,7 +444,7 @@ public class JogoController implements Initializable {
 
     private void atualizarEstadoRedeInicial() {
         if ("rede".equals(DadosGlobais.modoJogo)) {
-            labelEstadoRede.setText("A jogar em rede");
+            labelEstadoRede.setText("A tua cor é: " + DadosGlobais.corJogadorLocal);
         } else {
             labelEstadoRede.setText("");
         }
@@ -449,6 +460,18 @@ public class JogoController implements Initializable {
         if ("rede".equals(DadosGlobais.modoJogo)) {
             labelEstadoRede.setText("Jogada recebida. A tua vez.");
         }
+    }
+
+    private boolean pecaPertenceAoJogadorLocal(Peca peca) {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return true;
+        }
+
+        if (peca == null || DadosGlobais.nomeJogadorLocal == null) {
+            return false;
+        }
+
+        return peca.getDono().getNome().equals(DadosGlobais.nomeJogadorLocal);
     }
 
     private void configurarConversaRede() {

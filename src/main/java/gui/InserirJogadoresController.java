@@ -27,12 +27,19 @@ public class InserirJogadoresController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if ("rede".equals(DadosGlobais.modoJogo) && DadosGlobais.clienteRede != null) {
-            txtJogador1.setPromptText("A aguardar nomes do servidor");
-            txtJogador2.setPromptText("A aguardar nomes do servidor");
-            txtJogador1.setDisable(true);
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.servidorRede != null) {
+            txtJogador1.setPromptText("Nome do servidor");
+            txtJogador2.setPromptText("A aguardar nome do cliente");
             txtJogador2.setDisable(true);
             iniciarRececaoNomesRede();
+        } else if (DadosGlobais.clienteRede != null) {
+            txtJogador1.setPromptText("Nome do servidor");
+            txtJogador2.setPromptText("O teu nome");
+            txtJogador1.setDisable(true);
         }
     }
 
@@ -43,9 +50,14 @@ public class InserirJogadoresController implements Initializable {
     @FXML
     private void abrirRoleta(ActionEvent event) {
 
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            abrirRoletaRede();
+            return;
+        }
+
         String nome1 = txtJogador1.getText().trim();
         String nome2 = txtJogador2.getText().trim();
-
+        
         // Validação
         if (nome1.isBlank() || nome2.isBlank()) {
             Alert alerta = new Alert(Alert.AlertType.WARNING);
@@ -59,12 +71,6 @@ public class InserirJogadoresController implements Initializable {
         // Guardar nomes para o próximo ecrã
         DadosGlobais.nomeJogador1 = nome1;
         DadosGlobais.nomeJogador2 = nome2;
-
-        if ("rede".equals(DadosGlobais.modoJogo)
-                && DadosGlobais.servidorRede != null
-                && DadosGlobais.servidorRede.isClienteLigado()) {
-            DadosGlobais.servidorRede.enviarMensagem("NOMES_REDE|" + nome1 + "|" + nome2);
-        }
 
         // Avançar para a roleta
         ScreenManager.show("/fxml/Roleta.fxml");
@@ -87,13 +93,17 @@ public class InserirJogadoresController implements Initializable {
             int numeroMensagens = 0;
 
             while (aguardarNomesRede) {
-                if (DadosGlobais.clienteRede.getNumeroMensagensRecebidas() > numeroMensagens) {
-                    numeroMensagens = DadosGlobais.clienteRede.getNumeroMensagensRecebidas();
-                    String mensagem = DadosGlobais.clienteRede.getUltimaMensagem();
+                int numeroAtual = obterNumeroMensagensRede();
+
+                if (numeroAtual > numeroMensagens) {
+                    numeroMensagens = numeroAtual;
+                    String mensagem = obterMensagemRede();
 
                     if (mensagem != null && mensagem.startsWith("NOMES_REDE|")) {
                         Platform.runLater(() -> aplicarNomesRede(mensagem));
                         aguardarNomesRede = false;
+                    } else if (mensagem != null && mensagem.startsWith("NOME_CLIENTE|")) {
+                        Platform.runLater(() -> aplicarNomeClienteRede(mensagem));
                     }
                 }
 
@@ -108,6 +118,46 @@ public class InserirJogadoresController implements Initializable {
         thread.start();
     }
 
+    private void abrirRoletaRede() {
+        if (DadosGlobais.servidorRede != null) {
+            abrirRoletaServidor();
+        } else if (DadosGlobais.clienteRede != null) {
+            enviarNomeCliente();
+        }
+    }
+
+    private void abrirRoletaServidor() {
+        String nome1 = txtJogador1.getText().trim();
+        String nome2 = txtJogador2.getText().trim();
+
+        if (nome1.isBlank() || nome2.isBlank()) {
+            mostrarAlerta("Nomes inválidos", "Preenche o teu nome e aguarda pelo nome do cliente.");
+            return;
+        }
+
+        DadosGlobais.nomeJogador1 = nome1;
+        DadosGlobais.nomeJogador2 = nome2;
+        DadosGlobais.nomeJogadorLocal = nome1;
+        DadosGlobais.servidorRede.enviarMensagem("NOMES_REDE|" + nome1 + "|" + nome2);
+        aguardarNomesRede = false;
+        ScreenManager.show("/fxml/Roleta.fxml");
+    }
+
+    private void enviarNomeCliente() {
+        String nome2 = txtJogador2.getText().trim();
+
+        if (nome2.isBlank()) {
+            mostrarAlerta("Nome inválido", "Preenche o teu nome.");
+            return;
+        }
+
+        DadosGlobais.nomeJogador2 = nome2;
+        DadosGlobais.nomeJogadorLocal = nome2;
+        DadosGlobais.clienteRede.enviarMensagem("NOME_CLIENTE|" + nome2);
+        txtJogador2.setDisable(true);
+        iniciarRececaoNomesRede();
+    }
+
     private void aplicarNomesRede(String mensagem) {
         String[] partes = mensagem.split("\\|");
 
@@ -117,6 +167,54 @@ public class InserirJogadoresController implements Initializable {
 
         DadosGlobais.nomeJogador1 = partes[1];
         DadosGlobais.nomeJogador2 = partes[2];
+
+        if (DadosGlobais.clienteRede != null) {
+            DadosGlobais.nomeJogadorLocal = DadosGlobais.nomeJogador2;
+        }
+
         ScreenManager.show("/fxml/Roleta.fxml");
+    }
+
+    private void aplicarNomeClienteRede(String mensagem) {
+        String[] partes = mensagem.split("\\|");
+
+        if (partes.length != 2) {
+            return;
+        }
+
+        txtJogador2.setText(partes[1]);
+        DadosGlobais.nomeJogador2 = partes[1];
+    }
+
+    private String obterMensagemRede() {
+        if (DadosGlobais.servidorRede != null) {
+            return DadosGlobais.servidorRede.getUltimaMensagem();
+        }
+
+        if (DadosGlobais.clienteRede != null) {
+            return DadosGlobais.clienteRede.getUltimaMensagem();
+        }
+
+        return null;
+    }
+
+    private int obterNumeroMensagensRede() {
+        if (DadosGlobais.servidorRede != null) {
+            return DadosGlobais.servidorRede.getNumeroMensagensRecebidas();
+        }
+
+        if (DadosGlobais.clienteRede != null) {
+            return DadosGlobais.clienteRede.getNumeroMensagensRecebidas();
+        }
+
+        return 0;
+    }
+
+    private void mostrarAlerta(String titulo, String texto) {
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(texto);
+        alerta.showAndWait();
     }
 }
