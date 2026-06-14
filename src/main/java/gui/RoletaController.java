@@ -61,7 +61,7 @@ public class RoletaController implements Initializable {
             boolean jogador1Escolhe = Math.random() < 0.5;
 
             // 2) ROTAÇÃO FINAL — inclinar para o lado correto
-            double anguloFinal = jogador1Escolhe ? 30 : -30;
+            double anguloFinal = jogador1Escolhe ? -30 : 30;
 
             RotateTransition rt2 = new RotateTransition(Duration.seconds(0.4), seta);
             rt2.setToAngle(anguloFinal);
