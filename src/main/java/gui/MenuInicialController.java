@@ -4,19 +4,17 @@
  */
 package gui;
 
-import group15.mu_torere.DadosGlobais;
-import group15.mu_torere.GestorFicheiros;
-import group15.mu_torere.Jogo;
-import java.io.File;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.stage.FileChooser;
 
 /**
  * Controlador do ecrã inicial (Menu Inicial).
  *
- * Este controlador gere as ações dos botões do menu: - Jogo Local - Jogo em
- * Rede - Definições - Sair
+ * Este controlador gere as ações dos botões do menu:
+ *  - Jogo Local
+ *  - Jogo em Rede
+ *  - Definições
+ *  - Sair
  *
  * Cada botão chama o ScreenManager para trocar de ecrã.
  */
@@ -36,33 +34,6 @@ public class MenuInicialController {
     @FXML
     private void abrirJogoRede(ActionEvent e) {
         ScreenManager.show("/fxml/InserirIP.fxml");
-    }
-
-    /**
-     * Carrega um jogo previamente guardado num ficheiro.
-     *
-     * - Abre um FileChooser para o utilizador selecionar o ficheiro .mt - Usa o
-     * GestorFicheiros para reconstruir o objeto Jogo - Guarda o jogo carregado
-     * em DadosGlobais.jogoCarregado - Abre o ecrã Jogo, onde o JogoController
-     * irá inicializar o estado carregado
-     */
-    @FXML
-    private void carregarJogo() {
-
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Carregar Jogo");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiros MuTorere", "*.mt"));
-
-        File ficheiro = fc.showOpenDialog(null);
-
-        if (ficheiro != null) {
-            Jogo jogo = GestorFicheiros.carregarJogo(ficheiro);
-
-            if (jogo != null) {
-                DadosGlobais.jogoCarregado = jogo;
-                ScreenManager.show("/fxml/Jogo.fxml");
-            }
-        }
     }
 
     /**

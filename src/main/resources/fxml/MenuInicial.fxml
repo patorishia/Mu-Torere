@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <!--
     Ecrã inicial do jogo Mu Torere.
@@ -12,8 +13,7 @@
       - center: botões do menu
     O ficheiro CSS interface.css é aplicado diretamente através do atributo stylesheets.
 -->
-
-<BorderPane id="menuInicial" prefHeight="600" prefWidth="900" stylesheets="@interface.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="gui.MenuInicialController">
+<BorderPane id="menuInicial" prefHeight="600" prefWidth="900" stylesheets="@interface.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MenuInicialController">
     <!-- Título do jogo, centrado na parte superior -->
     <top>
         <Label styleClass="title-label" text="Mu Torere" BorderPane.alignment="CENTER" />
@@ -26,9 +26,6 @@
             <Button fx:id="btnJogoLocal" onAction="#abrirInserirJogadores" prefWidth="200" text="Jogo Local" />
             <!-- Botão para iniciar jogo em rede -->
             <Button fx:id="btnJogoRede" onAction="#abrirJogoRede" prefWidth="200" text="Jogo em Rede" />
-            <!-- Botão para carregar jogo guardado-->
-            <Button layoutX="20" layoutY="80" onAction="#carregarJogo" prefHeight="40.0" prefWidth="200.0" text="Carregar Jogo" />
-
             <!-- Botão para abrir definições -->
             <Button fx:id="btnDefinicoes" onAction="#abrirDefinicoes" prefWidth="200" text="Definições" />
             <!-- Botão para sair da aplicação -->

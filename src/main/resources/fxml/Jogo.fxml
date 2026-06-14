@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Line?>
 
-<BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900"
-            styleClass="mainFxmlClass"
-            xmlns="http://javafx.com/javafx/26"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="gui.JogoController">
+<!--
+    Ecrã: Jogo Local
+    Função: Jogar Mu Torere localmente entre dois jogadores.
+    Controlador: gui.jogo.JogoLocalController
+-->
 
+<BorderPane fx:id="jogoLocal" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.JogoController">
     <stylesheets>
-        <URL value="@interface.css" />
+        <URL value="@interface.css"/>
     </stylesheets>
 
     <!-- Título -->
     <top>
-        <Label styleClass="title-label" text="Mu Torere" BorderPane.alignment="CENTER" />
+        <Label text="Mu Torere"
+               BorderPane.alignment="CENTER"
+               styleClass="title-label"/>
     </top>
 
     <!-- Tabuleiro -->
     <center>
         <Pane fx:id="tabuleiro" prefHeight="500" prefWidth="500">
 
-             <!-- Linhas do centro para os kewai -->
+            <!-- Linhas do centro para os kewai -->
             <Line startX="250" startY="250" endX="190" endY="70"  styleClass="board-line"/>
             <Line startX="250" startY="250" endX="310" endY="70"  styleClass="board-line"/>
             <Line startX="250" startY="250" endX="430" endY="170" styleClass="board-line"/>
@@ -72,6 +74,7 @@
             <Circle fx:id="pecaEscura2" centerX="430" centerY="170" radius="14" styleClass="piece-dark"/>
             <Circle fx:id="pecaEscura3" centerX="430" centerY="330" radius="14" styleClass="piece-dark"/>
             <Circle fx:id="pecaEscura4" centerX="310" centerY="430" radius="14" styleClass="piece-dark"/>
+
         </Pane>
     </center>
 
@@ -79,16 +82,23 @@
     <right>
         <VBox alignment="CENTER" spacing="15">
             <padding>
-                <Insets bottom="20" left="20" right="20" top="20" />
+                <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
-            <Label styleClass="label" text="Jogador Atual:" />
-            <Label fx:id="labelJogadorAtual" styleClass="label-bold" />
+            <Label text="Jogador Atual:" styleClass="label"/>
+            <Label fx:id="labelJogadorAtual" styleClass="label-bold"/>
 
-            <Button fx:id="btnDefinicoesJogoLocal" onAction="#abrirDefinicoes" prefWidth="160" text="Definições" />
-            <Button onAction="#guardarJogo" prefHeight="40" prefWidth="160" text="Guardar Jogo" />
-            <Button fx:id="btnVoltarMenuJogoLocal" onAction="#mostrarMenuInicial" prefWidth="160" text="Voltar ao Menu" />
+            <Button fx:id="btnDefinicoesJogoLocal"
+                    text="Definições"
+                    prefWidth="160"
+                    onAction="#abrirDefinicoes"/>
+
+            <Button fx:id="btnVoltarMenuJogoLocal"
+                    text="Voltar ao Menu"
+                    prefWidth="160"
+                    onAction="#mostrarMenuInicial"/>
         </VBox>
     </right>
 
 </BorderPane>
+

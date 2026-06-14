@@ -24,10 +24,6 @@ public class Jogo {
     private Jogador jogadorAtual;
     private Tabuleiro tabuleiro;
 
-    // ============================================================
-    //  CONSTRUTOR PARA JOGOS NOVOS
-    // ============================================================
-
     /**
      * Construtor do jogo.
      * Agora recebe também as cores escolhidas no ecrã anterior.
@@ -53,52 +49,9 @@ public class Jogo {
             jogadorAtual = jogador1;
         }
 
-        // Colocar peças nas posições iniciais
+        // Colocar as peças nas posições iniciais
         inicializarPecas();
     }
-
-   // ============================================================
-    //  CONSTRUTOR PARA JOGOS CARREGADOS
-    // ============================================================
-
-    /**
-     * Construtor usado quando o jogo é carregado de um ficheiro.
-     * Reconstrói:
-     *  - tabuleiro
-     *  - jogadores (com as cores reais atribuídas pelo sorteio)
-     *  - peças nas posições corretas
-     *  - turno atual guardado
-     */
-    public Jogo(int turno, int[] posicoes, String nome1, String cor1, String nome2, String cor2) {
-
-        this.tabuleiro = new Tabuleiro();
-
-        // Criar jogadores com as cores guardadas
-        this.jogador1 = new Jogador(nome1, cor1);
-        this.jogador2 = new Jogador(nome2, cor2);
-
-        // Reconstruir peças
-        for (int i = 0; i < 9; i++) {
-
-            Posicao pos = tabuleiro.getPosicao(i);
-
-            if (posicoes[i] == 1) {
-                Peca p = new Peca(jogador1, pos);
-                jogador1.adicionarPeca(p);
-            }
-            else if (posicoes[i] == 2) {
-                Peca p = new Peca(jogador2, pos);
-                jogador2.adicionarPeca(p);
-            }
-        }
-
-        // Restaurar turno
-        this.jogadorAtual = (turno == 1) ? jogador1 : jogador2;
-    }
-
-    // ============================================================
-    //  MÉTODOS INTERNOS
-    // ============================================================
 
     /**
      * Coloca as peças dos jogadores nas posições iniciais do tabuleiro.
@@ -247,6 +200,9 @@ public class Jogo {
         alternarTurno();
     }
 
+    /**
+     * Alterna o jogador atual (troca entre jogador1 e jogador2).
+     */
     public void alternarTurno() {
         jogadorAtual = (jogadorAtual == jogador1) ? jogador2 : jogador1;
     }
@@ -269,33 +225,4 @@ public class Jogo {
     public Tabuleiro getTabuleiro() {
         return tabuleiro;
     }
-    
-    
-    /**
-     * Devolve o turno atual (1 ou 2).
-     */
-    public int getTurno() {
-        return (jogadorAtual == jogador1) ? 1 : 2;
-    }
-
-    /**
-     * Devolve o estado do tabuleiro num array de 9 posições:
-     * 0 = vazio
-     * 1 = peça do jogador 1
-     * 2 = peça do jogador 2
-     */
-    public int[] getPosicoes() {
-        int[] pos = new int[9];
-
-        for (int i = 0; i < 9; i++) {
-            Peca p = tabuleiro.getPosicao(i).getOcupante();
-
-            if (p == null) pos[i] = 0;
-            else if (p.getDono() == jogador1) pos[i] = 1;
-            else pos[i] = 2;
-        }
-
-        return pos;
-    }
 }
-
