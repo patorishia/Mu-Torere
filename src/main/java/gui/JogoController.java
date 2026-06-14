@@ -426,6 +426,10 @@ public class JogoController implements Initializable {
     private void atualizarDestaquesPecasMoveis() {
         limparStrokes();
 
+        if (!jogadorLocalTemTurno()) {
+            return;
+        }
+
         for (Circle pecaGui : pecas) {
             Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
@@ -474,6 +478,18 @@ public class JogoController implements Initializable {
         return peca.getDono().getNome().equals(DadosGlobais.nomeJogadorLocal);
     }
 
+    private boolean jogadorLocalTemTurno() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return true;
+        }
+
+        if (DadosGlobais.nomeJogadorLocal == null) {
+            return false;
+        }
+
+        return jogo.getJogadorAtual().getNome().equals(DadosGlobais.nomeJogadorLocal);
+    }
+
     private void configurarConversaRede() {
         boolean modoRede = "rede".equals(DadosGlobais.modoJogo);
 
@@ -487,7 +503,7 @@ public class JogoController implements Initializable {
         }
 
         listaMensagensConversa.getItems().clear();
-        listaMensagensConversa.getItems().add("Conversa iniciada.");
+        adicionarMensagemConversa("Conversa iniciada.");
         campoMensagemConversa.setDisable(false);
         btnEnviarMensagemConversa.setDisable(false);
     }
@@ -512,7 +528,7 @@ public class JogoController implements Initializable {
 
         texto = prepararTextoConversa(texto);
         enviarMensagemConversaRede("CHAT|" + texto);
-        listaMensagensConversa.getItems().add("Eu: " + texto);
+        adicionarMensagemConversa("Eu: " + texto);
         campoMensagemConversa.clear();
     }
 
@@ -530,8 +546,13 @@ public class JogoController implements Initializable {
         String texto = mensagem.substring("CHAT|".length());
 
         if (!texto.isEmpty()) {
-            listaMensagensConversa.getItems().add("Adversário: " + texto);
+            adicionarMensagemConversa("Adversário: " + texto);
         }
+    }
+
+    private void adicionarMensagemConversa(String mensagem) {
+        listaMensagensConversa.getItems().add(mensagem);
+        listaMensagensConversa.scrollTo(listaMensagensConversa.getItems().size() - 1);
     }
 
     private String prepararTextoConversa(String texto) {

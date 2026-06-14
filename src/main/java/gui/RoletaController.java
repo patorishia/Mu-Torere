@@ -86,6 +86,7 @@ public class RoletaController implements Initializable {
 
             labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
             btnContinuarRoleta.setDisable(false);
+            continuarAutomaticamenteSeNaoEscolheCor();
         });
 
         rt.play();
@@ -142,5 +143,29 @@ public class RoletaController implements Initializable {
         seta.setRotate(jogador1Escolhe ? -30 : 30);
         labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
         btnContinuarRoleta.setDisable(false);
+        continuarAutomaticamenteSeNaoEscolheCor();
+    }
+
+    private void continuarAutomaticamenteSeNaoEscolheCor() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.jogadorQueEscolheCor.equals(DadosGlobais.nomeJogadorLocal)) {
+            return;
+        }
+
+        btnContinuarRoleta.setDisable(true);
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(1800);
+            } catch (InterruptedException e) {
+            }
+
+            Platform.runLater(() -> ScreenManager.show("/fxml/EscolherCor.fxml"));
+        });
+
+        thread.start();
     }
 }

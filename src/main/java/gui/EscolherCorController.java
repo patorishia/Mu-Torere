@@ -56,10 +56,7 @@ public class EscolherCorController implements Initializable {
         labelJogadorAtual.setText(jogadorQueEscolhe + ", escolhe a cor:");
 
         if ("rede".equals(DadosGlobais.modoJogo) && !jogadorLocalEscolheCor()) {
-            labelJogadorAtual.setText("A aguardar escolha de cor de " + jogadorQueEscolhe);
-            circuloClara.setDisable(true);
-            circuloEscura.setDisable(true);
-            btnConfirmarCor.setDisable(true);
+            mostrarEsperaEscolhaCor();
             iniciarRececaoCoresRede();
         }
     }
@@ -125,6 +122,7 @@ public class EscolherCorController implements Initializable {
      */
     @FXML
     private void confirmarCor() {
+        btnConfirmarCor.setDisable(true);
 
         DadosGlobais.corJogador1 = corJogador1;
         DadosGlobais.corJogador2 = corJogador2;
@@ -218,11 +216,13 @@ public class EscolherCorController implements Initializable {
 
     private void mostrarCorEEntrarNoJogo() {
         if ("rede".equals(DadosGlobais.modoJogo)) {
+            esconderControlosEscolhaCor();
+            labelTitulo.setText("Cor atribuída");
             labelJogadorAtual.setText("A tua cor é: " + DadosGlobais.corJogadorLocal);
 
             Thread thread = new Thread(() -> {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                 }
 
@@ -233,6 +233,22 @@ public class EscolherCorController implements Initializable {
         } else {
             ScreenManager.show("/fxml/Jogo.fxml");
         }
+    }
+
+    private void mostrarEsperaEscolhaCor() {
+        labelTitulo.setText("A aguardar");
+        labelJogadorAtual.setText("Esperando o adversário escolher a cor...");
+        esconderControlosEscolhaCor();
+    }
+
+    private void esconderControlosEscolhaCor() {
+        circuloClara.setVisible(false);
+        circuloClara.setManaged(false);
+        circuloEscura.setVisible(false);
+        circuloEscura.setManaged(false);
+        btnConfirmarCor.setVisible(false);
+        btnConfirmarCor.setManaged(false);
+        btnConfirmarCor.setDisable(true);
     }
 
     private String obterMensagemRede() {
