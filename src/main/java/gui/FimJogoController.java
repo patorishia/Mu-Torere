@@ -5,6 +5,7 @@
 package gui;
 
 import group15.mu_torere.DadosGlobais;
+import group15.mu_torere.GestorSons;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -24,6 +25,7 @@ public class FimJogoController implements Initializable {
 
         // Mostrar o vencedor guardado globalmente
         labelVencedor.setText("Vencedor: " + DadosGlobais.vencedor);
+        GestorSons.tocarVitoria();
     }
 
     /**

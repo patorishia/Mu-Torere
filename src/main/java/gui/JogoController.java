@@ -160,16 +160,25 @@ public class JogoController implements Initializable {
 
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
 
-        if (!jogo.ePecaDoJogadorAtual(pecaModelo)) return;
+        if (!jogo.ePecaDoJogadorAtual(pecaModelo)) {
+            GestorSons.tocarErro();
+            return;
+        }
 
         List<Posicao> movimentosValidos = jogo.obterMovimentosValidos(pecaModelo);
 
-        if (movimentosValidos.isEmpty()) return;
+        if (movimentosValidos.isEmpty()) {
+            GestorSons.tocarErro();
+            return;
+        }
 
         Posicao destino = movimentosValidos.get(0);
         Circle casaDestino = obterCasaGui(destino);
 
-        if (casaDestino == null) return;
+        if (casaDestino == null) {
+            GestorSons.tocarErro();
+            return;
+        }
 
         pecaSelecionada = pecaGui;
 
@@ -184,17 +193,24 @@ public class JogoController implements Initializable {
 
     private void moverPecaParaCasa(Circle casaGui) {
 
-        if (pecaSelecionada == null) return;
+        if (pecaSelecionada == null) {
+            GestorSons.tocarErro();
+            return;
+        }
 
         Peca pecaModelo = mapaGuiParaModelo.get(pecaSelecionada);
         Posicao destino = mapaCasaGuiParaModelo.get(casaGui);
 
-        if (!jogo.movimentoValido(pecaModelo, destino)) return;
+        if (!jogo.movimentoValido(pecaModelo, destino)) {
+            GestorSons.tocarErro();
+            return;
+        }
 
         int origemRede = pecaModelo.getPosicaoAtual().getId();
         int destinoRede = destino.getId();
 
         jogo.fazerMovimento(pecaModelo, destino);
+        GestorSons.tocarJogada();
 
         pecaSelecionada.setCenterX(casaGui.getCenterX());
         pecaSelecionada.setCenterY(casaGui.getCenterY());
@@ -303,6 +319,7 @@ public class JogoController implements Initializable {
         }
 
         if (jogo.aplicarJogadaRede(origem, destino)) {
+            GestorSons.tocarJogada();
             atualizarPecasGui();
             atualizarJogadorAtual();
             atualizarDestaquesPecasMoveis();
