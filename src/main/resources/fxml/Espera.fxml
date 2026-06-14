@@ -26,6 +26,10 @@
                    text="IP: ---"
                    styleClass="espera-ip-label"/>
 
+            <Label fx:id="labelEstadoLigacao"
+                   text="Estado: à espera de ligação"
+                   styleClass="label"/>
+
             <ProgressIndicator />
 
             <Button fx:id="btnCancelarEspera"
