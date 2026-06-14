@@ -9,7 +9,11 @@ import group15.mu_torere.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -35,6 +39,10 @@ public class JogoController implements Initializable {
 
     @FXML private Label labelJogadorAtual;
     @FXML private Label labelEstadoRede;
+    @FXML private TabPane tabPaneConversa;
+    @FXML private ListView<String> listaMensagensConversa;
+    @FXML private TextField campoMensagemConversa;
+    @FXML private Button btnEnviarMensagemConversa;
 
     @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
@@ -85,6 +93,7 @@ public class JogoController implements Initializable {
 
         atualizarJogadorAtual();
         atualizarEstadoRedeInicial();
+        configurarConversaRede();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
     }
@@ -231,6 +240,8 @@ public class JogoController implements Initializable {
                         Platform.runLater(() -> aplicarJogadaRecebida(mensagem));
                     } else if (mensagem.startsWith("ESTADO_JOGO|")) {
                         Platform.runLater(() -> aplicarEstadoRecebido(mensagem));
+                    } else if (mensagem.startsWith("CHAT|")) {
+                        Platform.runLater(() -> receberMensagemConversa(mensagem));
                     }
                 }
 
@@ -416,6 +427,70 @@ public class JogoController implements Initializable {
         if ("rede".equals(DadosGlobais.modoJogo)) {
             labelEstadoRede.setText("Jogada recebida. A tua vez.");
         }
+    }
+
+    private void configurarConversaRede() {
+        boolean modoRede = "rede".equals(DadosGlobais.modoJogo);
+
+        tabPaneConversa.setVisible(modoRede);
+        tabPaneConversa.setManaged(modoRede);
+
+        if (!modoRede) {
+            campoMensagemConversa.setDisable(true);
+            btnEnviarMensagemConversa.setDisable(true);
+            return;
+        }
+
+        listaMensagensConversa.getItems().clear();
+        listaMensagensConversa.getItems().add("Conversa iniciada.");
+        campoMensagemConversa.setDisable(false);
+        btnEnviarMensagemConversa.setDisable(false);
+    }
+
+    @FXML
+    private void enviarMensagemConversa() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        String texto = campoMensagemConversa.getText();
+
+        if (texto == null) {
+            return;
+        }
+
+        texto = texto.trim();
+
+        if (texto.isEmpty()) {
+            return;
+        }
+
+        texto = prepararTextoConversa(texto);
+        enviarMensagemConversaRede("CHAT|" + texto);
+        listaMensagensConversa.getItems().add("Eu: " + texto);
+        campoMensagemConversa.clear();
+    }
+
+    private void enviarMensagemConversaRede(String mensagem) {
+        if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarMensagem(mensagem);
+        }
+
+        if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
+            DadosGlobais.clienteRede.enviarMensagem(mensagem);
+        }
+    }
+
+    private void receberMensagemConversa(String mensagem) {
+        String texto = mensagem.substring("CHAT|".length());
+
+        if (!texto.isEmpty()) {
+            listaMensagensConversa.getItems().add("Adversário: " + texto);
+        }
+    }
+
+    private String prepararTextoConversa(String texto) {
+        return texto.replace("|", "/");
     }
 
     private boolean jogadorTemMovimentos(Jogador jog) {

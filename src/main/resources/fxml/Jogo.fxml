@@ -92,6 +92,36 @@
                    text=""
                    styleClass="label"/>
 
+            <TabPane fx:id="tabPaneConversa"
+                     prefHeight="230"
+                     prefWidth="220"
+                     tabClosingPolicy="UNAVAILABLE">
+                <tabs>
+                    <Tab text="Conversa">
+                        <content>
+                            <VBox spacing="8">
+                                <padding>
+                                    <Insets top="8" right="8" bottom="8" left="8"/>
+                                </padding>
+
+                                <ListView fx:id="listaMensagensConversa"
+                                          prefHeight="150"
+                                          prefWidth="200"/>
+
+                                <TextField fx:id="campoMensagemConversa"
+                                           promptText="Mensagem"
+                                           onAction="#enviarMensagemConversa"/>
+
+                                <Button fx:id="btnEnviarMensagemConversa"
+                                        text="Enviar"
+                                        prefWidth="200"
+                                        onAction="#enviarMensagemConversa"/>
+                            </VBox>
+                        </content>
+                    </Tab>
+                </tabs>
+            </TabPane>
+
             <Button fx:id="btnDefinicoesJogoLocal"
                     text="Definições"
                     prefWidth="160"
