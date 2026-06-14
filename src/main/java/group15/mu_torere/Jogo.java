@@ -54,6 +54,34 @@ public class Jogo {
     }
 
     /**
+     * Construtor usado para reconstruir uma partida guardada em ficheiro.
+     *
+     * @param nome1 nome do primeiro jogador
+     * @param nome2 nome do segundo jogador
+     * @param corJog1 cor do primeiro jogador
+     * @param corJog2 cor do segundo jogador
+     * @param nomeJogadorAtual nome do jogador que tem o turno
+     * @param posicoesJogador1 posições das peças do jogador 1
+     * @param posicoesJogador2 posições das peças do jogador 2
+     */
+    public Jogo(String nome1, String nome2, String corJog1, String corJog2,
+            String nomeJogadorAtual, int[] posicoesJogador1, int[] posicoesJogador2) {
+
+        tabuleiro = new Tabuleiro();
+        jogador1 = new Jogador(nome1, corJog1);
+        jogador2 = new Jogador(nome2, corJog2);
+
+        adicionarPecasGuardadas(jogador1, posicoesJogador1);
+        adicionarPecasGuardadas(jogador2, posicoesJogador2);
+
+        if (nomeJogadorAtual != null && nomeJogadorAtual.equals(nome2)) {
+            jogadorAtual = jogador2;
+        } else {
+            jogadorAtual = jogador1;
+        }
+    }
+
+    /**
      * Coloca as peças dos jogadores nas posições iniciais do tabuleiro.
      * As peças são colocadas nas casas onde a GUI mostra essa cor.
      */
@@ -80,6 +108,13 @@ public class Jogo {
 
         for (int i = 0; i < posicoesIniciais.length; i++) {
             Peca p = new Peca(jogador, tabuleiro.getPosicao(posicoesIniciais[i]));
+            jogador.adicionarPeca(p);
+        }
+    }
+
+    private void adicionarPecasGuardadas(Jogador jogador, int[] posicoes) {
+        for (int i = 0; i < posicoes.length; i++) {
+            Peca p = new Peca(jogador, tabuleiro.getPosicao(posicoes[i]));
             jogador.adicionarPeca(p);
         }
     }
@@ -224,5 +259,21 @@ public class Jogo {
 
     public Tabuleiro getTabuleiro() {
         return tabuleiro;
+    }
+
+    /**
+     * Devolve as posições atuais das peças de um jogador.
+     *
+     * @param jogador jogador pretendido
+     * @return ids das posições das suas peças
+     */
+    public int[] getPosicoesDoJogador(Jogador jogador) {
+        int[] posicoes = new int[jogador.getPecas().size()];
+
+        for (int i = 0; i < jogador.getPecas().size(); i++) {
+            posicoes[i] = jogador.getPecas().get(i).getPosicaoAtual().getId();
+        }
+
+        return posicoes;
     }
 }

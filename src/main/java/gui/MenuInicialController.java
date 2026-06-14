@@ -4,8 +4,13 @@
  */
 package gui;
 
+import group15.mu_torere.DadosGlobais;
+import group15.mu_torere.GestorFicheiros;
+import group15.mu_torere.Jogo;
+import java.io.File;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.stage.FileChooser;
 
 /**
  * Controlador do ecrã inicial (Menu Inicial).
@@ -25,6 +30,8 @@ public class MenuInicialController {
      */
     @FXML
     private void abrirInserirJogadores(ActionEvent e) {
+        DadosGlobais.modoJogo = "local";
+        DadosGlobais.jogoCarregado = null;
         ScreenManager.show("/fxml/InserirJogadores.fxml");
     }
 
@@ -33,7 +40,30 @@ public class MenuInicialController {
      */
     @FXML
     private void abrirJogoRede(ActionEvent e) {
+        DadosGlobais.modoJogo = "rede";
+        DadosGlobais.jogoCarregado = null;
         ScreenManager.show("/fxml/InserirIP.fxml");
+    }
+
+    /**
+     * Carrega um jogo guardado num ficheiro.
+     */
+    @FXML
+    private void carregarJogo(ActionEvent e) {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Carregar Jogo");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiros Mu Torere", "*.mt"));
+
+        File ficheiro = fc.showOpenDialog(null);
+
+        if (ficheiro != null) {
+            Jogo jogo = GestorFicheiros.carregarJogo(ficheiro);
+
+            if (jogo != null) {
+                DadosGlobais.jogoCarregado = jogo;
+                ScreenManager.show("/fxml/Jogo.fxml");
+            }
+        }
     }
 
     /**

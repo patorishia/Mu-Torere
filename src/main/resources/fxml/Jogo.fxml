@@ -93,6 +93,11 @@
                     prefWidth="160"
                     onAction="#abrirDefinicoes"/>
 
+            <Button fx:id="btnGuardarJogo"
+                    text="Guardar Jogo"
+                    prefWidth="160"
+                    onAction="#guardarJogo"/>
+
             <Button fx:id="btnVoltarMenuJogoLocal"
                     text="Voltar ao Menu"
                     prefWidth="160"

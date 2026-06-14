@@ -12,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -48,25 +50,33 @@ public class JogoController implements Initializable {
 
     private Circle[] casas;
     private Circle[] pecas;
+    private Circle[] pecasClaras;
+    private Circle[] pecasEscuras;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // Criar jogo com nomes e cores escolhidas
-        jogo = new Jogo(
-                DadosGlobais.nomeJogador1,
-                DadosGlobais.nomeJogador2,
-                DadosGlobais.corJogador1,
-                DadosGlobais.corJogador2,
-                DadosGlobais.jogadorQueEscolheCor
-        );
+        if (DadosGlobais.jogoCarregado != null) {
+            jogo = DadosGlobais.jogoCarregado;
+            DadosGlobais.jogoCarregado = null;
+        } else {
+            jogo = new Jogo(
+                    DadosGlobais.nomeJogador1,
+                    DadosGlobais.nomeJogador2,
+                    DadosGlobais.corJogador1,
+                    DadosGlobais.corJogador2,
+                    DadosGlobais.jogadorQueEscolheCor
+            );
+        }
 
         casas = new Circle[]{casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7, casaCentro};
+        pecasClaras = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4};
+        pecasEscuras = new Circle[]{pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
         pecas = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4,
-                             pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
+                pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
 
-        ligarPecasDoModelo();
         ligarCasasDoModelo();
+        ligarPecasDoModelo();
         ligarClicksNasPecas();
         ligarClicksNasCasas();
 
@@ -79,17 +89,23 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
 
     private void ligarPecasDoModelo() {
-        Tabuleiro tab = jogo.getTabuleiro();
+        ligarPecasDoJogador(jogo.getJogador1());
+        ligarPecasDoJogador(jogo.getJogador2());
+    }
 
-        ligarPeca(pecaClara1, tab.getPosicao(5).getOcupante());
-        ligarPeca(pecaClara2, tab.getPosicao(6).getOcupante());
-        ligarPeca(pecaClara3, tab.getPosicao(7).getOcupante());
-        ligarPeca(pecaClara4, tab.getPosicao(0).getOcupante());
+    private void ligarPecasDoJogador(Jogador jogador) {
+        Circle[] pecasGui;
 
-        ligarPeca(pecaEscura1, tab.getPosicao(1).getOcupante());
-        ligarPeca(pecaEscura2, tab.getPosicao(2).getOcupante());
-        ligarPeca(pecaEscura3, tab.getPosicao(3).getOcupante());
-        ligarPeca(pecaEscura4, tab.getPosicao(4).getOcupante());
+        if (jogador.getCor().equals("claro")) {
+            pecasGui = pecasClaras;
+        } else {
+            pecasGui = pecasEscuras;
+        }
+
+        for (int i = 0; i < jogador.getPecas().size(); i++) {
+            ligarPeca(pecasGui[i], jogador.getPecas().get(i));
+            moverPecaGuiParaPosicao(pecasGui[i], jogador.getPecas().get(i).getPosicaoAtual());
+        }
     }
 
     private void ligarPeca(Circle pecaGui, Peca pecaModelo) {
@@ -191,6 +207,15 @@ public class JogoController implements Initializable {
         return null;
     }
 
+    private void moverPecaGuiParaPosicao(Circle pecaGui, Posicao posicao) {
+        Circle casaGui = obterCasaGui(posicao);
+
+        if (casaGui != null) {
+            pecaGui.setCenterX(casaGui.getCenterX());
+            pecaGui.setCenterY(casaGui.getCenterY());
+        }
+    }
+
     private void limparStrokes() {
         for (Circle p : pecas) {
             p.setStroke(null);
@@ -230,6 +255,23 @@ public class JogoController implements Initializable {
     @FXML
     private void abrirDefinicoes() {
         ScreenManager.show("/fxml/Parametros.fxml");
+    }
+
+    @FXML
+    private void guardarJogo() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Guardar Jogo");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ficheiros Mu Torere", "*.mt"));
+
+        File ficheiro = fc.showSaveDialog(null);
+
+        if (ficheiro != null) {
+            if (!ficheiro.getName().endsWith(".mt")) {
+                ficheiro = new File(ficheiro.getAbsolutePath() + ".mt");
+            }
+
+            GestorFicheiros.guardarJogo(jogo, ficheiro);
+        }
     }
 
     @FXML

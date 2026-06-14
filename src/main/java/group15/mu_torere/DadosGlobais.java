@@ -51,4 +51,10 @@ public class DadosGlobais {
     
     public static String ipServidor;
 
+    /** Modo atual da partida: "local" ou "rede" */
+    public static String modoJogo = "local";
+
+    /** Jogo carregado a partir de ficheiro */
+    public static Jogo jogoCarregado;
+
 }
