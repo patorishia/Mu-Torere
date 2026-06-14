@@ -182,6 +182,7 @@ public class JogoController implements Initializable {
 
         atualizarJogadorAtual();
         atualizarDestaquesPecasMoveis();
+        enviarEstadoJogoRede();
 
         // Verificar se o jogador seguinte tem movimentos
         if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
@@ -194,6 +195,20 @@ public class JogoController implements Initializable {
                             : jogo.getJogador1().getNome();
 
             ScreenManager.show("/fxml/FimJogo.fxml");
+        }
+    }
+
+    private void enviarEstadoJogoRede() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarEstadoJogo(jogo);
+        }
+
+        if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
+            DadosGlobais.clienteRede.enviarEstadoJogo(jogo);
         }
     }
 

@@ -276,4 +276,37 @@ public class Jogo {
 
         return posicoes;
     }
+
+    /**
+     * Cria uma mensagem de texto com o estado atual do jogo para enviar pela rede.
+     *
+     * @return estado do jogo numa unica linha de texto
+     */
+    public String criarMensagemEstadoRede() {
+        String mensagem = "ESTADO_JOGO";
+
+        mensagem += "|" + jogador1.getNome();
+        mensagem += "|" + jogador1.getCor();
+        mensagem += "|" + jogador2.getNome();
+        mensagem += "|" + jogador2.getCor();
+        mensagem += "|" + jogadorAtual.getNome();
+        mensagem += "|" + juntarPosicoes(getPosicoesDoJogador(jogador1));
+        mensagem += "|" + juntarPosicoes(getPosicoesDoJogador(jogador2));
+
+        return mensagem;
+    }
+
+    private String juntarPosicoes(int[] posicoes) {
+        String texto = "";
+
+        for (int i = 0; i < posicoes.length; i++) {
+            if (i > 0) {
+                texto += ",";
+            }
+
+            texto += posicoes[i];
+        }
+
+        return texto;
+    }
 }
