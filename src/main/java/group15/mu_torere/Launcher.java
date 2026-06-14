@@ -8,6 +8,7 @@ public class Launcher {
         if (args.length > 0 && args[0].equals("servidor")) {
             ServidorRede servidorRede = new ServidorRede(PORTO_SERVIDOR);
             servidorRede.start();
+            return;
         }
 
         // Isto vai chamar o teu jogo original contornando o bloqueio de módulos
