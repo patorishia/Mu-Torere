@@ -5,6 +5,7 @@
 package gui;
 
 import group15.mu_torere.DadosGlobais;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -38,6 +39,7 @@ public class EscolherCorController implements Initializable {
     private String jogadorQueEscolhe;
     private String corJogador1;
     private String corJogador2;
+    private boolean aguardarCoresRede;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -52,6 +54,14 @@ public class EscolherCorController implements Initializable {
 
         // Atualizar texto
         labelJogadorAtual.setText(jogadorQueEscolhe + ", escolhe a cor:");
+
+        if ("rede".equals(DadosGlobais.modoJogo) && DadosGlobais.clienteRede != null) {
+            labelJogadorAtual.setText("A aguardar escolha de cor de " + jogadorQueEscolhe);
+            circuloClara.setDisable(true);
+            circuloEscura.setDisable(true);
+            btnConfirmarCor.setDisable(true);
+            iniciarRececaoCoresRede();
+        }
     }
 
     /**
@@ -119,6 +129,56 @@ public class EscolherCorController implements Initializable {
         DadosGlobais.corJogador1 = corJogador1;
         DadosGlobais.corJogador2 = corJogador2;
 
+        if ("rede".equals(DadosGlobais.modoJogo)
+                && DadosGlobais.servidorRede != null
+                && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarMensagem("CORES_REDE|"
+                    + DadosGlobais.jogadorQueEscolheCor + "|"
+                    + DadosGlobais.corJogador1 + "|"
+                    + DadosGlobais.corJogador2);
+        }
+
+        ScreenManager.show("/fxml/Jogo.fxml");
+    }
+
+    private void iniciarRececaoCoresRede() {
+        aguardarCoresRede = true;
+
+        Thread thread = new Thread(() -> {
+            int numeroMensagens = 0;
+
+            while (aguardarCoresRede) {
+                if (DadosGlobais.clienteRede.getNumeroMensagensRecebidas() > numeroMensagens) {
+                    numeroMensagens = DadosGlobais.clienteRede.getNumeroMensagensRecebidas();
+                    String mensagem = DadosGlobais.clienteRede.getUltimaMensagem();
+
+                    if (mensagem != null && mensagem.startsWith("CORES_REDE|")) {
+                        Platform.runLater(() -> aplicarCoresRede(mensagem));
+                        aguardarCoresRede = false;
+                    }
+                }
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    aguardarCoresRede = false;
+                }
+            }
+        });
+
+        thread.start();
+    }
+
+    private void aplicarCoresRede(String mensagem) {
+        String[] partes = mensagem.split("\\|");
+
+        if (partes.length != 4) {
+            return;
+        }
+
+        DadosGlobais.jogadorQueEscolheCor = partes[1];
+        DadosGlobais.corJogador1 = partes[2];
+        DadosGlobais.corJogador2 = partes[3];
         ScreenManager.show("/fxml/Jogo.fxml");
     }
 }

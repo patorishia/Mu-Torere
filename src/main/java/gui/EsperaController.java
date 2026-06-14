@@ -62,7 +62,7 @@ public class EsperaController implements Initializable {
                                 Thread.sleep(200);
                             } catch (Exception e) {
                             }
-                            Platform.runLater(() -> ScreenManager.show("/fxml/Jogo.fxml"));
+                            Platform.runLater(() -> ScreenManager.show("/fxml/InserirJogadores.fxml"));
                         }).start();
                     });
                     verificarLigacao = false;
@@ -75,7 +75,7 @@ public class EsperaController implements Initializable {
                                 Thread.sleep(200);
                             } catch (Exception e) {
                             }
-                            Platform.runLater(() -> ScreenManager.show("/fxml/Jogo.fxml"));
+                            Platform.runLater(() -> ScreenManager.show("/fxml/InserirJogadores.fxml"));
                         }).start();
                     });
                     verificarLigacao = false;

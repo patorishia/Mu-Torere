@@ -5,6 +5,7 @@
 package gui;
 
 import group15.mu_torere.DadosGlobais;
+import javafx.application.Platform;
 import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,6 +32,7 @@ public class RoletaController implements Initializable {
     private Label seta;                  // Seta que roda
     @FXML
     private Button btnContinuarRoleta;   // Botão para avançar
+    private boolean aguardarRoletaRede;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -39,8 +41,11 @@ public class RoletaController implements Initializable {
         labelJogador1Roleta.setText(DadosGlobais.nomeJogador1);
         labelJogador2Roleta.setText(DadosGlobais.nomeJogador2);
 
-        // Iniciar a animação da roleta
-        iniciarAnimacaoRoleta();
+        if ("rede".equals(DadosGlobais.modoJogo) && DadosGlobais.clienteRede != null) {
+            aguardarResultadoRoletaRede();
+        } else {
+            iniciarAnimacaoRoleta();
+        }
     }
 
     /**
@@ -73,6 +78,12 @@ public class RoletaController implements Initializable {
                     ? DadosGlobais.nomeJogador1
                     : DadosGlobais.nomeJogador2;
 
+            if ("rede".equals(DadosGlobais.modoJogo)
+                    && DadosGlobais.servidorRede != null
+                    && DadosGlobais.servidorRede.isClienteLigado()) {
+                DadosGlobais.servidorRede.enviarMensagem("ROLETA_REDE|" + DadosGlobais.jogadorQueEscolheCor);
+            }
+
             labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
             btnContinuarRoleta.setDisable(false);
         });
@@ -85,6 +96,51 @@ public class RoletaController implements Initializable {
      */
     @FXML
     private void abrirEscolherCor() {
+        aguardarRoletaRede = false;
         ScreenManager.show("/fxml/EscolherCor.fxml");
+    }
+
+    private void aguardarResultadoRoletaRede() {
+        btnContinuarRoleta.setDisable(true);
+        labelResultado.setText("A aguardar resultado da roleta...");
+        aguardarRoletaRede = true;
+
+        Thread thread = new Thread(() -> {
+            int numeroMensagens = 0;
+
+            while (aguardarRoletaRede) {
+                if (DadosGlobais.clienteRede.getNumeroMensagensRecebidas() > numeroMensagens) {
+                    numeroMensagens = DadosGlobais.clienteRede.getNumeroMensagensRecebidas();
+                    String mensagem = DadosGlobais.clienteRede.getUltimaMensagem();
+
+                    if (mensagem != null && mensagem.startsWith("ROLETA_REDE|")) {
+                        Platform.runLater(() -> aplicarResultadoRoletaRede(mensagem));
+                        aguardarRoletaRede = false;
+                    }
+                }
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    aguardarRoletaRede = false;
+                }
+            }
+        });
+
+        thread.start();
+    }
+
+    private void aplicarResultadoRoletaRede(String mensagem) {
+        String[] partes = mensagem.split("\\|");
+
+        if (partes.length != 2) {
+            return;
+        }
+
+        DadosGlobais.jogadorQueEscolheCor = partes[1];
+        boolean jogador1Escolhe = DadosGlobais.jogadorQueEscolheCor.equals(DadosGlobais.nomeJogador1);
+        seta.setRotate(jogador1Escolhe ? -30 : 30);
+        labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
+        btnContinuarRoleta.setDisable(false);
     }
 }
