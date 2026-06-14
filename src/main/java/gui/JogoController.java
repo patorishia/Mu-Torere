@@ -52,6 +52,8 @@ public class JogoController implements Initializable {
     private Circle[] pecas;
     private Circle[] pecasClaras;
     private Circle[] pecasEscuras;
+    private boolean receberJogadasRede;
+    private int numeroMensagensRede;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -82,6 +84,7 @@ public class JogoController implements Initializable {
 
         atualizarJogadorAtual();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
+        iniciarRececaoJogadasRede();
     }
 
     // -------------------------------------------------------------------------
@@ -172,6 +175,9 @@ public class JogoController implements Initializable {
 
         if (!jogo.movimentoValido(pecaModelo, destino)) return;
 
+        int origemRede = pecaModelo.getPosicaoAtual().getId();
+        int destinoRede = destino.getId();
+
         jogo.fazerMovimento(pecaModelo, destino);
 
         pecaSelecionada.setCenterX(casaGui.getCenterX());
@@ -182,8 +188,105 @@ public class JogoController implements Initializable {
 
         atualizarJogadorAtual();
         atualizarDestaquesPecasMoveis();
+        enviarJogadaRede(origemRede, destinoRede);
         enviarEstadoJogoRede();
 
+        verificarFimJogo();
+    }
+
+    private void enviarJogadaRede(int origem, int destino) {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarJogada(origem, destino);
+        }
+
+        if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
+            DadosGlobais.clienteRede.enviarJogada(origem, destino);
+        }
+    }
+
+    private void iniciarRececaoJogadasRede() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        receberJogadasRede = true;
+        numeroMensagensRede = 0;
+
+        Thread thread = new Thread(() -> {
+            while (receberJogadasRede) {
+                String mensagem = obterMensagemRede();
+                int numeroMensagens = obterNumeroMensagensRede();
+
+                if (mensagem != null && numeroMensagens > numeroMensagensRede && mensagem.startsWith("JOGADA|")) {
+                    numeroMensagensRede = numeroMensagens;
+                    Platform.runLater(() -> aplicarJogadaRecebida(mensagem));
+                }
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    receberJogadasRede = false;
+                }
+            }
+        });
+
+        thread.start();
+    }
+
+    private String obterMensagemRede() {
+        if (DadosGlobais.servidorRede != null) {
+            return DadosGlobais.servidorRede.getUltimaMensagem();
+        }
+
+        if (DadosGlobais.clienteRede != null) {
+            return DadosGlobais.clienteRede.getUltimaMensagem();
+        }
+
+        return null;
+    }
+
+    private int obterNumeroMensagensRede() {
+        if (DadosGlobais.servidorRede != null) {
+            return DadosGlobais.servidorRede.getNumeroMensagensRecebidas();
+        }
+
+        if (DadosGlobais.clienteRede != null) {
+            return DadosGlobais.clienteRede.getNumeroMensagensRecebidas();
+        }
+
+        return 0;
+    }
+
+    private void aplicarJogadaRecebida(String mensagem) {
+        String[] partes = mensagem.split("\\|");
+
+        if (partes.length != 3) {
+            return;
+        }
+
+        int origem;
+        int destino;
+
+        try {
+            origem = Integer.parseInt(partes[1]);
+            destino = Integer.parseInt(partes[2]);
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if (jogo.aplicarJogadaRede(origem, destino)) {
+            atualizarPecasGui();
+            atualizarJogadorAtual();
+            atualizarDestaquesPecasMoveis();
+            verificarFimJogo();
+        }
+    }
+
+    private void verificarFimJogo() {
         // Verificar se o jogador seguinte tem movimentos
         if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
 
@@ -195,6 +298,16 @@ public class JogoController implements Initializable {
                             : jogo.getJogador1().getNome();
 
             ScreenManager.show("/fxml/FimJogo.fxml");
+        }
+    }
+
+    private void atualizarPecasGui() {
+        for (Circle pecaGui : pecas) {
+            Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
+
+            if (pecaModelo != null) {
+                moverPecaGuiParaPosicao(pecaGui, pecaModelo.getPosicaoAtual());
+            }
         }
     }
 

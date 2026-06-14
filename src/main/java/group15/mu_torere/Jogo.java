@@ -236,6 +236,45 @@ public class Jogo {
     }
 
     /**
+     * Aplica uma jogada recebida pela rede.
+     *
+     * @param origem id da posição onde está a peça
+     * @param destino id da posição para onde a peça vai
+     * @return true se a jogada foi aplicada, false caso contrário
+     */
+    public boolean aplicarJogadaRede(int origem, int destino) {
+        Peca peca = getPecaNaPosicao(origem);
+        Posicao posicaoDestino = tabuleiro.getPosicao(destino);
+
+        if (peca == null || posicaoDestino == null) {
+            return false;
+        }
+
+        if (!movimentoValido(peca, posicaoDestino)) {
+            return false;
+        }
+
+        fazerMovimento(peca, posicaoDestino);
+        return true;
+    }
+
+    /**
+     * Procura a peça que está numa posição do tabuleiro.
+     *
+     * @param idPosicao id da posição procurada
+     * @return peça encontrada, ou null se a posição estiver vazia
+     */
+    public Peca getPecaNaPosicao(int idPosicao) {
+        Posicao posicao = tabuleiro.getPosicao(idPosicao);
+
+        if (posicao == null) {
+            return null;
+        }
+
+        return posicao.getOcupante();
+    }
+
+    /**
      * Alterna o jogador atual (troca entre jogador1 e jogador2).
      */
     public void alternarTurno() {
