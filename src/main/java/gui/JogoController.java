@@ -14,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -43,6 +45,8 @@ public class JogoController implements Initializable {
     @FXML private ListView<String> listaMensagensConversa;
     @FXML private TextField campoMensagemConversa;
     @FXML private Button btnEnviarMensagemConversa;
+    @FXML private StackPane painelTabuleiro;
+    @FXML private Pane tabuleiro;
 
     @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
@@ -94,6 +98,7 @@ public class JogoController implements Initializable {
         atualizarJogadorAtual();
         atualizarEstadoRedeInicial();
         configurarConversaRede();
+        configurarTabuleiroResponsivo();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
     }
@@ -491,6 +496,25 @@ public class JogoController implements Initializable {
 
     private String prepararTextoConversa(String texto) {
         return texto.replace("|", "/");
+    }
+
+    private void configurarTabuleiroResponsivo() {
+        painelTabuleiro.widthProperty().addListener((obs, antigo, novo) -> atualizarEscalaTabuleiro());
+        painelTabuleiro.heightProperty().addListener((obs, antigo, novo) -> atualizarEscalaTabuleiro());
+        Platform.runLater(() -> atualizarEscalaTabuleiro());
+    }
+
+    private void atualizarEscalaTabuleiro() {
+        double escalaLargura = painelTabuleiro.getWidth() / 500;
+        double escalaAltura = painelTabuleiro.getHeight() / 500;
+        double escala = Math.min(escalaLargura, escalaAltura);
+
+        if (escala <= 0) {
+            escala = 1;
+        }
+
+        tabuleiro.setScaleX(escala);
+        tabuleiro.setScaleY(escala);
     }
 
     private boolean jogadorTemMovimentos(Jogador jog) {

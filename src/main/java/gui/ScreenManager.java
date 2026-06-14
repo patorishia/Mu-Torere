@@ -46,14 +46,21 @@ public class ScreenManager {
             // Carrega o ficheiro FXML e cria a árvore de nodos correspondente
             Parent root = FXMLLoader.load(ScreenManager.class.getResource(fxml));
 
-            // Cria uma nova Scene com o conteúdo carregado
-            Scene scene = new Scene(root);
+            Scene scene = stage.getScene();
+
+            if (scene == null) {
+                scene = new Scene(root);
+            } else {
+                scene.setRoot(root);
+            }
 
             // Aplica o ficheiro CSS global à Scene
             // Isto garante que TODOS os ecrãs partilham o mesmo estilo
-            scene.getStylesheets().add(
-                ScreenManager.class.getResource("/fxml/interface.css").toExternalForm()
-            );
+            String css = ScreenManager.class.getResource("/fxml/interface.css").toExternalForm();
+
+            if (!scene.getStylesheets().contains(css)) {
+                scene.getStylesheets().add(css);
+            }
 
             // Define a Scene no Stage principal
             stage.setScene(scene);
