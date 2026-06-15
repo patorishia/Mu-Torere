@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 
 /**
  * Controlador do ecrã Jogo Responsável por: - ligar GUI ao modelo - permitir
@@ -48,10 +51,6 @@ public class JogoController implements Initializable {
     private Button btnEnviarMensagemConversa;
     @FXML
     private Button btnGuardarJogo;
-    @FXML
-    private Label labelConfirmarVoltar;
-    @FXML
-    private HBox botoesConfirmarVoltar;
     @FXML
     private StackPane painelTabuleiro;
     @FXML
@@ -120,7 +119,6 @@ public class JogoController implements Initializable {
         ligarClicksNasCasas();
 
         atualizarEstadoRedeInicial();
-        esconderConfirmacaoVoltar();
         configurarConversaRede();
         configurarTabuleiroResponsivo();
         iniciarRececaoJogadasRede();
@@ -666,30 +664,30 @@ public class JogoController implements Initializable {
 
     @FXML
     private void mostrarMenuInicial() {
-        labelConfirmarVoltar.setVisible(true);
-        labelConfirmarVoltar.setManaged(true);
-        botoesConfirmarVoltar.setVisible(true);
-        botoesConfirmarVoltar.setManaged(true);
+
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Confirmar saída");
+        alerta.setHeaderText("Deseja realmente voltar ao menu?");
+        alerta.setContentText("O jogo atual será perdido.");
+
+        ButtonType sim = new ButtonType("Sim");
+        ButtonType nao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alerta.getButtonTypes().setAll(sim, nao);
+
+        alerta.showAndWait().ifPresent(resposta -> {
+            if (resposta == sim) {
+                // Se estiver em modo rede, enviar desistência
+                if ("rede".equals(DadosGlobais.modoJogo)) {
+                    enviarDesistenciaRede();
+                    DadosGlobais.fecharLigacoesRede();
+                }
+
+                receberJogadasRede = false;
+                DadosGlobais.limparJogoAtual();
+                ScreenManager.show("/fxml/MenuInicial.fxml");
+            }
+        });
     }
 
-    @FXML
-    private void confirmarVoltarMenu() {
-        receberJogadasRede = false;
-        enviarDesistenciaRede();
-        DadosGlobais.fecharLigacoesRede();
-        DadosGlobais.limparJogoAtual();
-        ScreenManager.show("/fxml/MenuInicial.fxml");
-    }
-
-    @FXML
-    private void cancelarVoltarMenu() {
-        esconderConfirmacaoVoltar();
-    }
-
-    private void esconderConfirmacaoVoltar() {
-        labelConfirmarVoltar.setVisible(false);
-        labelConfirmarVoltar.setManaged(false);
-        botoesConfirmarVoltar.setVisible(false);
-        botoesConfirmarVoltar.setManaged(false);
-    }
 }
