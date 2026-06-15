@@ -11,12 +11,24 @@
     -fx-background-color: linear-gradient(to bottom, #272B57, #1b1e3f);
 }
 
+.tema-escuro {
+    -fx-background-color: linear-gradient(to bottom, #272B57, #1b1e3f);
+}
+
+.tema-claro {
+    -fx-background-color: white;
+}
+
 /* ----------------------------- */
 /*   CONTROLOS GENÉRICOS         */
 /* ----------------------------- */
 
 .label {
     -fx-text-fill: white;
+}
+
+.tema-claro .label {
+    -fx-text-fill: #1f4fa3;
 }
 
 .button {
@@ -27,8 +39,17 @@
     -fx-padding: 10 20;
 }
 
+.tema-claro .button {
+    -fx-background-color: #1f6fd1;
+    -fx-text-fill: white;
+}
+
 .button:hover {
     -fx-background-color: #565cb3;
+}
+
+.tema-claro .button:hover {
+    -fx-background-color: #2f86f6;
 }
 
 .text-field {
@@ -46,10 +67,18 @@
     -fx-text-fill: white;
 }
 
+.tema-claro .check-box {
+    -fx-text-fill: #1f4fa3;
+}
+
 .title-label {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
+}
+
+.tema-claro .title-label {
+    -fx-text-fill: #1f4fa3;
 }
 
 /* ----------------------------- */
@@ -73,10 +102,19 @@
     -fx-stroke-width: 3;
 }
 
+.tema-claro .board-line {
+    -fx-stroke: #1f6fd1;
+}
+
 .board-cell {
     -fx-fill: #3f448c;
     -fx-stroke: #C5B5FF;
     -fx-stroke-width: 2;
+}
+
+.tema-claro .board-cell {
+    -fx-fill: #eaf3ff;
+    -fx-stroke: #1f6fd1;
 }
 
 /* ----------------------------- */
@@ -104,6 +142,10 @@
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-padding: 20 0 10 0;
+}
+
+.tema-claro .roleta-titulo {
+    -fx-text-fill: #1f4fa3;
 }
 
 .roleta-seta {
@@ -148,6 +190,10 @@
 .escolhercor-highlight {
     -fx-stroke: dodgerblue;
     -fx-stroke-width: 5;
+}
+
+.tema-claro .escolhercor-highlight {
+    -fx-stroke: #1f6fd1;
 }
 
 /* Botão confirmar — só o que é diferente do .button */

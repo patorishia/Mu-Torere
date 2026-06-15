@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package gui;
+import group15.mu_torere.DadosGlobais;
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -45,6 +46,7 @@ public class ScreenManager {
         try {
             // Carrega o ficheiro FXML e cria a árvore de nodos correspondente
             Parent root = FXMLLoader.load(ScreenManager.class.getResource(fxml));
+            aplicarTema(root);
 
             Scene scene = stage.getScene();
 
@@ -74,6 +76,17 @@ System.out.println("CSS URL = " + cssUrl);
         } catch (Exception e) {
             // Em caso de erro, imprime a stack trace para facilitar debugging
             e.printStackTrace();
+        }
+    }
+
+    private static void aplicarTema(Parent root) {
+        root.getStyleClass().remove("tema-claro");
+        root.getStyleClass().remove("tema-escuro");
+
+        if ("Escuro".equals(DadosGlobais.temaAtual)) {
+            root.getStyleClass().add("tema-escuro");
+        } else {
+            root.getStyleClass().add("tema-claro");
         }
     }
 }

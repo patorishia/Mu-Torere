@@ -82,6 +82,7 @@ public class InserirIPController {
 
     @FXML
     private void mostrarMenuInicial() {
+        DadosGlobais.limparJogoAtual();
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }
