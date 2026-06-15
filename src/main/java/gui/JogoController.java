@@ -27,34 +27,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-
 /**
- * Controlador do ecrã Jogo
- * Responsável por:
- *  - ligar GUI ao modelo
- *  - permitir selecionar peças
- *  - permitir mover peças
- *  - validar movimentos através do modelo
- *  - atualizar o jogador atual
- *  - detetar fim de jogo
+ * Controlador do ecrã Jogo Responsável por: - ligar GUI ao modelo - permitir
+ * selecionar peças - permitir mover peças - validar movimentos através do
+ * modelo - atualizar o jogador atual - detetar fim de jogo
  */
 public class JogoController implements Initializable {
 
-    @FXML private Label labelJogadorAtual;
-    @FXML private Label labelEstadoRede;
-    @FXML private TabPane tabPaneConversa;
-    @FXML private ListView<String> listaMensagensConversa;
-    @FXML private TextField campoMensagemConversa;
-    @FXML private Button btnEnviarMensagemConversa;
-    @FXML private Label labelConfirmarVoltar;
-    @FXML private HBox botoesConfirmarVoltar;
-    @FXML private StackPane painelTabuleiro;
-    @FXML private Pane tabuleiro;
+    @FXML
+    private Label labelJogadorAtual;
+    @FXML
+    private Label labelEstadoRede;
+    @FXML
+    private TabPane tabPaneConversa;
+    @FXML
+    private ListView<String> listaMensagensConversa;
+    @FXML
+    private TextField campoMensagemConversa;
+    @FXML
+    private Button btnEnviarMensagemConversa;
+    @FXML
+    private Label labelConfirmarVoltar;
+    @FXML
+    private HBox botoesConfirmarVoltar;
+    @FXML
+    private StackPane painelTabuleiro;
+    @FXML
+    private Pane tabuleiro;
 
-    @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
+    @FXML
+    private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
-    @FXML private Circle pecaClara1, pecaClara2, pecaClara3, pecaClara4;
-    @FXML private Circle pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4;
+    @FXML
+    private Circle pecaClara1, pecaClara2, pecaClara3, pecaClara4;
+    @FXML
+    private Circle pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4;
 
     private Circle pecaSelecionada;
 
@@ -91,7 +98,7 @@ public class JogoController implements Initializable {
         pecasClaras = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4};
         pecasEscuras = new Circle[]{pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
         pecas = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4,
-                pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
+            pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
 
         ligarCasasDoModelo();
         ligarPecasDoModelo();
@@ -111,7 +118,6 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // LIGAÇÃO GUI ↔ MODELO
     // -------------------------------------------------------------------------
-
     private void ligarPecasDoModelo() {
         ligarPecasDoJogador(jogo.getJogador1());
         ligarPecasDoJogador(jogo.getJogador2());
@@ -154,7 +160,6 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // INTERAÇÃO DO JOGADOR
     // -------------------------------------------------------------------------
-
     private void ligarClicksNasPecas() {
         for (Circle peca : pecas) {
             peca.setOnMouseClicked(e -> selecionarPeca(peca));
@@ -372,10 +377,10 @@ public class JogoController implements Initializable {
 
             // O jogador atual NÃO tem movimentos → perdeu
             // Logo, o vencedor é o outro jogador
-            DadosGlobais.vencedor =
-                    (jogo.getJogadorAtual() == jogo.getJogador1())
-                            ? jogo.getJogador2().getNome()
-                            : jogo.getJogador1().getNome();
+            DadosGlobais.vencedor
+                    = (jogo.getJogadorAtual() == jogo.getJogador1())
+                    ? jogo.getJogador2().getNome()
+                    : jogo.getJogador1().getNome();
 
             ScreenManager.show("/fxml/FimJogo.fxml");
         }
@@ -583,7 +588,10 @@ public class JogoController implements Initializable {
 
     private void adicionarMensagemConversa(String mensagem) {
         listaMensagensConversa.getItems().add(mensagem);
-        listaMensagensConversa.scrollTo(listaMensagensConversa.getItems().size() - 1);
+
+        Platform.runLater(() -> {
+            listaMensagensConversa.scrollTo(listaMensagensConversa.getItems().size() - 1);
+        });
     }
 
     private String prepararTextoConversa(String texto) {
@@ -611,7 +619,9 @@ public class JogoController implements Initializable {
 
     private boolean jogadorTemMovimentos(Jogador jog) {
         for (Peca p : jog.getPecas()) {
-            if (!jogo.obterMovimentosValidos(p).isEmpty()) return true;
+            if (!jogo.obterMovimentosValidos(p).isEmpty()) {
+                return true;
+            }
         }
         return false;
     }
@@ -619,7 +629,6 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // BOTÕES LATERAIS
     // -------------------------------------------------------------------------
-
     @FXML
     private void abrirDefinicoes() {
         ScreenManager.show("/fxml/Parametros.fxml");
