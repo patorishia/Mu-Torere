@@ -49,46 +49,61 @@ public class RoletaController implements Initializable {
     }
 
     /**
-     * Anima a seta e escolhe aleatoriamente o jogador vencedor.
+     * Anima a seta da roleta e determina qual jogador escolhe a cor. A animação
+     * tem duas fases: 1) Rotação rápida (efeito visual) 2) Rotação final para
+     * apontar para o jogador escolhido
      */
     private void iniciarAnimacaoRoleta() {
 
+        // Desativar o botão enquanto a roleta está a girar
         btnContinuarRoleta.setDisable(true);
         labelResultado.setText("A roleta vai decidir...");
 
-        // 1) ROTAÇÃO PRINCIPAL — 3 voltas completas
+        // -------------------------------
+        // 1) ROTAÇÃO PRINCIPAL (efeito)
+        // -------------------------------
+        // A seta roda 3 voltas completas apenas para criar animação visual.
         RotateTransition rt = new RotateTransition(Duration.seconds(1.5), seta);
-        rt.setByAngle(360 * 3);
+        rt.setByAngle(360 * 3);   // 3 voltas completas
         rt.setCycleCount(1);
 
         rt.setOnFinished(e -> {
 
+            // Escolha aleatória do jogador vencedor
             boolean jogador1Escolhe = Math.random() < 0.5;
 
-            // 2) ROTAÇÃO FINAL — apontar para o jogador escolhido
-            double anguloFinal = jogador1Escolhe ? 180 : 0;
+            // Jogador 1 → seta aponta para a ESQUERDA  → -90 graus
+            // Jogador 2 → seta aponta para a DIREITA   → +90 graus
+            double anguloFinal = jogador1Escolhe ? -90 : 90;
 
             RotateTransition rt2 = new RotateTransition(Duration.seconds(0.4), seta);
-            rt2.setToAngle(anguloFinal);
+            rt2.setToAngle(anguloFinal);   // rotação final para o lado correto
             rt2.setCycleCount(1);
             rt2.play();
 
-            // Guardar vencedor globalmente
+            // Guardar o nome do jogador que escolhe a cor
             DadosGlobais.jogadorQueEscolheCor = jogador1Escolhe
                     ? DadosGlobais.nomeJogador1
                     : DadosGlobais.nomeJogador2;
 
+            // Enviar resultado ao cliente (modo rede)
             if ("rede".equals(DadosGlobais.modoJogo)
                     && DadosGlobais.servidorRede != null
                     && DadosGlobais.servidorRede.isClienteLigado()) {
                 DadosGlobais.servidorRede.enviarMensagem("ROLETA_REDE|" + DadosGlobais.jogadorQueEscolheCor);
             }
 
+            // Atualizar texto do resultado
             labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
+
+            // Reativar botão
             btnContinuarRoleta.setDisable(false);
+
+            // Se o jogador local não for o escolhido, avança automaticamente
             continuarAutomaticamenteSeNaoEscolheCor();
         });
 
+        // Iniciar animação principal
         rt.play();
     }
 
