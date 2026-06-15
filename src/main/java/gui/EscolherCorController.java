@@ -237,7 +237,7 @@ public class EscolherCorController implements Initializable {
 
     private void mostrarEsperaEscolhaCor() {
         labelTitulo.setText("A aguardar");
-        labelJogadorAtual.setText("Esperando o adversário escolher a cor...");
+        labelJogadorAtual.setText("À espera do adversário escolher a cor...");
         esconderControlosEscolhaCor();
     }
 

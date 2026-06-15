@@ -138,6 +138,21 @@
                     text="Voltar ao Menu"
                     prefWidth="160"
                     onAction="#mostrarMenuInicial"/>
+
+            <Label fx:id="labelConfirmarVoltar"
+                   text="Tem a certeza que quer voltar ao menu? O processo do jogo vai ser perdido a menos que o tenha guardado."
+                   wrapText="true"
+                   prefWidth="220"
+                   styleClass="label"/>
+
+            <HBox fx:id="botoesConfirmarVoltar" alignment="CENTER" spacing="10">
+                <Button text="Sim"
+                        prefWidth="75"
+                        onAction="#confirmarVoltarMenu"/>
+                <Button text="Não"
+                        prefWidth="75"
+                        onAction="#cancelarVoltarMenu"/>
+            </HBox>
         </VBox>
     </right>
 

@@ -30,8 +30,8 @@ public class MenuInicialController {
      */
     @FXML
     private void abrirInserirJogadores(ActionEvent e) {
+        DadosGlobais.limparJogoAtual();
         DadosGlobais.modoJogo = "local";
-        DadosGlobais.jogoCarregado = null;
         ScreenManager.show("/fxml/InserirJogadores.fxml");
     }
 
@@ -40,8 +40,8 @@ public class MenuInicialController {
      */
     @FXML
     private void abrirJogoRede(ActionEvent e) {
+        DadosGlobais.limparJogoAtual();
         DadosGlobais.modoJogo = "rede";
-        DadosGlobais.jogoCarregado = null;
         ScreenManager.show("/fxml/InserirIP.fxml");
     }
 
@@ -57,6 +57,7 @@ public class MenuInicialController {
         File ficheiro = fc.showOpenDialog(null);
 
         if (ficheiro != null) {
+            DadosGlobais.limparJogoAtual();
             Jogo jogo = GestorFicheiros.carregarJogo(ficheiro);
 
             if (jogo != null) {
@@ -79,6 +80,7 @@ public class MenuInicialController {
      */
     @FXML
     private void sairJogo(ActionEvent e) {
+        DadosGlobais.limparJogoAtual();
         System.exit(0);
     }
 }

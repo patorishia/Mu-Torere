@@ -83,6 +83,7 @@ public class InserirJogadoresController implements Initializable {
     @FXML
     private void voltar(ActionEvent event) {
         aguardarNomesRede = false;
+        DadosGlobais.limparJogoAtual();
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 

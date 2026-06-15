@@ -30,7 +30,7 @@
 
             <!-- Seta -->
             <Label fx:id="seta"
-                   text="▼"
+                   text="➜"
                    styleClass="roleta-seta"/>
 
             <!-- Jogadores -->

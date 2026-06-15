@@ -24,7 +24,12 @@ public class FimJogoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         // Mostrar o vencedor guardado globalmente
-        labelVencedor.setText("Vencedor: " + DadosGlobais.vencedor);
+        if (DadosGlobais.vencedor != null && DadosGlobais.vencedor.startsWith("Parabéns!")) {
+            labelVencedor.setText(DadosGlobais.vencedor);
+        } else {
+            labelVencedor.setText("Vencedor: " + DadosGlobais.vencedor);
+        }
+
         GestorSons.tocarVitoria();
     }
 
@@ -33,6 +38,7 @@ public class FimJogoController implements Initializable {
      */
     @FXML
     private void mostrarMenuInicial() {
+        DadosGlobais.limparJogoAtual();
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }

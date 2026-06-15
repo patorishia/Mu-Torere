@@ -52,7 +52,7 @@ public class DadosGlobais {
     public static boolean somAtivo = true;
 
     /** Tema atual ("Claro" ou "Escuro") */
-    public static String temaAtual = "Claro";
+    public static String temaAtual = "Escuro";
     
     
     public static String ipServidor;
@@ -71,5 +71,40 @@ public class DadosGlobais {
 
     /** Jogo carregado a partir de ficheiro */
     public static Jogo jogoCarregado;
+
+    /**
+     * Fecha as ligacoes de rede ativas.
+     */
+    public static void fecharLigacoesRede() {
+        if (servidorRede != null) {
+            servidorRede.fechar();
+        }
+
+        if (clienteRede != null) {
+            clienteRede.fechar();
+        }
+
+        servidorRede = null;
+        clienteRede = null;
+    }
+
+    /**
+     * Limpa os dados da partida atual para permitir iniciar outro jogo.
+     */
+    public static void limparJogoAtual() {
+        fecharLigacoesRede();
+
+        nomeJogador1 = null;
+        nomeJogador2 = null;
+        corJogador1 = null;
+        corJogador2 = null;
+        jogadorQueEscolheCor = null;
+        nomeJogadorLocal = null;
+        corJogadorLocal = null;
+        vencedor = null;
+        ipServidor = null;
+        modoJogo = "local";
+        jogoCarregado = null;
+    }
 
 }

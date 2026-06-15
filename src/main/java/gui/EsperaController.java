@@ -34,17 +34,7 @@ public class EsperaController implements Initializable {
     @FXML
     private void cancelar() {
         verificarLigacao = false;
-
-        if (DadosGlobais.servidorRede != null) {
-            DadosGlobais.servidorRede.fechar();
-            DadosGlobais.servidorRede = null;
-        }
-
-        if (DadosGlobais.clienteRede != null) {
-            DadosGlobais.clienteRede.fechar();
-            DadosGlobais.clienteRede = null;
-        }
-
+        DadosGlobais.limparJogoAtual();
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 

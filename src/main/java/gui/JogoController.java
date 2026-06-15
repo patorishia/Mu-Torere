@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -45,6 +46,8 @@ public class JogoController implements Initializable {
     @FXML private ListView<String> listaMensagensConversa;
     @FXML private TextField campoMensagemConversa;
     @FXML private Button btnEnviarMensagemConversa;
+    @FXML private Label labelConfirmarVoltar;
+    @FXML private HBox botoesConfirmarVoltar;
     @FXML private StackPane painelTabuleiro;
     @FXML private Pane tabuleiro;
 
@@ -97,8 +100,10 @@ public class JogoController implements Initializable {
 
         atualizarJogadorAtual();
         atualizarEstadoRedeInicial();
+        esconderConfirmacaoVoltar();
         configurarConversaRede();
         configurarTabuleiroResponsivo();
+        atualizarDestaquesPecasMoveis();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
     }
@@ -273,6 +278,9 @@ public class JogoController implements Initializable {
                         Platform.runLater(() -> aplicarEstadoRecebido(mensagem));
                     } else if (mensagem.startsWith("CHAT|")) {
                         Platform.runLater(() -> receberMensagemConversa(mensagem));
+                    } else if (mensagem.startsWith("DESISTENCIA")) {
+                        Platform.runLater(() -> adversarioDesistiu());
+                        receberJogadasRede = false;
                     }
                 }
 
@@ -452,6 +460,8 @@ public class JogoController implements Initializable {
         } else {
             labelEstadoRede.setText("");
         }
+
+        atualizarDestaquesPecasMoveis();
     }
 
     private void indicarEsperaAdversario() {
@@ -542,6 +552,27 @@ public class JogoController implements Initializable {
         }
     }
 
+    private void enviarDesistenciaRede() {
+        if (!"rede".equals(DadosGlobais.modoJogo)) {
+            return;
+        }
+
+        if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
+            DadosGlobais.servidorRede.enviarMensagem("DESISTENCIA");
+        }
+
+        if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
+            DadosGlobais.clienteRede.enviarMensagem("DESISTENCIA");
+        }
+    }
+
+    private void adversarioDesistiu() {
+        receberJogadasRede = false;
+        DadosGlobais.fecharLigacoesRede();
+        DadosGlobais.vencedor = "Parabéns! É o vencedor, o seu adversário desistiu.";
+        ScreenManager.show("/fxml/FimJogo.fxml");
+    }
+
     private void receberMensagemConversa(String mensagem) {
         String texto = mensagem.substring("CHAT|".length());
 
@@ -613,6 +644,29 @@ public class JogoController implements Initializable {
 
     @FXML
     private void mostrarMenuInicial() {
+        labelConfirmarVoltar.setVisible(true);
+        labelConfirmarVoltar.setManaged(true);
+        botoesConfirmarVoltar.setVisible(true);
+        botoesConfirmarVoltar.setManaged(true);
+    }
+
+    @FXML
+    private void confirmarVoltarMenu() {
+        receberJogadasRede = false;
+        enviarDesistenciaRede();
+        DadosGlobais.limparJogoAtual();
         ScreenManager.show("/fxml/MenuInicial.fxml");
+    }
+
+    @FXML
+    private void cancelarVoltarMenu() {
+        esconderConfirmacaoVoltar();
+    }
+
+    private void esconderConfirmacaoVoltar() {
+        labelConfirmarVoltar.setVisible(false);
+        labelConfirmarVoltar.setManaged(false);
+        botoesConfirmarVoltar.setVisible(false);
+        botoesConfirmarVoltar.setManaged(false);
     }
 }
