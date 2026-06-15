@@ -106,5 +106,6 @@ public class DadosGlobais {
         modoJogo = "local";
         jogoCarregado = null;
     }
+    
 
 }

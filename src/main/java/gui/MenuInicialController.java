@@ -15,11 +15,8 @@ import javafx.stage.FileChooser;
 /**
  * Controlador do ecrã inicial (Menu Inicial).
  *
- * Este controlador gere as ações dos botões do menu:
- *  - Jogo Local
- *  - Jogo em Rede
- *  - Definições
- *  - Sair
+ * Este controlador gere as ações dos botões do menu: - Jogo Local - Jogo em
+ * Rede - Definições - Sair
  *
  * Cada botão chama o ScreenManager para trocar de ecrã.
  */
@@ -71,7 +68,7 @@ public class MenuInicialController {
      * Abre o ecrã de definições.
      */
     @FXML
-    private void abrirDefinicoes(ActionEvent e) {
+    private void abrirDefinicoes() {
         ScreenManager.show("/fxml/Parametros.fxml");
     }
 

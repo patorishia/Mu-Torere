@@ -14,15 +14,16 @@ import javafx.scene.control.Alert;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
 /**
- * Controlador do ecrã Inserir Jogadores.
- * Lê os nomes, valida e avança para o ecrã da roleta.
+ * Controlador do ecrã Inserir Jogadores. Lê os nomes, valida e avança para o
+ * ecrã da roleta.
  */
 public class InserirJogadoresController implements Initializable {
 
-    @FXML private TextField txtJogador1; // Campo do Jogador 1
-    @FXML private TextField txtJogador2; // Campo do Jogador 2
+    @FXML
+    private TextField txtJogador1; // Campo do Jogador 1
+    @FXML
+    private TextField txtJogador2; // Campo do Jogador 2
     private boolean aguardarNomesRede;
 
     @Override
@@ -44,8 +45,8 @@ public class InserirJogadoresController implements Initializable {
     }
 
     /**
-     * Ação do botão "Continuar".
-     * Valida os nomes, guarda-os e muda para o ecrã da roleta.
+     * Ação do botão "Continuar". Valida os nomes, guarda-os e muda para o ecrã
+     * da roleta.
      */
     @FXML
     private void abrirRoleta(ActionEvent event) {
@@ -57,7 +58,7 @@ public class InserirJogadoresController implements Initializable {
 
         String nome1 = txtJogador1.getText().trim();
         String nome2 = txtJogador2.getText().trim();
-        
+
         // Validação
         if (nome1.isBlank() || nome2.isBlank()) {
             Alert alerta = new Alert(Alert.AlertType.WARNING);
@@ -75,10 +76,9 @@ public class InserirJogadoresController implements Initializable {
         // Avançar para a roleta
         ScreenManager.show("/fxml/Roleta.fxml");
     }
-    
+
     /**
-     * Ação do botão "Voltar".
-     * Regressa ao menu inicial.
+     * Ação do botão "Voltar". Regressa ao menu inicial.
      */
     @FXML
     private void voltar(ActionEvent event) {
@@ -156,6 +156,8 @@ public class InserirJogadoresController implements Initializable {
         DadosGlobais.nomeJogadorLocal = nome2;
         DadosGlobais.clienteRede.enviarMensagem("NOME_CLIENTE|" + nome2);
         txtJogador2.setDisable(true);
+        txtJogador2.setPromptText("A aguardar o adversário...");
+
         iniciarRececaoNomesRede();
     }
 

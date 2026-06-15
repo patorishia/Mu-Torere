@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -26,35 +25,48 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
- * Controlador do ecrã Jogo
- * Responsável por:
- *  - ligar GUI ao modelo
- *  - permitir selecionar peças
- *  - permitir mover peças
- *  - validar movimentos através do modelo
- *  - atualizar o jogador atual
- *  - detetar fim de jogo
+ * Controlador do ecrã Jogo Responsável por: - ligar GUI ao modelo - permitir
+ * selecionar peças - permitir mover peças - validar movimentos através do
+ * modelo - atualizar o jogador atual - detetar fim de jogo
  */
 public class JogoController implements Initializable {
 
-    @FXML private Label labelJogadorAtual;
-    @FXML private Label labelEstadoRede;
-    @FXML private TabPane tabPaneConversa;
-    @FXML private ListView<String> listaMensagensConversa;
-    @FXML private TextField campoMensagemConversa;
-    @FXML private Button btnEnviarMensagemConversa;
-    @FXML private Label labelConfirmarVoltar;
-    @FXML private HBox botoesConfirmarVoltar;
-    @FXML private StackPane painelTabuleiro;
-    @FXML private Pane tabuleiro;
+    @FXML
+    private Label labelJogadorAtual;
+    @FXML
+    private Label labelEstadoRede;
+    @FXML
+    private TabPane tabPaneConversa;
+    @FXML
+    private ListView<String> listaMensagensConversa;
+    @FXML
+    private TextField campoMensagemConversa;
+    @FXML
+    private Button btnEnviarMensagemConversa;
+    @FXML
+    private Button btnGuardarJogo;
+    @FXML
+    private StackPane painelTabuleiro;
+    @FXML
+    private Pane tabuleiro;
 
-    @FXML private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
+    @FXML
+    private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
-    @FXML private Circle pecaClara1, pecaClara2, pecaClara3, pecaClara4;
-    @FXML private Circle pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4;
+    @FXML
+    private Circle pecaClara1, pecaClara2, pecaClara3, pecaClara4;
+    @FXML
+    private Circle pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4;
 
     private Circle pecaSelecionada;
 
@@ -87,31 +99,44 @@ public class JogoController implements Initializable {
             );
         }
 
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            btnGuardarJogo.setVisible(false);
+            btnGuardarJogo.setManaged(false);
+        }
+
         casas = new Circle[]{casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7, casaCentro};
         pecasClaras = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4};
         pecasEscuras = new Circle[]{pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
         pecas = new Circle[]{pecaClara1, pecaClara2, pecaClara3, pecaClara4,
-                pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
+            pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4};
 
         ligarCasasDoModelo();
         ligarPecasDoModelo();
+
+        Platform.runLater(() -> {
+            atualizarPecasGui();
+            atualizarJogadorAtual();
+            atualizarDestaquesPecasMoveis();
+        });
+
         ligarClicksNasPecas();
         ligarClicksNasCasas();
 
-        atualizarJogadorAtual();
         atualizarEstadoRedeInicial();
-        esconderConfirmacaoVoltar();
         configurarConversaRede();
         configurarTabuleiroResponsivo();
-        atualizarDestaquesPecasMoveis();
-        Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
+        //Platform.runLater(this::aplicarTema);
+        
+        Platform.runLater(this::atualizarDestaquesPecasMoveis);
+
+
+
     }
 
     // -------------------------------------------------------------------------
     // LIGAÇÃO GUI ↔ MODELO
     // -------------------------------------------------------------------------
-
     private void ligarPecasDoModelo() {
         ligarPecasDoJogador(jogo.getJogador1());
         ligarPecasDoJogador(jogo.getJogador2());
@@ -154,7 +179,6 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // INTERAÇÃO DO JOGADOR
     // -------------------------------------------------------------------------
-
     private void ligarClicksNasPecas() {
         for (Circle peca : pecas) {
             peca.setOnMouseClicked(e -> selecionarPeca(peca));
@@ -372,10 +396,10 @@ public class JogoController implements Initializable {
 
             // O jogador atual NÃO tem movimentos → perdeu
             // Logo, o vencedor é o outro jogador
-            DadosGlobais.vencedor =
-                    (jogo.getJogadorAtual() == jogo.getJogador1())
-                            ? jogo.getJogador2().getNome()
-                            : jogo.getJogador1().getNome();
+            DadosGlobais.vencedor
+                    = (jogo.getJogadorAtual() == jogo.getJogador1())
+                    ? jogo.getJogador2().getNome()
+                    : jogo.getJogador1().getNome();
 
             ScreenManager.show("/fxml/FimJogo.fxml");
         }
@@ -583,7 +607,10 @@ public class JogoController implements Initializable {
 
     private void adicionarMensagemConversa(String mensagem) {
         listaMensagensConversa.getItems().add(mensagem);
-        listaMensagensConversa.scrollTo(listaMensagensConversa.getItems().size() - 1);
+
+        Platform.runLater(() -> {
+            listaMensagensConversa.scrollTo(listaMensagensConversa.getItems().size() - 1);
+        });
     }
 
     private String prepararTextoConversa(String texto) {
@@ -611,7 +638,9 @@ public class JogoController implements Initializable {
 
     private boolean jogadorTemMovimentos(Jogador jog) {
         for (Peca p : jog.getPecas()) {
-            if (!jogo.obterMovimentosValidos(p).isEmpty()) return true;
+            if (!jogo.obterMovimentosValidos(p).isEmpty()) {
+                return true;
+            }
         }
         return false;
     }
@@ -619,11 +648,12 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // BOTÕES LATERAIS
     // -------------------------------------------------------------------------
-
-    @FXML
+    /*@FXML
     private void abrirDefinicoes() {
-        ScreenManager.show("/fxml/Parametros.fxml");
-    }
+        DadosGlobais.ecrãAnterior = "/fxml/Jogo.fxml";
+        abrirPopupDefinicoes();
+
+    }*/
 
     @FXML
     private void guardarJogo() {
@@ -644,29 +674,68 @@ public class JogoController implements Initializable {
 
     @FXML
     private void mostrarMenuInicial() {
-        labelConfirmarVoltar.setVisible(true);
-        labelConfirmarVoltar.setManaged(true);
-        botoesConfirmarVoltar.setVisible(true);
-        botoesConfirmarVoltar.setManaged(true);
+
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Confirmar saída");
+        alerta.setHeaderText("Deseja realmente voltar ao menu?");
+        alerta.setContentText("O jogo atual será perdido.");
+
+        ButtonType sim = new ButtonType("Sim");
+        ButtonType nao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alerta.getButtonTypes().setAll(sim, nao);
+
+        alerta.showAndWait().ifPresent(resposta -> {
+            if (resposta == sim) {
+                // Se estiver em modo rede, enviar desistência
+                if ("rede".equals(DadosGlobais.modoJogo)) {
+                    enviarDesistenciaRede();
+                    DadosGlobais.fecharLigacoesRede();
+                }
+
+                receberJogadasRede = false;
+                DadosGlobais.limparJogoAtual();
+                ScreenManager.show("/fxml/MenuInicial.fxml");
+            }
+        });
     }
 
-    @FXML
-    private void confirmarVoltarMenu() {
-        receberJogadasRede = false;
-        enviarDesistenciaRede();
-        DadosGlobais.limparJogoAtual();
-        ScreenManager.show("/fxml/MenuInicial.fxml");
+   /* private void abrirPopupDefinicoes() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Parametros.fxml"));
+            Parent root = loader.load();
+
+            Stage popup = new Stage();
+            popup.setTitle("Definições");
+            popup.setScene(new Scene(root));
+            popup.initModality(Modality.APPLICATION_MODAL); // bloqueia o jogo
+            popup.initOwner(labelJogadorAtual.getScene().getWindow()); // janela pai
+
+            popup.showAndWait(); // espera até fechar
+
+            aplicarTema();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    private void cancelarVoltarMenu() {
-        esconderConfirmacaoVoltar();
-    }
+    private void aplicarTema() {
+        if (labelJogadorAtual.getScene() == null) {
+            return;
+        }
 
-    private void esconderConfirmacaoVoltar() {
-        labelConfirmarVoltar.setVisible(false);
-        labelConfirmarVoltar.setManaged(false);
-        botoesConfirmarVoltar.setVisible(false);
-        botoesConfirmarVoltar.setManaged(false);
-    }
+        var root = labelJogadorAtual.getScene().getRoot();
+
+        root.getStyleClass().remove("tema-claro");
+        root.getStyleClass().remove("tema-escuro");
+
+        String tema = DadosGlobais.temaAtual;
+
+        if (tema != null && tema.toLowerCase().contains("claro")) {
+            root.getStyleClass().add("tema-claro");
+        } else {
+            root.getStyleClass().add("tema-escuro");
+        }
+    }*/
+
 }
