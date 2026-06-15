@@ -671,6 +671,7 @@ public class JogoController implements Initializable {
     private void confirmarVoltarMenu() {
         receberJogadasRede = false;
         enviarDesistenciaRede();
+        DadosGlobais.fecharLigacoesRede();
         DadosGlobais.limparJogoAtual();
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
