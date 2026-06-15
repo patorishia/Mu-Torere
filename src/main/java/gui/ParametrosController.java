@@ -42,7 +42,7 @@ public class ParametrosController implements Initializable {
         DadosGlobais.temaAtual = temaCombo.getValue();
 
         // Voltar ao menu
-        ScreenManager.show("/fxml/MenuInicial.fxml");
+        ScreenManager.show(DadosGlobais.ecrãAnterior);
     }
 
     /**
