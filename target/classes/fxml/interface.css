@@ -55,7 +55,23 @@
 .text-field {
     -fx-background-radius: 6;
     -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
+    -fx-border-radius: 6;
+    -fx-text-fill: #1A1A1A;
     -fx-padding: 8;
+}
+
+.tema-claro .text-field {
+    -fx-background-color: #eaf3ff;
+    -fx-border-color: #1f6fd1;
+    -fx-border-width: 2;
+    -fx-text-fill: #12386f;
+    -fx-prompt-text-fill: #4f7fbd;
+}
+
+.tema-claro .text-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2f86f6;
 }
 
 .choice-box {

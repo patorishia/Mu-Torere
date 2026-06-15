@@ -52,7 +52,7 @@ public class DadosGlobais {
     public static boolean somAtivo = true;
 
     /** Tema atual ("Claro" ou "Escuro") */
-    public static String temaAtual = "Claro";
+    public static String temaAtual = "Escuro";
     
     
     public static String ipServidor;

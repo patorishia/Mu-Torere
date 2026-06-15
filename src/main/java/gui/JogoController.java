@@ -103,6 +103,7 @@ public class JogoController implements Initializable {
         esconderConfirmacaoVoltar();
         configurarConversaRede();
         configurarTabuleiroResponsivo();
+        atualizarDestaquesPecasMoveis();
         Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
     }
@@ -459,6 +460,8 @@ public class JogoController implements Initializable {
         } else {
             labelEstadoRede.setText("");
         }
+
+        atualizarDestaquesPecasMoveis();
     }
 
     private void indicarEsperaAdversario() {
