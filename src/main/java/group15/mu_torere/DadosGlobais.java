@@ -106,5 +106,11 @@ public class DadosGlobais {
         modoJogo = "local";
         jogoCarregado = null;
     }
+    
+    /**
+     * variável global para guardar o ecrã anterior
+     */
+    public static String ecrãAnterior = null;
+
 
 }

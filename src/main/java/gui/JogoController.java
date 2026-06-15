@@ -638,6 +638,7 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     @FXML
     private void abrirDefinicoes() {
+        DadosGlobais.ecrãAnterior = "/fxml/Jogo.fxml";
         ScreenManager.show("/fxml/Parametros.fxml");
     }
 

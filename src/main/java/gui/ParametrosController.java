@@ -13,13 +13,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controlador do ecrã de Definições.
- * Permite ativar/desativar som e escolher o tema da aplicação.
+ * Controlador do ecrã de Definições. Permite ativar/desativar som e escolher o
+ * tema da aplicação.
  */
 public class ParametrosController implements Initializable {
 
-    @FXML private CheckBox checkSom;
-    @FXML private ComboBox<String> temaCombo;
+    @FXML
+    private CheckBox checkSom;
+    @FXML
+    private ComboBox<String> temaCombo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -48,6 +50,12 @@ public class ParametrosController implements Initializable {
      */
     @FXML
     private void voltarAtras() {
-        ScreenManager.show("/fxml/MenuInicial.fxml");
+        if (DadosGlobais.ecrãAnterior != null) {
+            ScreenManager.show(DadosGlobais.ecrãAnterior);
+        } else {
+            // fallback de segurança
+            ScreenManager.show("/fxml/MenuInicial.fxml");
+        }
     }
+
 }
