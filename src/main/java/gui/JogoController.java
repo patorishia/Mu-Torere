@@ -25,9 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Controlador do ecrã Jogo Responsável por: - ligar GUI ao modelo - permitir
@@ -121,6 +126,11 @@ public class JogoController implements Initializable {
         configurarConversaRede();
         configurarTabuleiroResponsivo();
         iniciarRececaoJogadasRede();
+        //Platform.runLater(this::aplicarTema);
+        
+        Platform.runLater(this::atualizarDestaquesPecasMoveis);
+
+
 
     }
 
@@ -638,11 +648,12 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // BOTÕES LATERAIS
     // -------------------------------------------------------------------------
-    @FXML
+    /*@FXML
     private void abrirDefinicoes() {
         DadosGlobais.ecrãAnterior = "/fxml/Jogo.fxml";
-        ScreenManager.show("/fxml/Parametros.fxml");
-    }
+        abrirPopupDefinicoes();
+
+    }*/
 
     @FXML
     private void guardarJogo() {
@@ -688,5 +699,43 @@ public class JogoController implements Initializable {
             }
         });
     }
+
+   /* private void abrirPopupDefinicoes() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Parametros.fxml"));
+            Parent root = loader.load();
+
+            Stage popup = new Stage();
+            popup.setTitle("Definições");
+            popup.setScene(new Scene(root));
+            popup.initModality(Modality.APPLICATION_MODAL); // bloqueia o jogo
+            popup.initOwner(labelJogadorAtual.getScene().getWindow()); // janela pai
+
+            popup.showAndWait(); // espera até fechar
+
+            aplicarTema();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void aplicarTema() {
+        if (labelJogadorAtual.getScene() == null) {
+            return;
+        }
+
+        var root = labelJogadorAtual.getScene().getRoot();
+
+        root.getStyleClass().remove("tema-claro");
+        root.getStyleClass().remove("tema-escuro");
+
+        String tema = DadosGlobais.temaAtual;
+
+        if (tema != null && tema.toLowerCase().contains("claro")) {
+            root.getStyleClass().add("tema-claro");
+        } else {
+            root.getStyleClass().add("tema-escuro");
+        }
+    }*/
 
 }

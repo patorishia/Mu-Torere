@@ -134,10 +134,10 @@
                 </tabs>
             </TabPane>
 
-            <Button fx:id="btnDefinicoesJogoLocal"
+            <!--<Button fx:id="btnDefinicoesJogoLocal"
                     text="Definições"
                     prefWidth="160"
-                    onAction="#abrirDefinicoes"/>
+                    onAction="#abrirDefinicoes"/>-->
 
             <Button fx:id="btnGuardarJogo"
                     text="Guardar Jogo"

@@ -69,7 +69,6 @@ public class MenuInicialController {
      */
     @FXML
     private void abrirDefinicoes() {
-        DadosGlobais.ecrãAnterior = "/fxml/MenuInicial.fxml";
         ScreenManager.show("/fxml/Parametros.fxml");
     }
 

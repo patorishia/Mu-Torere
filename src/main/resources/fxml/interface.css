@@ -108,6 +108,13 @@
     -fx-stroke-width: 2;
 }
 
+/* Peças claras no tema claro — mais contraste */
+.tema-claro .piece-light {
+    -fx-fill: #ffffff;          /* branco puro */
+    -fx-stroke: #1f6fd1;        /* azul forte do tema */
+    -fx-stroke-width: 3;        /* contorno mais visível */
+}
+
 .piece-dark {
     -fx-fill: #1A1A1A;
     -fx-stroke: #555555;
