@@ -72,12 +72,12 @@ public class RoletaController implements Initializable {
             // Escolha aleatória do jogador vencedor
             boolean jogador1Escolhe = Math.random() < 0.5;
 
-            // Jogador 1 → seta aponta para a ESQUERDA  → -90 graus
-            // Jogador 2 → seta aponta para a DIREITA   → +90 graus
-            double anguloFinal = jogador1Escolhe ? -90 : 90;
+            // Jogador 1 → esquerda  (180°)
+            // Jogador 2 → direita   (0°)
+            double anguloFinal = jogador1Escolhe ? 135 : 45;
 
             RotateTransition rt2 = new RotateTransition(Duration.seconds(0.4), seta);
-            rt2.setToAngle(anguloFinal);   // rotação final para o lado correto
+            rt2.setToAngle(anguloFinal);
             rt2.setCycleCount(1);
             rt2.play();
 
@@ -155,7 +155,7 @@ public class RoletaController implements Initializable {
 
         DadosGlobais.jogadorQueEscolheCor = partes[1];
         boolean jogador1Escolhe = DadosGlobais.jogadorQueEscolheCor.equals(DadosGlobais.nomeJogador1);
-        seta.setRotate(jogador1Escolhe ? 180 : 0);
+        seta.setRotate(jogador1Escolhe ? 135 : 45);
         labelResultado.setText(DadosGlobais.jogadorQueEscolheCor + " escolhe a cor!");
         btnContinuarRoleta.setDisable(false);
         continuarAutomaticamenteSeNaoEscolheCor();
