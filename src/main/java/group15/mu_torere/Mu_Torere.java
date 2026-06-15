@@ -10,6 +10,7 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 /**
@@ -25,10 +26,17 @@ public class Mu_Torere extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuInicial.fxml"));
 
         Scene scene = new Scene(root);
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.F11) {
+                primaryStage.setFullScreen(!primaryStage.isFullScreen());
+            }
+        });
 
         primaryStage.setTitle("Mu Torere");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(500);
         primaryStage.show();
 
         // Guardar a stage no ScreenManager para permitir troca de ecrãs

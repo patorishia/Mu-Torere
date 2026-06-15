@@ -1,0 +1,16 @@
+# Maven
+target/
+*.class
+*.jar
+
+# JavaFX build artifacts
+*.log
+
+# NetBeans
+nbproject/private/
+build/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db

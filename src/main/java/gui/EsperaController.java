@@ -13,13 +13,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controlador do ecrã de espera.
- * Mostra o IP do servidor e aguarda ligação do adversário.
+ * Controlador do ecrã de espera. Mostra o IP do servidor e aguarda ligação do
+ * adversário.
  */
 public class EsperaController implements Initializable {
 
-    @FXML private Label labelIPServidor;
-    @FXML private Label labelEstadoLigacao;
+    @FXML
+    private Label labelIPServidor;
+    @FXML
+    private Label labelEstadoLigacao;
     private boolean verificarLigacao;
 
     @Override
@@ -52,18 +54,33 @@ public class EsperaController implements Initializable {
         Thread thread = new Thread(() -> {
             while (verificarLigacao) {
                 if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
-                    Platform.runLater(() -> labelEstadoLigacao.setText("Estado: ligação aceite"));
+                    Platform.runLater(() -> {
+                        labelEstadoLigacao.setText("Estado: ligação aceite");
+
+                        new Thread(() -> {
+                            try {
+                                Thread.sleep(200);
+                            } catch (Exception e) {
+                            }
+                            Platform.runLater(() -> ScreenManager.show("/fxml/InserirJogadores.fxml"));
+                        }).start();
+                    });
                     verificarLigacao = false;
                 } else if (DadosGlobais.clienteRede != null && DadosGlobais.clienteRede.isLigado()) {
-                    Platform.runLater(() -> labelEstadoLigacao.setText("Estado: ligado ao servidor"));
+                    Platform.runLater(() -> {
+                        labelEstadoLigacao.setText("Estado: ligado ao servidor");
+
+                        new Thread(() -> {
+                            try {
+                                Thread.sleep(200);
+                            } catch (Exception e) {
+                            }
+                            Platform.runLater(() -> ScreenManager.show("/fxml/InserirJogadores.fxml"));
+                        }).start();
+                    });
                     verificarLigacao = false;
                 }
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    verificarLigacao = false;
-                }
             }
         });
 

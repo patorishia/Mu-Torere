@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Ecrã: Jogo em Rede
+    Função: Permitir criar servidor ou entrar num servidor pelo IP.
+-->
+<BorderPane fx:id="jogoRede" prefHeight="600" prefWidth="900" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.InserirIPController">
+    <stylesheets>
+        <URL value="@interface.css"/>
+    </stylesheets>
+    <top>
+        <Label text="Jogo em Rede"
+               BorderPane.alignment="CENTER"
+               styleClass="title-label"/>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+
+            <Label text="Escolha uma opção:" styleClass="label"/>
+
+            <Button fx:id="btnCriarServidor"
+                    text="Criar Servidor"
+                    prefWidth="200"
+                    onAction="#criarServidor"/>
+
+            <Label fx:id="labelIPLocal"
+                   text="IP do servidor: ---"
+                   styleClass="label"/>
+
+            <Label text="Entrar no servidor:" styleClass="label"/>
+
+            <TextField fx:id="campoIP"
+                       promptText="ex: 192.168.1.10"
+                       prefWidth="300"/>
+
+            <Button fx:id="btnConectarRede"
+                    text="Entrar no Servidor"
+                    prefWidth="200"
+                    onAction="#conectar"/>
+
+            <Button fx:id="btnVoltarRede"
+                    text="Voltar"
+                    prefWidth="200"
+                    onAction="#mostrarMenuInicial"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

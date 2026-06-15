@@ -31,6 +31,12 @@ public class DadosGlobais {
     /** Jogador que ganhou a roleta e escolhe a cor */
     public static String jogadorQueEscolheCor;
 
+    /** Nome do jogador que esta a usar este computador */
+    public static String nomeJogadorLocal;
+
+    /** Cor do jogador que esta a usar este computador */
+    public static String corJogadorLocal;
+
     // ---------------------------------------------------------
     // FIM DE JOGO
     // ---------------------------------------------------------
