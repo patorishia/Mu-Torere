@@ -97,28 +97,38 @@
             <TabPane fx:id="tabPaneConversa"
                      prefHeight="230"
                      prefWidth="220"
-                     tabClosingPolicy="UNAVAILABLE">
+                     tabClosingPolicy="UNAVAILABLE"
+                     tabMinHeight="0"
+                     tabMaxHeight="0">
                 <tabs>
                     <Tab text="Conversa">
                         <content>
-                            <VBox spacing="8">
-                                <padding>
-                                    <Insets top="8" right="8" bottom="8" left="8"/>
-                                </padding>
+                            <BorderPane styleClass="chat-card">
+                                <center>
+                                    <VBox spacing="8">
+                                        <padding>
+                                            <Insets top="8" right="8" bottom="8" left="8"/>
+                                        </padding>
+                                        
+                                        <Label text="Conversa"
+                                               styleClass="chat-title"/>
 
-                                <ListView fx:id="listaMensagensConversa"
-                                          prefHeight="150"
-                                          prefWidth="200"/>
 
-                                <TextField fx:id="campoMensagemConversa"
-                                           promptText="Mensagem"
-                                           onAction="#enviarMensagemConversa"/>
+                                        <ListView fx:id="listaMensagensConversa"
+                                                  prefHeight="150"
+                                                  prefWidth="200"/>
 
-                                <Button fx:id="btnEnviarMensagemConversa"
-                                        text="Enviar"
-                                        prefWidth="200"
-                                        onAction="#enviarMensagemConversa"/>
-                            </VBox>
+                                        <TextField fx:id="campoMensagemConversa"
+                                                   promptText="Mensagem"
+                                                   onAction="#enviarMensagemConversa"/>
+
+                                        <Button fx:id="btnEnviarMensagemConversa"
+                                                text="Enviar"
+                                                prefWidth="200"
+                                                onAction="#enviarMensagemConversa"/>
+                                    </VBox>
+                                </center>
+                            </BorderPane>
                         </content>
                     </Tab>
                 </tabs>
