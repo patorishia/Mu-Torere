@@ -47,6 +47,8 @@ public class JogoController implements Initializable {
     @FXML
     private Button btnEnviarMensagemConversa;
     @FXML
+    private Button btnGuardarJogo;
+    @FXML
     private Label labelConfirmarVoltar;
     @FXML
     private HBox botoesConfirmarVoltar;
@@ -92,6 +94,11 @@ public class JogoController implements Initializable {
                     DadosGlobais.corJogador2,
                     DadosGlobais.jogadorQueEscolheCor
             );
+        }
+
+        if ("rede".equals(DadosGlobais.modoJogo)) {
+            btnGuardarJogo.setVisible(false);
+            btnGuardarJogo.setManaged(false);
         }
 
         casas = new Circle[]{casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7, casaCentro};
