@@ -109,17 +109,22 @@ public class JogoController implements Initializable {
 
         ligarCasasDoModelo();
         ligarPecasDoModelo();
+
+        Platform.runLater(() -> {
+            atualizarPecasGui();
+            atualizarJogadorAtual();
+            atualizarDestaquesPecasMoveis();
+        });
+
         ligarClicksNasPecas();
         ligarClicksNasCasas();
 
-        atualizarJogadorAtual();
         atualizarEstadoRedeInicial();
         esconderConfirmacaoVoltar();
         configurarConversaRede();
         configurarTabuleiroResponsivo();
-        atualizarDestaquesPecasMoveis();
-        Platform.runLater(() -> atualizarDestaquesPecasMoveis());
         iniciarRececaoJogadasRede();
+
     }
 
     // -------------------------------------------------------------------------
