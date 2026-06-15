@@ -16,8 +16,9 @@
 }
 
 .tema-claro {
-    -fx-background-color: white;
+    -fx-background-color: #f2f4f8; /* cinza muito claro */
 }
+
 
 /* ----------------------------- */
 /*   CONTROLOS GENÉRICOS         */
