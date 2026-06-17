@@ -16,8 +16,9 @@
 }
 
 .tema-claro {
-    -fx-background-color: white;
+    -fx-background-color: #f2f4f8; /* cinza muito claro */
 }
+
 
 /* ----------------------------- */
 /*   CONTROLOS GENÉRICOS         */
@@ -107,6 +108,13 @@
     -fx-stroke-width: 2;
 }
 
+/* Peças claras no tema claro — mais contraste */
+.tema-claro .piece-light {
+    -fx-fill: #ffffff;          /* branco puro */
+    -fx-stroke: #1f6fd1;        /* azul forte do tema */
+    -fx-stroke-width: 3;        /* contorno mais visível */
+}
+
 .piece-dark {
     -fx-fill: #1A1A1A;
     -fx-stroke: #555555;
@@ -132,6 +140,34 @@
     -fx-fill: #eaf3ff;
     -fx-stroke: #1f6fd1;
 }
+
+.tab-pane .tab-header-area {
+    visibility: hidden;
+    -fx-padding: 0;
+}
+.chat-card {
+    -fx-background-color: rgba(255, 255, 255, 0.08); /* fundo suave */
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+}
+
+.tema-claro .chat-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d0d7e3;
+}
+
+.chat-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tema-claro .chat-title {
+    -fx-text-fill: #1f4fa3;
+}
+
 
 /* ----------------------------- */
 /*   DROPDOWNS / MENUS           */

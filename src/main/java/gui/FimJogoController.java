@@ -38,7 +38,7 @@ public class FimJogoController implements Initializable {
      */
     @FXML
     private void mostrarMenuInicial() {
-        DadosGlobais.limparJogoAtual();
+        DadosGlobais.limparJogoAtualAssincrono();
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 }

@@ -17,10 +17,11 @@ public class ClienteRede extends Thread {
 
     private final String ipServidor;
     private final int porto;
+    private final Object bloqueioMensagem = new Object();
     private Socket socket;
     private BufferedReader entrada;
     private PrintWriter saida;
-    private boolean ligado;
+    private volatile boolean ligado;
     private String ultimaMensagem;
     private int numeroMensagensRecebidas;
 
@@ -36,6 +37,7 @@ public class ClienteRede extends Thread {
         this.ligado = false;
         this.ultimaMensagem = "";
         this.numeroMensagensRecebidas = 0;
+        setDaemon(true);
     }
 
     /**
@@ -66,8 +68,10 @@ public class ClienteRede extends Thread {
      * @param mensagem texto a enviar
      */
     public synchronized void enviarMensagem(String mensagem) {
-        if (saida != null) {
-            saida.println(mensagem);
+        PrintWriter saidaAtual = saida;
+
+        if (saidaAtual != null) {
+            saidaAtual.println(mensagem);
         }
     }
 
@@ -97,8 +101,10 @@ public class ClienteRede extends Thread {
      *
      * @return ultima mensagem recebida
      */
-    public synchronized String getUltimaMensagem() {
-        return ultimaMensagem;
+    public String getUltimaMensagem() {
+        synchronized (bloqueioMensagem) {
+            return ultimaMensagem;
+        }
     }
 
     /**
@@ -106,8 +112,10 @@ public class ClienteRede extends Thread {
      *
      * @return quantidade de mensagens recebidas
      */
-    public synchronized int getNumeroMensagensRecebidas() {
-        return numeroMensagensRecebidas;
+    public int getNumeroMensagensRecebidas() {
+        synchronized (bloqueioMensagem) {
+            return numeroMensagensRecebidas;
+        }
     }
 
     /**
@@ -115,35 +123,45 @@ public class ClienteRede extends Thread {
      *
      * @return true se estiver ligado, false caso contrario
      */
-    public synchronized boolean isLigado() {
+    public boolean isLigado() {
         return ligado;
     }
 
     /**
      * Fecha a ligacao e os recursos de rede.
      */
-    public synchronized void fechar() {
+    public void fechar() {
         ligado = false;
 
+        Socket socketAtual = socket;
+        BufferedReader entradaAtual = entrada;
+        PrintWriter saidaAtual = saida;
+
+        socket = null;
+        entrada = null;
+        saida = null;
+
         try {
-            if (entrada != null) {
-                entrada.close();
+            if (socketAtual != null) {
+                socketAtual.close();
             }
 
-            if (saida != null) {
-                saida.close();
+            if (entradaAtual != null) {
+                entradaAtual.close();
             }
 
-            if (socket != null) {
-                socket.close();
+            if (saidaAtual != null) {
+                saidaAtual.close();
             }
         } catch (IOException e) {
             guardarMensagem("Erro ao fechar cliente: " + e.getMessage());
         }
     }
 
-    private synchronized void guardarMensagem(String mensagem) {
-        ultimaMensagem = mensagem;
-        numeroMensagensRecebidas++;
+    private void guardarMensagem(String mensagem) {
+        synchronized (bloqueioMensagem) {
+            ultimaMensagem = mensagem;
+            numeroMensagensRecebidas++;
+        }
     }
 }

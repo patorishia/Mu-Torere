@@ -19,7 +19,7 @@ public class Posicao {
 
     // Identificador da posição (0 a 8)
     private int id;
-    
+
     // Peça que está atualmente nesta posição (null se estiver vazia)
     private Peca ocupante;
     

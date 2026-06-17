@@ -401,6 +401,7 @@ public class JogoController implements Initializable {
                     ? jogo.getJogador2().getNome()
                     : jogo.getJogador1().getNome();
 
+            receberJogadasRede = false;
             ScreenManager.show("/fxml/FimJogo.fxml");
         }
     }
@@ -592,7 +593,7 @@ public class JogoController implements Initializable {
 
     private void adversarioDesistiu() {
         receberJogadasRede = false;
-        DadosGlobais.fecharLigacoesRede();
+        DadosGlobais.fecharLigacoesRedeAssincrono();
         DadosGlobais.vencedor = "Parabéns! É o vencedor, o seu adversário desistiu.";
         ScreenManager.show("/fxml/FimJogo.fxml");
     }
@@ -690,11 +691,10 @@ public class JogoController implements Initializable {
                 // Se estiver em modo rede, enviar desistência
                 if ("rede".equals(DadosGlobais.modoJogo)) {
                     enviarDesistenciaRede();
-                    DadosGlobais.fecharLigacoesRede();
                 }
 
                 receberJogadasRede = false;
-                DadosGlobais.limparJogoAtual();
+                DadosGlobais.limparJogoAtualAssincrono();
                 ScreenManager.show("/fxml/MenuInicial.fxml");
             }
         });

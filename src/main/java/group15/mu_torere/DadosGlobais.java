@@ -76,16 +76,43 @@ public class DadosGlobais {
      * Fecha as ligacoes de rede ativas.
      */
     public static void fecharLigacoesRede() {
-        if (servidorRede != null) {
-            servidorRede.fechar();
-        }
-
-        if (clienteRede != null) {
-            clienteRede.fechar();
-        }
+        ServidorRede servidor = servidorRede;
+        ClienteRede cliente = clienteRede;
 
         servidorRede = null;
         clienteRede = null;
+
+        if (servidor != null) {
+            servidor.fechar();
+        }
+
+        if (cliente != null) {
+            cliente.fechar();
+        }
+    }
+
+    /**
+     * Fecha as ligacoes fora da thread da interface para evitar bloqueios na UI.
+     */
+    public static void fecharLigacoesRedeAssincrono() {
+        ServidorRede servidor = servidorRede;
+        ClienteRede cliente = clienteRede;
+
+        servidorRede = null;
+        clienteRede = null;
+
+        Thread threadFecho = new Thread(() -> {
+            if (servidor != null) {
+                servidor.fechar();
+            }
+
+            if (cliente != null) {
+                cliente.fechar();
+            }
+        });
+
+        threadFecho.setDaemon(true);
+        threadFecho.start();
     }
 
     /**
@@ -93,7 +120,18 @@ public class DadosGlobais {
      */
     public static void limparJogoAtual() {
         fecharLigacoesRede();
+        limparDadosPartida();
+    }
 
+    /**
+     * Limpa a partida atual sem bloquear a interface ao fechar a rede.
+     */
+    public static void limparJogoAtualAssincrono() {
+        fecharLigacoesRedeAssincrono();
+        limparDadosPartida();
+    }
+
+    private static void limparDadosPartida() {
         nomeJogador1 = null;
         nomeJogador2 = null;
         corJogador1 = null;

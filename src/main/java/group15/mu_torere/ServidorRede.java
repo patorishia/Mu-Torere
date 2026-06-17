@@ -17,12 +17,13 @@ import java.net.Socket;
 public class ServidorRede extends Thread {
 
     private final int porto;
+    private final Object bloqueioMensagem = new Object();
     private ServerSocket serverSocket;
     private Socket clienteSocket;
     private BufferedReader entrada;
     private PrintWriter saida;
-    private boolean ligado;
-    private boolean clienteLigado;
+    private volatile boolean ligado;
+    private volatile boolean clienteLigado;
     private String ultimaMensagem;
     private int numeroMensagensRecebidas;
 
@@ -71,8 +72,10 @@ public class ServidorRede extends Thread {
      * @param mensagem texto a enviar
      */
     public synchronized void enviarMensagem(String mensagem) {
-        if (saida != null) {
-            saida.println(mensagem);
+        PrintWriter saidaAtual = saida;
+
+        if (saidaAtual != null) {
+            saidaAtual.println(mensagem);
         }
     }
 
@@ -102,8 +105,10 @@ public class ServidorRede extends Thread {
      *
      * @return ultima mensagem recebida
      */
-    public synchronized String getUltimaMensagem() {
-        return ultimaMensagem;
+    public String getUltimaMensagem() {
+        synchronized (bloqueioMensagem) {
+            return ultimaMensagem;
+        }
     }
 
     /**
@@ -111,8 +116,10 @@ public class ServidorRede extends Thread {
      *
      * @return quantidade de mensagens recebidas
      */
-    public synchronized int getNumeroMensagensRecebidas() {
-        return numeroMensagensRecebidas;
+    public int getNumeroMensagensRecebidas() {
+        synchronized (bloqueioMensagem) {
+            return numeroMensagensRecebidas;
+        }
     }
 
     /**
@@ -120,7 +127,7 @@ public class ServidorRede extends Thread {
      *
      * @return true se o servidor estiver ativo, false caso contrario
      */
-    public synchronized boolean isLigado() {
+    public boolean isLigado() {
         return ligado;
     }
 
@@ -129,40 +136,52 @@ public class ServidorRede extends Thread {
      *
      * @return true se existir cliente ligado, false caso contrario
      */
-    public synchronized boolean isClienteLigado() {
+    public boolean isClienteLigado() {
         return clienteLigado;
     }
 
     /**
      * Fecha o servidor e os recursos de rede.
      */
-    public synchronized void fechar() {
+    public void fechar() {
         ligado = false;
         clienteLigado = false;
 
+        ServerSocket serverSocketAtual = serverSocket;
+        Socket clienteSocketAtual = clienteSocket;
+        BufferedReader entradaAtual = entrada;
+        PrintWriter saidaAtual = saida;
+
+        serverSocket = null;
+        clienteSocket = null;
+        entrada = null;
+        saida = null;
+
         try {
-            if (entrada != null) {
-                entrada.close();
+            if (clienteSocketAtual != null) {
+                clienteSocketAtual.close();
             }
 
-            if (saida != null) {
-                saida.close();
+            if (serverSocketAtual != null) {
+                serverSocketAtual.close();
             }
 
-            if (clienteSocket != null) {
-                clienteSocket.close();
+            if (entradaAtual != null) {
+                entradaAtual.close();
             }
 
-            if (serverSocket != null) {
-                serverSocket.close();
+            if (saidaAtual != null) {
+                saidaAtual.close();
             }
         } catch (IOException e) {
             guardarMensagem("Erro ao fechar servidor: " + e.getMessage());
         }
     }
 
-    private synchronized void guardarMensagem(String mensagem) {
-        ultimaMensagem = mensagem;
-        numeroMensagensRecebidas++;
+    private void guardarMensagem(String mensagem) {
+        synchronized (bloqueioMensagem) {
+            ultimaMensagem = mensagem;
+            numeroMensagensRecebidas++;
+        }
     }
 }
