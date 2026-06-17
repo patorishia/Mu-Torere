@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author patri
- */
-/**
  * Representa o tabuleiro do Mu Torere.
  * O tabuleiro tem 9 posições:
  *  - 8 posições exteriores (kewai) em círculo: 0 a 7
@@ -21,7 +17,7 @@ import java.util.List;
  */
 public class Tabuleiro {
 
-    // Lista de todas as posições do tabuleiro
+    /** Lista de todas as posições do tabuleiro. */
     private List<Posicao> posicoes;
 
     /**
@@ -69,8 +65,9 @@ public class Tabuleiro {
 
     /**
      * Devolve a posição com o id indicado.
+     *
      * @param id identificador da posição (0 a 8)
-     * @return 
+     * @return posição correspondente ao identificador indicado
      */
     public Posicao getPosicao(int id) {
         return posicoes.get(id);

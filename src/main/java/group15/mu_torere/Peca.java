@@ -5,20 +5,15 @@
 package group15.mu_torere;
 
 /**
- *
- * @author patri
- */
-
-/**
  * Representa uma peça de um jogador no jogo Mu Torere.
  * Cada peça pertence a um jogador e ocupa uma posição no tabuleiro.
  */
 public class Peca {
 
-    // Jogador a que esta peça pertence
+    /** Jogador a que esta peça pertence. */
     private Jogador dono;
 
-    // Posição atual da peça no tabuleiro
+    /** Posição atual da peça no tabuleiro. */
     private Posicao posicaoAtual;
 
     /**
@@ -34,7 +29,8 @@ public class Peca {
 
     /**
      * Devolve o jogador dono da peça.
-     * @return 
+     *
+     * @return jogador que controla a peça
      */
     public Jogador getDono() {
         return dono;
@@ -42,7 +38,8 @@ public class Peca {
 
     /**
      * Devolve a posição atual da peça.
-     * @return 
+     *
+     * @return posição onde a peça se encontra
      */
     public Posicao getPosicaoAtual() {
         return posicaoAtual;
@@ -51,7 +48,8 @@ public class Peca {
     /**
      * Move a peça para uma nova posição.
      * Remove a peça da posição anterior e coloca-a na nova.
-     * @param destino
+     *
+     * @param destino nova posição da peça
      */
     public void moverPara(Posicao destino) {
         // Liberta a posição antiga
@@ -64,4 +62,3 @@ public class Peca {
         posicaoAtual = destino;
     }
 }
-

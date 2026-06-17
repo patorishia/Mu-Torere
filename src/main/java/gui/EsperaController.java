@@ -18,12 +18,29 @@ import java.util.ResourceBundle;
  */
 public class EsperaController implements Initializable {
 
+    /**
+     * Cria o controlador do ecrã de espera por ligação.
+     */
+    public EsperaController() {
+    }
+
+    /** Label onde é mostrado o IP do servidor criado ou usado. */
     @FXML
     private Label labelIPServidor;
+
+    /** Label que mostra o estado atual da ligação em rede. */
     @FXML
     private Label labelEstadoLigacao;
+
+    /** Indica se a thread de espera deve continuar a verificar a ligação. */
     private boolean verificarLigacao;
 
+    /**
+     * Inicializa o ecrã de espera e começa a verificar a ligação de rede.
+     *
+     * @param url localização usada para resolver caminhos relativos, fornecida pelo JavaFX
+     * @param rb recursos de internacionalização, fornecidos pelo JavaFX
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Mostrar o IP guardado no ecrã anterior
@@ -31,6 +48,9 @@ public class EsperaController implements Initializable {
         iniciarVerificacaoLigacao();
     }
 
+    /**
+     * Cancela a espera por ligação e volta ao menu inicial.
+     */
     @FXML
     private void cancelar() {
         verificarLigacao = false;
@@ -38,6 +58,9 @@ public class EsperaController implements Initializable {
         ScreenManager.show("/fxml/MenuInicial.fxml");
     }
 
+    /**
+     * Inicia uma thread que verifica quando o servidor ou cliente fica ligado.
+     */
     private void iniciarVerificacaoLigacao() {
         verificarLigacao = true;
 

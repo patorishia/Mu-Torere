@@ -16,15 +16,25 @@ import java.net.Socket;
  */
 public class ServidorRede extends Thread {
 
+    /** Porto TCP onde o servidor fica à escuta de ligações. */
     private final int porto;
+    /** Objeto usado para sincronizar o acesso à última mensagem recebida. */
     private final Object bloqueioMensagem = new Object();
+    /** Socket de servidor responsável por aceitar a ligação do cliente. */
     private ServerSocket serverSocket;
+    /** Socket que representa o cliente atualmente ligado ao servidor. */
     private Socket clienteSocket;
+    /** Leitor de texto usado para receber mensagens do cliente. */
     private BufferedReader entrada;
+    /** Escritor de texto usado para enviar mensagens ao cliente. */
     private PrintWriter saida;
+    /** Indica se o servidor deve continuar ativo. */
     private volatile boolean ligado;
+    /** Indica se já existe um cliente ligado ao servidor. */
     private volatile boolean clienteLigado;
+    /** Última mensagem recebida através da ligação de rede. */
     private String ultimaMensagem;
+    /** Contador de mensagens recebidas, usado pelos controllers para detetar novidades. */
     private int numeroMensagensRecebidas;
 
     /**
@@ -178,6 +188,11 @@ public class ServidorRede extends Thread {
         }
     }
 
+    /**
+     * Guarda a última mensagem recebida e incrementa o contador de mensagens.
+     *
+     * @param mensagem texto recebido pela ligação de rede
+     */
     private void guardarMensagem(String mensagem) {
         synchronized (bloqueioMensagem) {
             ultimaMensagem = mensagem;

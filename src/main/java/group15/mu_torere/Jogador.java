@@ -8,22 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author patri
- */
-/**
  * Representa um jogador do Mu Torere.
  * Cada jogador tem um nome, uma cor e um conjunto de peças.
  */
 public class Jogador {
 
-    // Nome do jogador (ex: "Jogador 1")
+    /** Nome apresentado para identificar o jogador. */
     private String nome;
 
-    // Cor das peças do jogador (ex: "escuro" ou "claro")
+    /** Cor das peças do jogador, normalmente "escuro" ou "claro". */
     private String cor;
 
-    // Lista de peças que pertencem a este jogador
+    /** Lista de peças que pertencem ao jogador. */
     private List<Peca> pecas;
 
     /**
@@ -39,7 +35,8 @@ public class Jogador {
 
     /**
      * Adiciona uma peça à lista de peças do jogador.
-     * @param p
+     *
+     * @param p peça a adicionar ao jogador
      */
     public void adicionarPeca(Peca p) {
         pecas.add(p);
@@ -47,7 +44,8 @@ public class Jogador {
 
     /**
      * Devolve a lista de peças do jogador.
-     * @return 
+     *
+     * @return lista de peças pertencentes ao jogador
      */
     public List<Peca> getPecas() {
         return pecas;
@@ -55,7 +53,8 @@ public class Jogador {
 
     /**
      * Devolve o nome do jogador.
-     * @return 
+     *
+     * @return nome do jogador
      */
     public String getNome() {
         return nome;
@@ -63,11 +62,11 @@ public class Jogador {
 
     /**
      * Devolve a cor das peças do jogador.
-     * @return 
+     *
+     * @return cor atribuída ao jogador
      */
     public String getCor() {
         return cor;
     }
     
 }
-

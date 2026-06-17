@@ -12,6 +12,12 @@ package group15.mu_torere;
  */
 public class DadosGlobais {
 
+    /**
+     * Cria o contentor de dados globais.
+     */
+    public DadosGlobais() {
+    }
+
     // ---------------------------------------------------------
     // JOGADORES
     // ---------------------------------------------------------
@@ -55,6 +61,7 @@ public class DadosGlobais {
     public static String temaAtual = "Escuro";
     
     
+    /** IP do servidor usado quando a partida decorre em modo de rede. */
     public static String ipServidor;
 
     /** Porto usado para a ligação em rede */
@@ -131,6 +138,9 @@ public class DadosGlobais {
         limparDadosPartida();
     }
 
+    /**
+     * Limpa os dados temporários de jogadores, cores, vencedor, rede e jogo carregado.
+     */
     private static void limparDadosPartida() {
         nomeJogador1 = null;
         nomeJogador2 = null;

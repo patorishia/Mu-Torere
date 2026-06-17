@@ -23,7 +23,15 @@ import javafx.stage.FileChooser;
 public class MenuInicialController {
 
     /**
+     * Cria o controlador do menu inicial.
+     */
+    public MenuInicialController() {
+    }
+
+    /**
      * Abre o ecrã de inserir jogadores para o modo local.
+     *
+     * @param e evento gerado pelo botão do menu
      */
     @FXML
     private void abrirInserirJogadores(ActionEvent e) {
@@ -34,6 +42,8 @@ public class MenuInicialController {
 
     /**
      * Abre o ecrã do modo de jogo em rede.
+     *
+     * @param e evento gerado pelo botão do menu
      */
     @FXML
     private void abrirJogoRede(ActionEvent e) {
@@ -44,6 +54,8 @@ public class MenuInicialController {
 
     /**
      * Carrega um jogo guardado num ficheiro.
+     *
+     * @param e evento gerado pelo botão do menu
      */
     @FXML
     private void carregarJogo(ActionEvent e) {
@@ -74,6 +86,8 @@ public class MenuInicialController {
 
     /**
      * Encerra a aplicação.
+     *
+     * @param e evento gerado pelo botão do menu
      */
     @FXML
     private void sairJogo(ActionEvent e) {

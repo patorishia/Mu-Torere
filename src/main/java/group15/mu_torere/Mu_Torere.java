@@ -19,6 +19,18 @@ import javafx.stage.Stage;
  */
 public class Mu_Torere extends Application {
 
+    /**
+     * Cria a aplicação Mu Torere.
+     */
+    public Mu_Torere() {
+    }
+
+    /**
+     * Inicializa a janela principal, carrega o menu inicial e configura atalhos.
+     *
+     * @param primaryStage janela principal fornecida pelo JavaFX
+     * @throws Exception se o FXML inicial não puder ser carregado
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -43,6 +55,11 @@ public class Mu_Torere extends Application {
         ScreenManager.setStage(primaryStage);
     }
 
+    /**
+     * Ponto de entrada principal que arranca a aplicação JavaFX.
+     *
+     * @param args argumentos de linha de comandos
+     */
     public static void main(String[] args) {
         launch(args);
     }

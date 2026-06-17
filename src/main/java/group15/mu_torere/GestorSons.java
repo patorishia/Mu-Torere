@@ -12,9 +12,19 @@ import javafx.scene.media.MediaPlayer;
  */
 public class GestorSons {
 
+    /**
+     * Cria o gestor de sons.
+     */
+    public GestorSons() {
+    }
+
+    /** Caminho do recurso de som tocado quando uma jogada válida é feita. */
     private static final String SOM_JOGADA = "/sons/jogada.wav";
+    /** Caminho do recurso de som tocado quando ocorre uma ação inválida. */
     private static final String SOM_ERRO = "/sons/erro.wav";
+    /** Caminho do recurso de som tocado quando a partida termina com vitória. */
     private static final String SOM_VITORIA = "/sons/vitoria.wav";
+    /** MediaPlayer atualmente usado para tocar o último som pedido. */
     private static MediaPlayer playerAtual;
 
     /**
@@ -38,6 +48,11 @@ public class GestorSons {
         tocar(SOM_VITORIA);
     }
 
+    /**
+     * Toca o ficheiro de som indicado, respeitando a definição global de som.
+     *
+     * @param caminho caminho do recurso de áudio dentro de resources
+     */
     private static void tocar(String caminho) {
         if (!DadosGlobais.somAtivo) {
             return;

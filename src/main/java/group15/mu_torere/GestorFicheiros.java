@@ -14,6 +14,12 @@ import java.io.PrintWriter;
 public class GestorFicheiros {
 
     /**
+     * Cria o gestor de ficheiros.
+     */
+    public GestorFicheiros() {
+    }
+
+    /**
      * Guarda o estado atual do jogo num ficheiro.
      *
      * @param jogo jogo a guardar
@@ -87,6 +93,12 @@ public class GestorFicheiros {
         }
     }
 
+    /**
+     * Converte um array de posições para texto separado por vírgulas.
+     *
+     * @param posicoes identificadores das posições a converter
+     * @return texto no formato "id,id,id"
+     */
     private static String juntarPosicoes(int[] posicoes) {
         String texto = "";
 
@@ -100,6 +112,12 @@ public class GestorFicheiros {
         return texto;
     }
 
+    /**
+     * Converte texto separado por vírgulas num array de posições.
+     *
+     * @param texto texto no formato "id,id,id"
+     * @return array com os identificadores das posições
+     */
     private static int[] separarPosicoes(String texto) {
         String[] partes = texto.split(",");
         int[] posicoes = new int[partes.length];

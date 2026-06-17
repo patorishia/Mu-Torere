@@ -22,25 +22,50 @@ import java.util.ResourceBundle;
  */
 public class EscolherCorController implements Initializable {
 
+    /**
+     * Cria o controlador do ecrã de escolha de cor.
+     */
+    public EscolherCorController() {
+    }
+
+    /** Título do ecrã de escolha de cor. */
     @FXML
     private Label labelTitulo;
+
+    /** Label que indica qual jogador deve escolher a cor. */
     @FXML
     private Label labelJogadorAtual;
 
+    /** Círculo clicável que representa a cor clara. */
     @FXML
     private Circle circuloClara;
+
+    /** Círculo clicável que representa a cor escura. */
     @FXML
     private Circle circuloEscura;
 
+    /** Botão usado para confirmar a cor escolhida. */
     @FXML
     private Button btnConfirmarCor;
 
-    // Variáveis internas
+    /** Nome do jogador escolhido pela roleta para selecionar a cor. */
     private String jogadorQueEscolhe;
+
+    /** Cor atribuída ao primeiro jogador. */
     private String corJogador1;
+
+    /** Cor atribuída ao segundo jogador. */
     private String corJogador2;
+
+    /** Indica se este ecrã está à espera de uma mensagem de cores pela rede. */
     private boolean aguardarCoresRede;
 
+    /**
+     * Inicializa o ecrã e prepara o modo de escolha ou espera em rede.
+     *
+     * @param url localização usada para resolver caminhos relativos, fornecida pelo JavaFX
+     * @param rb recursos de internacionalização, fornecidos pelo JavaFX
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -63,6 +88,8 @@ public class EscolherCorController implements Initializable {
 
     /**
      * Seleciona a cor clara.
+     *
+     * @param event evento de clique no círculo da cor clara
      */
     @FXML
     private void selecionarClara(MouseEvent event) {
@@ -80,6 +107,8 @@ public class EscolherCorController implements Initializable {
 
     /**
      * Seleciona a cor escura.
+     *
+     * @param event evento de clique no círculo da cor escura
      */
     @FXML
     private void selecionarEscura(MouseEvent event) {
@@ -98,6 +127,8 @@ public class EscolherCorController implements Initializable {
     /**
      * Aplica o highlight visual ao círculo selecionado. Remove o highlight
      * anterior e aplica ao círculo escolhido.
+     *
+     * @param cor cor selecionada, "clara" ou "escura"
      */
     private void highlightEscolha(String cor) {
 
@@ -143,6 +174,9 @@ public class EscolherCorController implements Initializable {
         mostrarCorEEntrarNoJogo();
     }
 
+    /**
+     * Inicia uma thread que aguarda a mensagem com as cores escolhidas pelo adversário.
+     */
     private void iniciarRececaoCoresRede() {
         aguardarCoresRede = true;
 
@@ -173,6 +207,11 @@ public class EscolherCorController implements Initializable {
         thread.start();
     }
 
+    /**
+     * Aplica as cores recebidas por rede e avança para o jogo.
+     *
+     * @param mensagem mensagem no formato "CORES_REDE|jogador|cor1|cor2"
+     */
     private void aplicarCoresRede(String mensagem) {
         String[] partes = mensagem.split("\\|");
 
@@ -187,6 +226,11 @@ public class EscolherCorController implements Initializable {
         mostrarCorEEntrarNoJogo();
     }
 
+    /**
+     * Indica se o jogador deste computador é quem deve escolher a cor.
+     *
+     * @return true se o jogador local puder escolher a cor
+     */
     private boolean jogadorLocalEscolheCor() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return true;
@@ -195,6 +239,11 @@ public class EscolherCorController implements Initializable {
         return jogadorQueEscolhe.equals(DadosGlobais.nomeJogadorLocal);
     }
 
+    /**
+     * Cria a mensagem de rede com as cores atribuídas aos jogadores.
+     *
+     * @return mensagem de cores no formato usado pelo protocolo da aplicação
+     */
     private String criarMensagemCoresRede() {
         return "CORES_REDE|"
                 + DadosGlobais.jogadorQueEscolheCor + "|"
@@ -202,6 +251,9 @@ public class EscolherCorController implements Initializable {
                 + DadosGlobais.corJogador2;
     }
 
+    /**
+     * Atualiza a cor do jogador local com base no nome guardado globalmente.
+     */
     private void atualizarCorJogadorLocal() {
         if (DadosGlobais.nomeJogadorLocal == null) {
             return;
@@ -214,6 +266,9 @@ public class EscolherCorController implements Initializable {
         }
     }
 
+    /**
+     * Mostra a cor atribuída em modo de rede ou entra diretamente no jogo local.
+     */
     private void mostrarCorEEntrarNoJogo() {
         if ("rede".equals(DadosGlobais.modoJogo)) {
             esconderControlosEscolhaCor();
@@ -235,12 +290,18 @@ public class EscolherCorController implements Initializable {
         }
     }
 
+    /**
+     * Mostra o estado de espera quando a cor será escolhida pelo adversário.
+     */
     private void mostrarEsperaEscolhaCor() {
         labelTitulo.setText("A aguardar");
         labelJogadorAtual.setText("À espera do adversário escolher a cor...");
         esconderControlosEscolhaCor();
     }
 
+    /**
+     * Esconde os controlos de escolha de cor quando o jogador local não deve interagir.
+     */
     private void esconderControlosEscolhaCor() {
         circuloClara.setVisible(false);
         circuloClara.setManaged(false);
@@ -251,6 +312,11 @@ public class EscolherCorController implements Initializable {
         btnConfirmarCor.setDisable(true);
     }
 
+    /**
+     * Obtém a última mensagem recebida pelo servidor ou cliente ativo.
+     *
+     * @return última mensagem de rede, ou null se não existir ligação ativa
+     */
     private String obterMensagemRede() {
         if (DadosGlobais.servidorRede != null) {
             return DadosGlobais.servidorRede.getUltimaMensagem();
@@ -263,6 +329,11 @@ public class EscolherCorController implements Initializable {
         return null;
     }
 
+    /**
+     * Obtém o número de mensagens recebidas pelo servidor ou cliente ativo.
+     *
+     * @return quantidade de mensagens recebidas pela ligação ativa
+     */
     private int obterNumeroMensagensRede() {
         if (DadosGlobais.servidorRede != null) {
             return DadosGlobais.servidorRede.getNumeroMensagensRecebidas();

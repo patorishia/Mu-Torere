@@ -22,18 +22,41 @@ import java.util.ResourceBundle;
  */
 public class RoletaController implements Initializable {
 
+    /**
+     * Cria o controlador do ecrã da roleta.
+     */
+    public RoletaController() {
+    }
+
+    /** Label que mostra o nome do primeiro jogador na roleta. */
     @FXML
-    private Label labelJogador1Roleta;   // Nome do Jogador 1
+    private Label labelJogador1Roleta;
+
+    /** Label que mostra o nome do segundo jogador na roleta. */
     @FXML
-    private Label labelJogador2Roleta;   // Nome do Jogador 2
+    private Label labelJogador2Roleta;
+
+    /** Label onde é apresentado o resultado da roleta. */
     @FXML
-    private Label labelResultado;        // Texto do resultado
+    private Label labelResultado;
+
+    /** Elemento gráfico que roda para indicar o jogador escolhido. */
     @FXML
-    private Label seta;                  // Seta que roda
+    private Label seta;
+
+    /** Botão que permite avançar para o ecrã de escolha de cor. */
     @FXML
-    private Button btnContinuarRoleta;   // Botão para avançar
+    private Button btnContinuarRoleta;
+
+    /** Indica se o cliente está à espera do resultado da roleta enviado pela rede. */
     private boolean aguardarRoletaRede;
 
+    /**
+     * Inicializa a roleta com os nomes dos jogadores e inicia ou aguarda o sorteio.
+     *
+     * @param url localização usada para resolver caminhos relativos, fornecida pelo JavaFX
+     * @param rb recursos de internacionalização, fornecidos pelo JavaFX
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -116,6 +139,9 @@ public class RoletaController implements Initializable {
         ScreenManager.show("/fxml/EscolherCor.fxml");
     }
 
+    /**
+     * Coloca o cliente em espera até receber o resultado da roleta do servidor.
+     */
     private void aguardarResultadoRoletaRede() {
         btnContinuarRoleta.setDisable(true);
         labelResultado.setText("A aguardar resultado da roleta...");
@@ -146,6 +172,11 @@ public class RoletaController implements Initializable {
         thread.start();
     }
 
+    /**
+     * Aplica o resultado da roleta recebido por rede.
+     *
+     * @param mensagem mensagem no formato "ROLETA_REDE|nomeJogador"
+     */
     private void aplicarResultadoRoletaRede(String mensagem) {
         String[] partes = mensagem.split("\\|");
 
@@ -161,6 +192,9 @@ public class RoletaController implements Initializable {
         continuarAutomaticamenteSeNaoEscolheCor();
     }
 
+    /**
+     * Avança automaticamente para a escolha de cor quando o jogador local não é o escolhido.
+     */
     private void continuarAutomaticamenteSeNaoEscolheCor() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return;

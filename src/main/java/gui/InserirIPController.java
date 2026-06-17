@@ -22,7 +22,16 @@ import javafx.scene.control.TextField;
  */
 public class InserirIPController {
 
+    /**
+     * Cria o controlador do ecrã de inserção de IP.
+     */
+    public InserirIPController() {
+    }
+
+    /** Campo onde o jogador cliente introduz o IP do servidor. */
     @FXML private TextField campoIP;
+
+    /** Label onde é apresentado o IP local quando este jogador cria o servidor. */
     @FXML private Label labelIPLocal;
 
     /**
@@ -80,6 +89,9 @@ public class InserirIPController {
         ScreenManager.show("/fxml/Espera.fxml");
     }
 
+    /**
+     * Regressa ao menu inicial e limpa os dados da partida atual.
+     */
     @FXML
     private void mostrarMenuInicial() {
         DadosGlobais.limparJogoAtual();

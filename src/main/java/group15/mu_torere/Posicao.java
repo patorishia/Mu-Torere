@@ -8,22 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author patri
- */
-/**
  * Representa uma posição do tabuleiro de Mu Torere.
  * Cada posição pode ter uma peça e tem uma lista de posições adjacentes.
  */
 public class Posicao {
 
-    // Identificador da posição (0 a 8)
+    /** Identificador da posição no tabuleiro, entre 0 e 8. */
     private int id;
 
-    // Peça que está atualmente nesta posição (null se estiver vazia)
+    /** Peça que está atualmente nesta posição, ou null se estiver vazia. */
     private Peca ocupante;
     
-    // Lista de posições adjacentes (para validar movimentos)
+    /** Lista de posições adjacentes usadas para validar movimentos. */
     private List<Posicao> adjacentes;
 
     /**
@@ -37,7 +33,8 @@ public class Posicao {
 
     /**
      * Devolve o id da posição.
-     * @return 
+     *
+     * @return identificador da posição
      */
     public int getId() {
         return id;
@@ -45,7 +42,8 @@ public class Posicao {
 
     /**
      * Indica se a posição está ocupada por uma peça.
-     * @return 
+     *
+     * @return true se existir uma peça na posição, false caso contrário
      */
     public boolean estaOcupada() {
         return ocupante != null;
@@ -53,7 +51,8 @@ public class Posicao {
 
     /**
      * Devolve a peça que ocupa esta posição (ou null se estiver vazia).
-     * @return 
+     *
+     * @return peça ocupante, ou null se a posição estiver vazia
      */
     public Peca getOcupante() {
         return ocupante;
@@ -61,7 +60,8 @@ public class Posicao {
 
     /**
      * Define a peça que ocupa esta posição.
-     * @param peca
+     *
+     * @param peca peça a colocar na posição, ou null para deixar a posição vazia
      */
     public void setOcupante(Peca peca) {
         this.ocupante = peca;
@@ -70,7 +70,8 @@ public class Posicao {
     /**
      * Adiciona uma posição adjacente a esta.
      * Usado para definir as ligações do tabuleiro.
-     * @param p
+     *
+     * @param p posição adjacente a adicionar
      */
     public void adicionarAdjacente(Posicao p) {
         adjacentes.add(p);
@@ -78,7 +79,8 @@ public class Posicao {
 
     /**
      * Devolve a lista de posições adjacentes.
-     * @return 
+     *
+     * @return lista de posições para onde é possível haver ligação
      */
     public List<Posicao> getAdjacentes() {
         return adjacentes;

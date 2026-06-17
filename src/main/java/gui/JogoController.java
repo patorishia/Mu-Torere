@@ -41,48 +41,99 @@ import javafx.stage.Stage;
  */
 public class JogoController implements Initializable {
 
+    /**
+     * Cria o controlador do ecrã principal do jogo.
+     */
+    public JogoController() {
+    }
+
+    /** Label que apresenta o jogador com o turno atual. */
     @FXML
     private Label labelJogadorAtual;
+
+    /** Label que mostra mensagens de estado do modo de rede. */
     @FXML
     private Label labelEstadoRede;
+
+    /** Separador que contém a conversa entre jogadores no modo de rede. */
     @FXML
     private TabPane tabPaneConversa;
+
+    /** Lista visual das mensagens de conversa recebidas e enviadas. */
     @FXML
     private ListView<String> listaMensagensConversa;
+
+    /** Campo de texto usado para escrever mensagens de conversa. */
     @FXML
     private TextField campoMensagemConversa;
+
+    /** Botão usado para enviar mensagens de conversa. */
     @FXML
     private Button btnEnviarMensagemConversa;
+
+    /** Botão usado para guardar a partida local. */
     @FXML
     private Button btnGuardarJogo;
+
+    /** Painel exterior usado para calcular a escala responsiva do tabuleiro. */
     @FXML
     private StackPane painelTabuleiro;
+
+    /** Pane que contém as casas e peças do tabuleiro. */
     @FXML
     private Pane tabuleiro;
 
+    /** Círculos que representam visualmente as casas do tabuleiro. */
     @FXML
     private Circle casaCentro, casa0, casa1, casa2, casa3, casa4, casa5, casa6, casa7;
 
+    /** Círculos que representam as quatro peças claras. */
     @FXML
     private Circle pecaClara1, pecaClara2, pecaClara3, pecaClara4;
+
+    /** Círculos que representam as quatro peças escuras. */
     @FXML
     private Circle pecaEscura1, pecaEscura2, pecaEscura3, pecaEscura4;
 
+    /** Peça atualmente selecionada na interface gráfica. */
     private Circle pecaSelecionada;
 
+    /** Modelo lógico da partida em curso. */
     private Jogo jogo;
 
+    /** Associação entre cada peça gráfica e a peça correspondente no modelo. */
     private final Map<Circle, Peca> mapaGuiParaModelo = new HashMap<>();
+
+    /** Associação entre cada peça do modelo e a peça correspondente na interface. */
     private final Map<Peca, Circle> mapaModeloParaGui = new HashMap<>();
+
+    /** Associação entre cada casa gráfica e a posição correspondente no modelo. */
     private final Map<Circle, Posicao> mapaCasaGuiParaModelo = new HashMap<>();
 
+    /** Array com todas as casas do tabuleiro na interface. */
     private Circle[] casas;
+
+    /** Array com todas as peças na interface. */
     private Circle[] pecas;
+
+    /** Array com as peças claras na interface. */
     private Circle[] pecasClaras;
+
+    /** Array com as peças escuras na interface. */
     private Circle[] pecasEscuras;
+
+    /** Indica se a thread de receção de jogadas de rede deve continuar ativa. */
     private boolean receberJogadasRede;
+
+    /** Número da última mensagem de rede já processada por este controller. */
     private int numeroMensagensRede;
 
+    /**
+     * Inicializa a partida, liga a interface ao modelo e prepara eventos, rede e escala.
+     *
+     * @param url localização usada para resolver caminhos relativos, fornecida pelo JavaFX
+     * @param rb recursos de internacionalização, fornecidos pelo JavaFX
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -137,11 +188,19 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // LIGAÇÃO GUI ↔ MODELO
     // -------------------------------------------------------------------------
+    /**
+     * Liga todas as peças do modelo às peças gráficas correspondentes.
+     */
     private void ligarPecasDoModelo() {
         ligarPecasDoJogador(jogo.getJogador1());
         ligarPecasDoJogador(jogo.getJogador2());
     }
 
+    /**
+     * Liga as peças de um jogador às peças gráficas da cor correspondente.
+     *
+     * @param jogador jogador cujas peças serão ligadas à interface
+     */
     private void ligarPecasDoJogador(Jogador jogador) {
         Circle[] pecasGui;
 
@@ -157,11 +216,20 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Regista a correspondência entre uma peça gráfica e uma peça do modelo.
+     *
+     * @param pecaGui círculo que representa a peça na interface
+     * @param pecaModelo peça correspondente no modelo do jogo
+     */
     private void ligarPeca(Circle pecaGui, Peca pecaModelo) {
         mapaGuiParaModelo.put(pecaGui, pecaModelo);
         mapaModeloParaGui.put(pecaModelo, pecaGui);
     }
 
+    /**
+     * Liga cada casa gráfica à posição correspondente do tabuleiro lógico.
+     */
     private void ligarCasasDoModelo() {
         Tabuleiro tab = jogo.getTabuleiro();
 
@@ -179,12 +247,20 @@ public class JogoController implements Initializable {
     // -------------------------------------------------------------------------
     // INTERAÇÃO DO JOGADOR
     // -------------------------------------------------------------------------
+    /**
+     * Associa o clique de cada peça gráfica ao método de seleção de peças.
+     */
     private void ligarClicksNasPecas() {
         for (Circle peca : pecas) {
             peca.setOnMouseClicked(e -> selecionarPeca(peca));
         }
     }
 
+    /**
+     * Seleciona uma peça, valida se pode mover e executa o primeiro movimento válido.
+     *
+     * @param pecaGui círculo que representa a peça selecionada
+     */
     private void selecionarPeca(Circle pecaGui) {
 
         Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
@@ -219,12 +295,20 @@ public class JogoController implements Initializable {
         moverPecaParaCasa(casaDestino);
     }
 
+    /**
+     * Associa o clique de cada casa gráfica ao método de movimento.
+     */
     private void ligarClicksNasCasas() {
         for (Circle casa : casas) {
             casa.setOnMouseClicked(e -> moverPecaParaCasa(casa));
         }
     }
 
+    /**
+     * Move a peça selecionada para a casa indicada, se o movimento for válido.
+     *
+     * @param casaGui círculo que representa a casa de destino
+     */
     private void moverPecaParaCasa(Circle casaGui) {
 
         if (pecaSelecionada == null) {
@@ -266,6 +350,12 @@ public class JogoController implements Initializable {
         verificarFimJogo();
     }
 
+    /**
+     * Envia uma jogada pela ligação de rede ativa.
+     *
+     * @param origem identificador da posição de origem
+     * @param destino identificador da posição de destino
+     */
     private void enviarJogadaRede(int origem, int destino) {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return;
@@ -280,6 +370,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Inicia a receção assíncrona de jogadas, estados, conversa e desistências pela rede.
+     */
     private void iniciarRececaoJogadasRede() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return;
@@ -319,6 +412,11 @@ public class JogoController implements Initializable {
         thread.start();
     }
 
+    /**
+     * Obtém a última mensagem recebida pela ligação de rede ativa.
+     *
+     * @return última mensagem recebida, ou null se não houver ligação
+     */
     private String obterMensagemRede() {
         if (DadosGlobais.servidorRede != null) {
             return DadosGlobais.servidorRede.getUltimaMensagem();
@@ -331,6 +429,11 @@ public class JogoController implements Initializable {
         return null;
     }
 
+    /**
+     * Obtém o número de mensagens recebidas pela ligação de rede ativa.
+     *
+     * @return quantidade de mensagens recebidas
+     */
     private int obterNumeroMensagensRede() {
         if (DadosGlobais.servidorRede != null) {
             return DadosGlobais.servidorRede.getNumeroMensagensRecebidas();
@@ -343,6 +446,11 @@ public class JogoController implements Initializable {
         return 0;
     }
 
+    /**
+     * Aplica uma jogada recebida pela rede ao modelo e atualiza a interface.
+     *
+     * @param mensagem mensagem no formato "JOGADA|origem|destino"
+     */
     private void aplicarJogadaRecebida(String mensagem) {
         String[] partes = mensagem.split("\\|");
 
@@ -370,6 +478,11 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Aplica um estado completo de jogo recebido pela rede.
+     *
+     * @param mensagem mensagem de estado criada pelo modelo do jogo
+     */
     private void aplicarEstadoRecebido(String mensagem) {
         try {
             if (jogo.aplicarMensagemEstadoRede(mensagem)) {
@@ -390,6 +503,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Verifica se o jogador que ficou com o turno ainda tem movimentos disponíveis.
+     */
     private void verificarFimJogo() {
         // Verificar se o jogador seguinte tem movimentos
         if (!jogadorTemMovimentos(jogo.getJogadorAtual())) {
@@ -406,6 +522,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Atualiza a posição gráfica de todas as peças com base no modelo.
+     */
     private void atualizarPecasGui() {
         for (Circle pecaGui : pecas) {
             Peca pecaModelo = mapaGuiParaModelo.get(pecaGui);
@@ -416,6 +535,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Envia o estado completo do jogo pela ligação de rede ativa.
+     */
     private void enviarEstadoJogoRede() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return;
@@ -430,6 +552,12 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Obtém a casa gráfica associada a uma posição do modelo.
+     *
+     * @param posicao posição lógica procurada
+     * @return círculo da casa correspondente, ou null se não existir associação
+     */
     private Circle obterCasaGui(Posicao posicao) {
         for (Circle casa : casas) {
             if (mapaCasaGuiParaModelo.get(casa) == posicao) {
@@ -440,6 +568,12 @@ public class JogoController implements Initializable {
         return null;
     }
 
+    /**
+     * Move uma peça gráfica para as coordenadas da posição lógica indicada.
+     *
+     * @param pecaGui círculo que representa a peça
+     * @param posicao posição lógica de destino
+     */
     private void moverPecaGuiParaPosicao(Circle pecaGui, Posicao posicao) {
         Circle casaGui = obterCasaGui(posicao);
 
@@ -449,6 +583,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Remove os contornos visuais de todas as peças.
+     */
     private void limparStrokes() {
         for (Circle p : pecas) {
             p.setStroke(null);
@@ -456,6 +593,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Destaca visualmente as peças do jogador local que têm movimentos válidos.
+     */
     private void atualizarDestaquesPecasMoveis() {
         limparStrokes();
 
@@ -475,10 +615,16 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Atualiza a label que indica o jogador com o turno atual.
+     */
     private void atualizarJogadorAtual() {
         labelJogadorAtual.setText(jogo.getJogadorAtual().getNome());
     }
 
+    /**
+     * Atualiza a mensagem inicial de estado consoante o modo local ou rede.
+     */
     private void atualizarEstadoRedeInicial() {
         if ("rede".equals(DadosGlobais.modoJogo)) {
             labelEstadoRede.setText("A tua cor é: " + DadosGlobais.corJogadorLocal);
@@ -489,18 +635,30 @@ public class JogoController implements Initializable {
         atualizarDestaquesPecasMoveis();
     }
 
+    /**
+     * Mostra uma mensagem indicando que o jogador local deve aguardar o adversário.
+     */
     private void indicarEsperaAdversario() {
         if ("rede".equals(DadosGlobais.modoJogo)) {
             labelEstadoRede.setText("À espera do adversário...");
         }
     }
 
+    /**
+     * Mostra uma mensagem indicando que foi recebida uma jogada do adversário.
+     */
     private void indicarJogadaRecebida() {
         if ("rede".equals(DadosGlobais.modoJogo)) {
             labelEstadoRede.setText("Jogada recebida. A tua vez.");
         }
     }
 
+    /**
+     * Verifica se uma peça pertence ao jogador local em modo de rede.
+     *
+     * @param peca peça a verificar
+     * @return true se a peça puder ser jogada neste computador
+     */
     private boolean pecaPertenceAoJogadorLocal(Peca peca) {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return true;
@@ -513,6 +671,11 @@ public class JogoController implements Initializable {
         return peca.getDono().getNome().equals(DadosGlobais.nomeJogadorLocal);
     }
 
+    /**
+     * Indica se é a vez do jogador local jogar.
+     *
+     * @return true em jogo local ou quando o jogador local tem o turno em rede
+     */
     private boolean jogadorLocalTemTurno() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return true;
@@ -525,6 +688,9 @@ public class JogoController implements Initializable {
         return jogo.getJogadorAtual().getNome().equals(DadosGlobais.nomeJogadorLocal);
     }
 
+    /**
+     * Configura a área de conversa, ativando-a apenas no modo de rede.
+     */
     private void configurarConversaRede() {
         boolean modoRede = "rede".equals(DadosGlobais.modoJogo);
 
@@ -543,6 +709,9 @@ public class JogoController implements Initializable {
         btnEnviarMensagemConversa.setDisable(false);
     }
 
+    /**
+     * Envia a mensagem escrita pelo jogador para a conversa em rede.
+     */
     @FXML
     private void enviarMensagemConversa() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
@@ -567,6 +736,11 @@ public class JogoController implements Initializable {
         campoMensagemConversa.clear();
     }
 
+    /**
+     * Envia uma mensagem de conversa pela ligação de rede ativa.
+     *
+     * @param mensagem mensagem já formatada para o protocolo da conversa
+     */
     private void enviarMensagemConversaRede(String mensagem) {
         if (DadosGlobais.servidorRede != null && DadosGlobais.servidorRede.isClienteLigado()) {
             DadosGlobais.servidorRede.enviarMensagem(mensagem);
@@ -577,6 +751,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Envia uma mensagem de desistência ao adversário em modo de rede.
+     */
     private void enviarDesistenciaRede() {
         if (!"rede".equals(DadosGlobais.modoJogo)) {
             return;
@@ -591,6 +768,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Trata a desistência do adversário, fecha a rede e mostra o ecrã final.
+     */
     private void adversarioDesistiu() {
         receberJogadasRede = false;
         DadosGlobais.fecharLigacoesRedeAssincrono();
@@ -598,6 +778,11 @@ public class JogoController implements Initializable {
         ScreenManager.show("/fxml/FimJogo.fxml");
     }
 
+    /**
+     * Recebe uma mensagem de conversa e apresenta-a na lista.
+     *
+     * @param mensagem mensagem no formato "CHAT|texto"
+     */
     private void receberMensagemConversa(String mensagem) {
         String texto = mensagem.substring("CHAT|".length());
 
@@ -606,6 +791,11 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Adiciona uma mensagem à lista visual da conversa.
+     *
+     * @param mensagem texto a adicionar à conversa
+     */
     private void adicionarMensagemConversa(String mensagem) {
         listaMensagensConversa.getItems().add(mensagem);
 
@@ -614,16 +804,28 @@ public class JogoController implements Initializable {
         });
     }
 
+    /**
+     * Prepara o texto da conversa para não interferir com o separador do protocolo.
+     *
+     * @param texto texto introduzido pelo jogador
+     * @return texto normalizado para envio pela rede
+     */
     private String prepararTextoConversa(String texto) {
         return texto.replace("|", "/");
     }
 
+    /**
+     * Configura listeners para manter o tabuleiro ajustado ao tamanho disponível.
+     */
     private void configurarTabuleiroResponsivo() {
         painelTabuleiro.widthProperty().addListener((obs, antigo, novo) -> atualizarEscalaTabuleiro());
         painelTabuleiro.heightProperty().addListener((obs, antigo, novo) -> atualizarEscalaTabuleiro());
         Platform.runLater(() -> atualizarEscalaTabuleiro());
     }
 
+    /**
+     * Atualiza a escala visual do tabuleiro para caber no painel disponível.
+     */
     private void atualizarEscalaTabuleiro() {
         double escalaLargura = painelTabuleiro.getWidth() / 500;
         double escalaAltura = painelTabuleiro.getHeight() / 500;
@@ -637,6 +839,12 @@ public class JogoController implements Initializable {
         tabuleiro.setScaleY(escala);
     }
 
+    /**
+     * Verifica se um jogador tem pelo menos uma peça com movimentos válidos.
+     *
+     * @param jog jogador a verificar
+     * @return true se existir pelo menos um movimento possível
+     */
     private boolean jogadorTemMovimentos(Jogador jog) {
         for (Peca p : jog.getPecas()) {
             if (!jogo.obterMovimentosValidos(p).isEmpty()) {
@@ -656,6 +864,9 @@ public class JogoController implements Initializable {
 
     }*/
 
+    /**
+     * Guarda a partida atual num ficheiro escolhido pelo utilizador.
+     */
     @FXML
     private void guardarJogo() {
         FileChooser fc = new FileChooser();
@@ -673,6 +884,9 @@ public class JogoController implements Initializable {
         }
     }
 
+    /**
+     * Pede confirmação para voltar ao menu inicial e termina a partida atual.
+     */
     @FXML
     private void mostrarMenuInicial() {
 

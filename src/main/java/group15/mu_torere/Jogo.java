@@ -19,9 +19,13 @@ import java.util.ArrayList;
  */
 public class Jogo {
 
+    /** Primeiro jogador da partida. */
     private Jogador jogador1;
+    /** Segundo jogador da partida. */
     private Jogador jogador2;
+    /** Jogador que tem permissão para jogar no turno atual. */
     private Jogador jogadorAtual;
+    /** Tabuleiro lógico onde estão as posições e adjacências do jogo. */
     private Tabuleiro tabuleiro;
 
     /**
@@ -112,6 +116,12 @@ public class Jogo {
         }
     }
 
+    /**
+     * Recria as peças de um jogador nas posições lidas de um ficheiro ou mensagem de rede.
+     *
+     * @param jogador jogador ao qual as peças reconstruídas pertencem
+     * @param posicoes ids das posições onde as peças devem ser colocadas
+     */
     private void adicionarPecasGuardadas(Jogador jogador, int[] posicoes) {
         for (int i = 0; i < posicoes.length; i++) {
             Peca p = new Peca(jogador, tabuleiro.getPosicao(posicoes[i]));
@@ -282,20 +292,37 @@ public class Jogo {
     }
 
     /**
+     * Devolve o jogador que tem permissão para jogar no turno atual.
+     *
      * @return jogador que tem o turno atual
      */
     public Jogador getJogadorAtual() {
         return jogadorAtual;
     }
 
+    /**
+     * Devolve o primeiro jogador da partida.
+     *
+     * @return jogador 1
+     */
     public Jogador getJogador1() {
         return jogador1;
     }
 
+    /**
+     * Devolve o segundo jogador da partida.
+     *
+     * @return jogador 2
+     */
     public Jogador getJogador2() {
         return jogador2;
     }
 
+    /**
+     * Devolve o tabuleiro lógico da partida.
+     *
+     * @return tabuleiro do jogo
+     */
     public Tabuleiro getTabuleiro() {
         return tabuleiro;
     }
@@ -367,6 +394,12 @@ public class Jogo {
         return true;
     }
 
+    /**
+     * Converte um array de posições para texto separado por vírgulas.
+     *
+     * @param posicoes ids das posições a converter
+     * @return posições no formato "id,id,id"
+     */
     private String juntarPosicoes(int[] posicoes) {
         String texto = "";
 
@@ -381,6 +414,12 @@ public class Jogo {
         return texto;
     }
 
+    /**
+     * Converte texto separado por vírgulas num array de posições.
+     *
+     * @param texto posições no formato "id,id,id"
+     * @return array com os ids das posições
+     */
     private int[] separarPosicoes(String texto) {
         String[] partes = texto.split(",");
         int[] posicoes = new int[partes.length];

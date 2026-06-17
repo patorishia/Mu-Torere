@@ -18,9 +18,24 @@ import java.util.ResourceBundle;
  */
 public class ParametrosController implements Initializable {
 
+    /**
+     * Cria o controlador do ecrã de definições.
+     */
+    public ParametrosController() {
+    }
+
+    /** CheckBox que indica se o som da aplicação está ativo. */
     @FXML private CheckBox checkSom;
+
+    /** ComboBox usada para escolher o tema visual da aplicação. */
     @FXML private ComboBox<String> temaCombo;
 
+    /**
+     * Inicializa o ecrã com as definições guardadas nos dados globais.
+     *
+     * @param url localização usada para resolver caminhos relativos, fornecida pelo JavaFX
+     * @param rb recursos de internacionalização, fornecidos pelo JavaFX
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 

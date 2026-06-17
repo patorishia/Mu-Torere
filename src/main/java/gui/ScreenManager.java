@@ -23,7 +23,13 @@ import javafx.stage.Stage;
  */
 public class ScreenManager {
 
-    // Stage principal da aplicação (a janela)
+    /**
+     * Cria o gestor de ecrãs.
+     */
+    public ScreenManager() {
+    }
+
+    /** Stage principal da aplicação, usado para trocar o conteúdo visível. */
     private static Stage stage;
 
     /**
@@ -79,6 +85,11 @@ System.out.println("CSS URL = " + cssUrl);
         }
     }
 
+    /**
+     * Aplica ao ecrã carregado a classe CSS correspondente ao tema atual.
+     *
+     * @param root nó raiz do ecrã carregado por FXML
+     */
     private static void aplicarTema(Parent root) {
         root.getStyleClass().remove("tema-claro");
         root.getStyleClass().remove("tema-escuro");

@@ -18,8 +18,21 @@ import java.util.ResourceBundle;
  */
 public class FimJogoController implements Initializable {
 
+    /**
+     * Cria o controlador do ecrã de fim de jogo.
+     */
+    public FimJogoController() {
+    }
+
+    /** Label onde é apresentado o vencedor da partida. */
     @FXML private Label labelVencedor;
 
+    /**
+     * Inicializa o ecrã, apresenta o vencedor e toca o som de vitória.
+     *
+     * @param url localização usada para resolver caminhos relativos, fornecida pelo JavaFX
+     * @param rb recursos de internacionalização, fornecidos pelo JavaFX
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
